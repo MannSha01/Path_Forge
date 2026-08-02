@@ -99,6 +99,88 @@ const PATHWAYS_DATA = {
         ]
       },
       {
+        id: "fullstack",
+        title: "Fullstack Engineer",
+        icon: "code",
+        tagline: "Connect frontend interfaces directly to scalable backend infrastructure.",
+        steps: [
+          {
+            id: "tech-fs-1",
+            title: "Fullstack Frameworks (Next.js)",
+            duration: "4 Weeks",
+            summary: "Server-Side Rendering (SSR), Static Site Generation (SSG), and Server Actions.",
+            concepts: ["App Router", "SSR vs SSG", "Server Actions", "API Routes"],
+            resources: [
+              { name: "Next.js Official Learn Course", url: "https://nextjs.org/learn" }
+            ],
+            project: "Build a fullstack blog platform with dynamic routes."
+          },
+          {
+            id: "tech-fs-2",
+            title: "Authentication & Security",
+            duration: "2 Weeks",
+            summary: "User authentication, JWTs, OAuth single sign-on, and role-based access.",
+            concepts: ["OAuth 2.0", "JWT Tokens", "Session Storage", "Middleware Protection"],
+            resources: [
+              { name: "Auth0 Docs & Security Guides", url: "https://auth0.com/docs" }
+            ],
+            project: "Implement secure login/signup with NextAuth or Clerk."
+          },
+          {
+            id: "tech-fs-3",
+            title: "Payment Gateways & Deployment",
+            duration: "3 Weeks",
+            summary: "Integrating Stripe webhooks, deploying to Vercel, and CI/CD triggers.",
+            concepts: ["Stripe Webhooks", "Vercel Deployment", "Environment Variables", "Serverless Functions"],
+            resources: [
+              { name: "Stripe API Reference", url: "https://stripe.com/docs/api" }
+            ],
+            project: "Build a SaaS subscription application with paid tier access."
+          }
+        ]
+      },
+      {
+        id: "devops",
+        title: "DevOps & Cloud Engineer",
+        icon: "cloud",
+        tagline: "Automate build pipelines, manage cloud infrastructure, and monitor systems.",
+        steps: [
+          {
+            id: "tech-do-1",
+            title: "Linux Administration & Bash Scripting",
+            duration: "3 Weeks",
+            summary: "Command line mastery, file permissions, process management, and shell scripting.",
+            concepts: ["SSH Keys", "Bash Scripts", "Systemd Services", "Cron Jobs"],
+            resources: [
+              { name: "Linux Journey Fundamentals", url: "https://linuxjourney.com/" }
+            ],
+            project: "Write a shell script to automate server log rotation and backup."
+          },
+          {
+            id: "tech-do-2",
+            title: "Containerization with Docker & Kubernetes",
+            duration: "4 Weeks",
+            summary: "Packaging software into containers and orchestrating cluster deployments.",
+            concepts: ["Dockerfiles", "Docker Compose", "Pods & Services", "Helm Charts"],
+            resources: [
+              { name: "Docker Official Docs & Getting Started", url: "https://docs.docker.com/get-started/" }
+            ],
+            project: "Containerize a multi-container app with frontend, backend, and Redis."
+          },
+          {
+            id: "tech-do-3",
+            title: "CI/CD & Infrastructure as Code (IaC)",
+            duration: "4 Weeks",
+            summary: "Automating deployments with GitHub Actions and provisioning cloud via Terraform.",
+            concepts: ["GitHub Actions Workflows", "Terraform State", "AWS EC2/S3", "CloudWatch"],
+            resources: [
+              { name: "HashiCorp Terraform Tutorials", url: "https://developer.hashicorp.com/terraform/tutorials" }
+            ],
+            project: "Build a CI/CD pipeline that automatically provisions AWS resources and deploys code."
+          }
+        ]
+      },
+      {
         id: "data-analyst",
         title: "Data Analyst",
         icon: "bar-chart-3",
@@ -136,6 +218,77 @@ const PATHWAYS_DATA = {
               { name: "Tableau Public Learning Resources", url: "https://public.tableau.com" }
             ],
             project: "Create an executive sales KPI dashboard."
+          }
+        ]
+      },
+      {
+        id: "ai-engineer",
+        title: "Data Scientist & AI Specialist",
+        icon: "cpu",
+        tagline: "Train machine learning models, analyze big data, and integrate GenAI APIs.",
+        steps: [
+          {
+            id: "tech-ai-1",
+            title: "Mathematics & Scientific Python",
+            duration: "3 - 4 Weeks",
+            summary: "Linear algebra, probability, statistics, NumPy, and SciPy.",
+            concepts: ["Matrix Operations", "Probability Distributions", "Hypothesis Testing", "NumPy Arrays"],
+            resources: [
+              { name: "Khan Academy Linear Algebra & Stats", url: "https://www.khanacademy.org/math" }
+            ],
+            project: "Build a statistical analysis notebook for housing market predictions."
+          },
+          {
+            id: "tech-ai-2",
+            title: "Machine Learning with Scikit-Learn",
+            duration: "4 Weeks",
+            summary: "Supervised and unsupervised learning, regression, classification, and evaluation.",
+            concepts: ["Decision Trees", "Random Forests", "Overfitting vs Underfitting", "Cross-Validation"],
+            resources: [
+              { name: "Scikit-Learn Official User Guide", url: "https://scikit-learn.org/stable/user_guide.html" }
+            ],
+            project: "Train a customer churn prediction model with high accuracy."
+          },
+          {
+            id: "tech-ai-3",
+            title: "LLMs, RAG & Vector Databases",
+            duration: "3 - 4 Weeks",
+            summary: "Building generative AI applications using LangChain, OpenAI API, and Pinecone.",
+            concepts: ["Embeddings", "Vector Databases", "Prompt Engineering", "RAG Pipelines"],
+            resources: [
+              { name: "DeepLearning.AI Short Courses", url: "https://www.deeplearning.ai/short-courses/" }
+            ],
+            project: "Build a Custom Q&A Chatbot over your own PDF documents."
+          }
+        ]
+      },
+      {
+        id: "cybersecurity",
+        title: "Cybersecurity Analyst",
+        icon: "shield",
+        tagline: "Protect networks, audit security vulnerabilities, and monitor threat activity.",
+        steps: [
+          {
+            id: "tech-sec-1",
+            title: "Computer Networks & Security Fundamentals",
+            duration: "3 Weeks",
+            summary: "TCP/IP models, firewalls, DNS, VPNs, and common attack vectors.",
+            concepts: ["TCP/IP & OSI Layers", "Wireshark Packet Analysis", "DNS Spoofing", "Encryption Standards"],
+            resources: [
+              { name: "Cybrary Free Cybersecurity Fundamentals", url: "https://www.cybrary.it/" }
+            ],
+            project: "Analyze network traffic logs to detect suspicious activity."
+          },
+          {
+            id: "tech-sec-2",
+            title: "Vulnerability Scanning & Penetration Testing",
+            duration: "4 Weeks",
+            summary: "Identifying software flaws using tools like Nmap, Burp Suite, and Metasploit.",
+            concepts: ["Port Scanning", "OWASP Top 10", "SQL Injection", "XSS Vulnerabilities"],
+            resources: [
+              { name: "TryHackMe Interactive Rooms", url: "https://tryhackme.com/" }
+            ],
+            project: "Perform an OWASP security audit on an intentionally vulnerable web app."
           }
         ]
       }
@@ -188,7 +341,7 @@ const PATHWAYS_DATA = {
       {
         id: "uiux-designer",
         title: "UI/UX Designer",
-        icon: "figma",
+        icon: "palette",
         tagline: "Design human-centered user interfaces and wireframes in Figma.",
         steps: [
           {
@@ -242,6 +395,96 @@ const PATHWAYS_DATA = {
               { name: "Google Skillshop Ads Certification", url: "https://skillshop.exceedlms.com/" }
             ],
             project: "Design a $1,000 ad budget campaign strategy and creative copy."
+          }
+        ]
+      },
+      {
+        id: "business-analyst",
+        title: "Business Analyst",
+        icon: "pie-chart",
+        tagline: "Bridge business requirements with technical systems and operational strategy.",
+        steps: [
+          {
+            id: "nontech-ba-1",
+            title: "Business Requirements & Process Modeling",
+            duration: "3 Weeks",
+            summary: "Eliciting requirements, mapping process workflows (BPMN), and gap analysis.",
+            concepts: ["BPMN Flowcharts", "Gap Analysis", "Use Cases", "Stakeholder Mapping"],
+            resources: [
+              { name: "IIBA Business Analysis Guide", url: "https://www.iiba.org/" }
+            ],
+            project: "Document and model an AS-IS vs TO-BE workflow for a business process."
+          },
+          {
+            id: "nontech-ba-2",
+            title: "Data Analysis with Excel & PowerBI",
+            duration: "3 Weeks",
+            summary: "Advanced PivotTables, VLOOKUP/XLOOKUP, DAX formulas, and stakeholder reports.",
+            concepts: ["PivotTables", "XLOOKUP", "DAX Formulas", "Executive Summaries"],
+            resources: [
+              { name: "Microsoft Excel Learning Center", url: "https://support.microsoft.com/en-us/excel" }
+            ],
+            project: "Build an operational efficiency report in Excel for a logistics startup."
+          }
+        ]
+      },
+      {
+        id: "scrum-master",
+        title: "Scrum Master / Agile Coach",
+        icon: "users",
+        tagline: "Facilitate team execution, clear blockers, and foster continuous delivery.",
+        steps: [
+          {
+            id: "nontech-sm-1",
+            title: "Agile Manifesto & Scrum Ceremonies",
+            duration: "2 - 3 Weeks",
+            summary: "Sprint planning, daily standups, sprint reviews, and retrospectives.",
+            concepts: ["Sprint Planning", "Burndown Charts", "Agile Principles", "Retrospectives"],
+            resources: [
+              { name: "Official Scrum Guide", url: "https://scrumguides.org/" }
+            ],
+            project: "Set up a Jira project workspace with complete sprint board workflow rules."
+          },
+          {
+            id: "nontech-sm-2",
+            title: "Coaching & Conflict Resolution",
+            duration: "2 Weeks",
+            summary: "Servant leadership, removing team impedance, velocity tracking, and continuous improvement.",
+            concepts: ["Servant Leadership", "Team Velocity", "Story Point Estimation", "Impediment Removal"],
+            resources: [
+              { name: "Scrum.org Open Assessments", url: "https://www.scrum.org/open-assessments" }
+            ],
+            project: "Design an actionable Retrospective template for an underperforming sprint team."
+          }
+        ]
+      },
+      {
+        id: "solutions-architect",
+        title: "Solutions Architect / Tech Sales",
+        icon: "layers",
+        tagline: "Drive high-value enterprise sales with technical demos and solution designs.",
+        steps: [
+          {
+            id: "nontech-sa-1",
+            title: "Discovery & Solution Scoping",
+            duration: "3 Weeks",
+            summary: "Uncovering client technical pain points and drafting architectural proposals.",
+            concepts: ["Discovery Calls", "RFP Responses", "Technical Proofs of Concept", "Solution Architecture"],
+            resources: [
+              { name: "AWS Cloud Practitioner Essentials", url: "https://aws.amazon.com/training/" }
+            ],
+            project: "Create a technical proposal and architecture outline responding to a sample RFP."
+          },
+          {
+            id: "nontech-sa-2",
+            title: "Technical Demos & Objection Handling",
+            duration: "2 - 3 Weeks",
+            summary: "Conducting engaging software live demos and handling technical enterprise objections.",
+            concepts: ["Live Demos", "Security & Compliance Objections", "ROI Pitching", "Value Selling"],
+            resources: [
+              { name: "HubSpot Sales Enablement Guides", url: "https://academy.hubspot.com/" }
+            ],
+            project: "Record a 5-minute sales demo video presenting an enterprise cloud software product."
           }
         ]
       }
