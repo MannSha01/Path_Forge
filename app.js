@@ -1,7 +1,14 @@
+// ==========================================================================
 
-// --- LOADING SCREEN CONTROLLER ---
+
+
+// --- LOADING SCREEN & SCROLL UNLOCK CONTROLLER ---
 window.addEventListener("load", () => {
   const loadingScreen = document.getElementById("loading-screen");
+  
+  // Guarantee body scroll is unlocked immediately on startup
+  document.body.style.overflow = "auto";
+  
   if (loadingScreen) {
     setTimeout(() => {
       loadingScreen.classList.add("opacity-0", "pointer-events-none");
@@ -12,7 +19,7 @@ window.addEventListener("load", () => {
   }
 });
 
-// --- DATASET: BEGINNER-FRIENDLY PATHWAYS ---
+// --- DATASET: 15 COMPLETE BEGINNER-FRIENDLY PATHWAYS ---
 const PATHWAYS_DATA = {
   tech: {
     categoryName: "Tech & Coding",
@@ -198,6 +205,74 @@ const PATHWAYS_DATA = {
         ]
       },
       {
+        id: "devops",
+        title: "DevOps & Cloud Engineer",
+        icon: "cloud",
+        tagline: "Automate website deployments, manage cloud servers, and keep apps running 24/7.",
+        steps: [
+          {
+            id: "tech-do-1",
+            title: "Terminal Commands & Linux",
+            duration: "3 Weeks",
+            summary: "Learn how to control computers using text commands instead of clicking with a mouse.",
+            whyMatters: "Cloud servers in data centers don't have screen displays—you control them entirely through typed commands!",
+            concepts: ["Command Line Basics", "Automated Scripts", "Server Access"],
+            syllabus: [
+              "Week 1: Navigating folders, creating files, and editing permissions using terminal text commands.",
+              "Week 2: Connecting securely to distant cloud computers over the internet.",
+              "Week 3: Writing mini auto-scripts to back up files automatically every midnight."
+            ],
+            resources: [
+              { name: "Linux Journey Fundamentals", url: "https://linuxjourney.com/" }
+            ],
+            project: "Write an automated script that creates a daily backup copy of a folder."
+          },
+          {
+            id: "tech-do-2",
+            title: "App Packaging: Docker & Cloud",
+            duration: "3 Weeks",
+            summary: "Package your app into a clean digital box (container) so it runs on any computer in the world instantly.",
+            whyMatters: "Prevents the classic developer headache: 'Well, it worked on my laptop, why doesn't it work on the server?'",
+            concepts: ["Digital Boxes (Containers)", "Automatic Deployment", "Cloud Hosting"],
+            syllabus: [
+              "Week 1: Putting your code into a self-contained Docker container.",
+              "Week 2: Running multiple containers together (like web app + database).",
+              "Week 3: Setting up GitHub to auto-publish your app every time you save new code."
+            ],
+            resources: [
+              { name: "Docker Getting Started Guide", url: "https://docs.docker.com/get-started/" }
+            ],
+            project: "Box up a full web application into Docker and deploy it to a live cloud server."
+          }
+        ]
+      },
+      {
+        id: "mobile-dev",
+        title: "Mobile App Developer",
+        icon: "smartphone",
+        tagline: "Build mobile applications for iPhone (iOS) and Android phones.",
+        steps: [
+          {
+            id: "tech-mob-1",
+            title: "Cross-Platform Apps: React Native",
+            duration: "4 Weeks",
+            summary: "Write code once in JavaScript and turn it into native apps for both iPhone and Android.",
+            whyMatters: "Saves you from having to write two completely separate apps for Apple and Android.",
+            concepts: ["Mobile UI Screens", "Touch & Swipe Events", "Phone Camera & Storage"],
+            syllabus: [
+              "Week 1: Understanding mobile screen components, touch buttons, and scroll views.",
+              "Week 2: Moving smoothly between screens using swipe or back arrows.",
+              "Week 3: Saving app data directly on the phone's local memory.",
+              "Week 4: Preparing your app for submission to the Apple App Store and Google Play."
+            ],
+            resources: [
+              { name: "React Native Docs for Beginners", url: "https://reactnative.dev/" }
+            ],
+            project: "Build a mobile task list app where users can add, cross off, and save daily goals."
+          }
+        ]
+      },
+      {
         id: "data-analyst",
         title: "Data Analyst",
         icon: "bar-chart-3",
@@ -219,13 +294,97 @@ const PATHWAYS_DATA = {
               { name: "Mode Analytics Free SQL Course", url: "https://mode.com/sql-tutorial/" }
             ],
             project: "Analyze a real online store sales report to figure out their top 3 bestselling items."
+          },
+          {
+            id: "tech-da-2",
+            title: "Visual Dashboards: Excel & PowerBI",
+            duration: "2 - 3 Weeks",
+            summary: "Turn raw spreadsheets into beautiful, interactive charts and visual graphs for company leaders.",
+            whyMatters: "Executives don't want to look at endless text rows—they want clear visual pie charts and trends.",
+            concepts: ["Spreadsheet Magic", "Bar Charts & Pie Charts", "Live Dashboards"],
+            syllabus: [
+              "Week 1: Advanced spreadsheet formulas (VLOOKUP, SUMIFS, Pivot Tables).",
+              "Week 2: Creating clean visual charts that highlight important trends.",
+              "Week 3: Building interactive dashboards where users can filter numbers by date."
+            ],
+            resources: [
+              { name: "Microsoft PowerBI Beginner Guide", url: "https://learn.microsoft.com/power-bi/" }
+            ],
+            project: "Build a visual sales dashboard tracking revenue across different global cities."
+          }
+        ]
+      },
+      {
+        id: "ai-engineer",
+        title: "Data Scientist & AI Specialist",
+        icon: "cpu",
+        tagline: "Train smart computer algorithms, spot deep patterns, and build AI chatbots.",
+        steps: [
+          {
+            id: "tech-ai-1",
+            title: "Python for Data & Math Basics",
+            duration: "3 - 4 Weeks",
+            summary: "Learn Python—the easiest programming language—to crunch numbers and make predictions.",
+            whyMatters: "Python is the undisputed global language of Artificial Intelligence and Machine Learning.",
+            concepts: ["Python Basics", "Averages & Probability", "Data Charts"],
+            syllabus: [
+              "Week 1: Python programming basics (loops, lists, and numbers).",
+              "Week 2: Basic math and statistics concepts made easy with visual aids.",
+              "Week 3: Loading large data files and plotting graphs in Python."
+            ],
+            resources: [
+              { name: "Kaggle Python for Beginners", url: "https://www.kaggle.com/learn/python" }
+            ],
+            project: "Write a Python script that calculates housing price predictions based on square footage."
+          },
+          {
+            id: "tech-ai-2",
+            title: "AI Tools & Machine Learning",
+            duration: "3 Weeks",
+            summary: "Learn how modern AI models work and connect your app to OpenAI (ChatGPT) services.",
+            whyMatters: "Allows you to add smart AI features like automated summaries, text generation, and image recognition to apps.",
+            concepts: ["Machine Learning Basics", "Connecting AI APIs", "Smart Prompts"],
+            syllabus: [
+              "Week 1: How algorithms 'learn' patterns from old examples.",
+              "Week 2: Sending requests to ChatGPT-like AI models through code.",
+              "Week 3: Customizing AI responses to suit specific user needs."
+            ],
+            resources: [
+              { name: "DeepLearning.AI Short Courses", url: "https://www.deeplearning.ai/" }
+            ],
+            project: "Build a mini AI assistant that automatically summarizes long articles into 3 bullet points."
+          }
+        ]
+      },
+      {
+        id: "cybersecurity",
+        title: "Cybersecurity Analyst",
+        icon: "shield",
+        tagline: "Protect company networks, catch digital security risks, and defend against hackers.",
+        steps: [
+          {
+            id: "tech-sec-1",
+            title: "Internet Security & Networks",
+            duration: "3 Weeks",
+            summary: "Learn how information travels across the internet and how digital firewalls block bad activity.",
+            whyMatters: "You can't protect a computer network if you don't know how computers talk to each other!",
+            concepts: ["How Internet Works", "Firewalls", "Inspecting Web Traffic"],
+            syllabus: [
+              "Week 1: How websites send data back and forth securely (HTTP vs HTTPS).",
+              "Week 2: Using inspection tools to see network activity in real time.",
+              "Week 3: Identifying common hacker traps (phishing links, fake websites)."
+            ],
+            resources: [
+              { name: "Cybrary Free Cybersecurity Guide", url: "https://www.cybrary.it/" }
+            ],
+            project: "Inspect a sample network log file and identify suspicious unauthorized login attempts."
           }
         ]
       }
     ]
   },
   "non-tech": {
-    categoryName: "Design & Product",
+    categoryName: "Design & Business",
     roles: [
       {
         id: "uiux-designer",
@@ -249,6 +408,23 @@ const PATHWAYS_DATA = {
               { name: "Nielsen Norman Group UX Basics", url: "https://www.nngroup.com/" }
             ],
             project: "Sketch rough layout blueprints for a mobile app that helps people track daily hydration."
+          },
+          {
+            id: "nontech-ux-2",
+            title: "Visual Design & Figma Prototypes",
+            duration: "3 Weeks",
+            summary: "Turn rough sketches into glowing, clickable app designs with colors, icons, and interactive buttons.",
+            whyMatters: "Clickable prototypes feel like real apps and allow testing before any developer writes code.",
+            concepts: ["Figma Design Tool", "Colors & Typography", "Clickable Prototypes"],
+            syllabus: [
+              "Week 1: Master Figma basics—drawing shapes, choosing color palettes, and picking readable fonts.",
+              "Week 2: Designing polished mobile screens with consistent buttons and cards.",
+              "Week 3: Linking screens together with click animations so it feels like a real, working app."
+            ],
+            resources: [
+              { name: "Figma Official Beginners Course", url: "https://www.figma.com/resources/learn-design/" }
+            ],
+            project: "Create a fully clickable 4-screen prototype for a food delivery app in Figma."
           }
         ]
       },
@@ -256,7 +432,7 @@ const PATHWAYS_DATA = {
         id: "product-manager",
         title: "Product Manager",
         icon: "kanban",
-        tagline: "Guide app vision, guide team priorities, and make sure projects finish on schedule.",
+        tagline: "Guide app vision, set team priorities, and make sure projects finish on schedule.",
         steps: [
           {
             id: "nontech-pm-1",
@@ -276,6 +452,130 @@ const PATHWAYS_DATA = {
             project: "Write a 1-page proposal outlining an exciting new feature idea for your favorite mobile app."
           }
         ]
+      },
+      {
+        id: "digital-marketing",
+        title: "Digital Growth Marketer",
+        icon: "trending-up",
+        tagline: "Attract customers to apps and websites through search engines, content, and ads.",
+        steps: [
+          {
+            id: "nontech-dm-1",
+            title: "Search Engine Optimization (SEO)",
+            duration: "3 Weeks",
+            summary: "Learn how to get websites to show up at the top of Google search results for free.",
+            whyMatters: "Google gets billions of searches daily—ranking high brings millions of free visitors to your app.",
+            concepts: ["Google Keywords", "On-Page Articles", "Search Ranking"],
+            syllabus: [
+              "Week 1: Discovering what phrases and questions people search for on Google.",
+              "Week 2: Writing articles and organizing web pages so Google ranks them higher.",
+              "Week 3: Getting other respectable websites to link back to your content."
+            ],
+            resources: [
+              { name: "Ahrefs SEO Academy", url: "https://ahrefs.com/academy" }
+            ],
+            project: "Perform a keyword analysis and plan 3 blog article topics for a fitness app."
+          }
+        ]
+      },
+      {
+        id: "business-analyst",
+        title: "Business Analyst",
+        icon: "pie-chart",
+        tagline: "Bridge business requirements with tech teams to streamline company operations.",
+        steps: [
+          {
+            id: "nontech-ba-1",
+            title: "Process Mapping & Requirements",
+            duration: "3 Weeks",
+            summary: "Study how a company currently operates, find bottlenecks, and design smoother workflows.",
+            whyMatters: "Saves companies time and money by fixing inefficient or redundant daily procedures.",
+            concepts: ["Flowchart Diagrams", "Finding Bottlenecks", "Clear Step Lists"],
+            syllabus: [
+              "Week 1: Interviewing employees to understand their current daily task problems.",
+              "Week 2: Drawing visual flowcharts that show how work moves through a company.",
+              "Week 3: Creating an improved, step-by-step 'Future Process' plan."
+            ],
+            resources: [
+              { name: "IIBA Beginner Guide", url: "https://www.iiba.org/" }
+            ],
+            project: "Draw a simple flowchart diagram showing how a customer order gets fulfilled from purchase to delivery."
+          }
+        ]
+      },
+      {
+        id: "scrum-master",
+        title: "Scrum Master / Agile Coach",
+        icon: "users",
+        tagline: "Facilitate team teamwork, run daily standup meetings, and remove project blockers.",
+        steps: [
+          {
+            id: "nontech-sm-1",
+            title: "Agile Planning & Team Sprints",
+            duration: "2 Weeks",
+            summary: "Learn how modern software teams organize work into short 2-week mini-goals called 'Sprints'.",
+            whyMatters: "Helps teams build apps iteratively without getting overwhelmed by giant long-term deadlines.",
+            concepts: ["2-Week Sprints", "Daily Standup Meetings", "Task Boards"],
+            syllabus: [
+              "Week 1: Understanding Agile principles and setting up Trello/Jira task boards.",
+              "Week 2: Hosting short daily check-in meetings to help team members clear roadblocks."
+            ],
+            resources: [
+              { name: "Official Scrum Guide", url: "https://scrumguides.org/" }
+            ],
+            project: "Set up a digital Kanban task board (To Do, In Progress, Done) for a 2-week app build."
+          }
+        ]
+      },
+      {
+        id: "tech-writer",
+        title: "Technical Writer & Docs Specialist",
+        icon: "file-text",
+        tagline: "Write simple, clear help guides, manuals, and developer documentation.",
+        steps: [
+          {
+            id: "nontech-tw-1",
+            title: "Writing Easy Tech Guides",
+            duration: "2 - 3 Weeks",
+            summary: "Translate complex code and tech features into clear, simple instructions anyone can follow.",
+            whyMatters: "Great technology is useless if nobody can figure out how to use it!",
+            concepts: ["Clear Step-by-Step Writing", "User Guides", "Markdown Docs"],
+            syllabus: [
+              "Week 1: Writing with direct, simple language and avoiding confusing tech jargon.",
+              "Week 2: Formatting clean help articles with headings, code samples, and screenshots.",
+              "Week 3: Publishing documentation on web-based help sites."
+            ],
+            resources: [
+              { name: "Write the Docs Community Guides", url: "https://www.writethedocs.org/" }
+            ],
+            project: "Write a 1-page beginner user guide explaining how to set up two-factor security on a smartphone."
+          }
+        ]
+      },
+      {
+        id: "solutions-architect",
+        title: "Solutions Architect / Tech Sales",
+        icon: "layers",
+        tagline: "Match client business problems with the perfect technical software solutions.",
+        steps: [
+          {
+            id: "nontech-sa-1",
+            title: "Client Discovery & Pitch Proposals",
+            duration: "3 Weeks",
+            summary: "Listen to business needs, map out software tools that solve their problems, and present pitches.",
+            whyMatters: "Helps non-technical business leaders understand what tech tools they need to buy.",
+            concepts: ["Client Interviews", "Software Blueprints", "Proposal Pitches"],
+            syllabus: [
+              "Week 1: Asking effective questions to discover a business's tech pain points.",
+              "Week 2: Recommending cloud tools and estimating monthly implementation costs.",
+              "Week 3: Writing visual proposals and presenting solutions confidently."
+            ],
+            resources: [
+              { name: "AWS Cloud Practitioner Basics", url: "https://aws.amazon.com/training/" }
+            ],
+            project: "Create a 3-slide visual pitch proposing cloud software for a local retail store."
+          }
+        ]
       }
     ]
   }
@@ -284,21 +584,30 @@ const PATHWAYS_DATA = {
 // --- QUIZ QUESTIONS DATASET ---
 const QUIZ_QUESTIONS = [
   {
-    question: "What kind of activity sounds most fun to you?",
+    question: "What kind of daily problem-solving sounds most exciting to you?",
     options: [
-      { text: "Designing screen layouts, choosing colors, and making things look visual", category: "non-tech", roleId: "uiux-designer" },
-      { text: "Building website pages, writing basic code, or creating interactive buttons", category: "tech", roleId: "frontend" },
-      { text: "Searching through data to spot trends, charts, and patterns", category: "tech", roleId: "data-analyst" },
-      { text: "Planning project roadmaps, organizing team tasks, and brainstorm features", category: "non-tech", roleId: "product-manager" }
+      { text: "Designing screen layouts, colors, and visual prototypes", category: "non-tech", roleId: "uiux-designer" },
+      { text: "Writing code, building web pages, or creating server systems", category: "tech", roleId: "frontend" },
+      { text: "Analyzing numbers, spreadsheets, and visual trends", category: "tech", roleId: "data-analyst" },
+      { text: "Leading team strategy, organizing projects, and planning features", category: "non-tech", roleId: "product-manager" }
     ]
   },
   {
-    question: "How do you feel about writing computer code?",
+    question: "How do you feel about writing programming code?",
     options: [
-      { text: "I want to learn step-by-step programming from total scratch!", category: "tech", roleId: "frontend" },
-      { text: "I prefer using visual design software (like Figma) with no heavy code.", category: "non-tech", roleId: "uiux-designer" },
-      { text: "I like organizing data, numbers, and logical spreadsheets.", category: "tech", roleId: "data-analyst" },
-      { text: "I like high-level strategy, product ideas, and team management.", category: "non-tech", roleId: "product-manager" }
+      { text: "I want to learn step-by-step programming (HTML/JS/Python/SQL)!", category: "tech", roleId: "fullstack" },
+      { text: "I prefer visual design software (Figma) and zero coding.", category: "non-tech", roleId: "uiux-designer" },
+      { text: "I like business workflows, flowcharts, and clear team communication.", category: "non-tech", roleId: "business-analyst" },
+      { text: "I want to work with cloud platforms, servers, or cybersecurity.", category: "tech", roleId: "devops" }
+    ]
+  },
+  {
+    question: "What is your main career goal right now?",
+    options: [
+      { text: "Become a software developer or app builder", category: "tech", roleId: "frontend" },
+      { text: "Become a UX designer crafting app screen interfaces", category: "non-tech", roleId: "uiux-designer" },
+      { text: "Work in data analytics, AI, or cybersecurity defense", category: "tech", roleId: "ai-engineer" },
+      { text: "Guide product strategy, agile teams, or technical sales", category: "non-tech", roleId: "product-manager" }
     ]
   }
 ];
@@ -397,6 +706,7 @@ function showLandingView() {
   if (viewRoadmap) viewRoadmap.classList.add("hidden");
 
   if (navBackBtn) navBackBtn.classList.add("hidden");
+  document.body.style.overflow = "auto";
 }
 
 function selectCategory(categoryKey) {
@@ -424,9 +734,9 @@ function selectCategory(categoryKey) {
         </div>
 
         <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 w-full text-xs">
-          <span class="text-slate-500 font-medium">${role.steps.length} Easy Milestones</span>
+          <span class="text-slate-500 font-medium">${role.steps.length} Milestones</span>
           <span class="text-indigo-400 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition">
-            Start Learning <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            Start Pathway <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
           </span>
         </div>
       `;
@@ -444,6 +754,7 @@ function selectCategory(categoryKey) {
 
   if (backBtnText) backBtnText.textContent = "Home";
   if (navBackBtn) navBackBtn.classList.remove("hidden");
+  document.body.style.overflow = "auto";
 }
 
 function selectRole(role) {
@@ -458,6 +769,7 @@ function selectRole(role) {
 
   if (backBtnText) backBtnText.textContent = "Roles";
   if (navBackBtn) navBackBtn.classList.remove("hidden");
+  document.body.style.overflow = "auto";
 }
 
 // --- RENDER ROADMAP & PROGRESS ---
@@ -637,7 +949,7 @@ function renderRoadmap() {
   if (window.lucide) lucide.createIcons();
 }
 
-// --- ENHANCED BEGINNER-FRIENDLY PROGRESS TRACKER ---
+// --- BEGINNER PROGRESS TRACKER ---
 function updateProgress() {
   if (!currentRole) return;
 
@@ -767,10 +1079,11 @@ function recommendRole(answers) {
   };
 }
 
-// --- GENERAL MODAL UTILS ---
+// --- GENERAL MODAL UTILS (WITH SCROLL MANAGEMENT) ---
 function openModal() {
   if (modal) {
     modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden"; // Prevent background scroll when modal is open
     setTimeout(() => {
       if (modalBox) {
         modalBox.classList.remove("scale-95", "opacity-0");
@@ -787,5 +1100,6 @@ function closeModal() {
   }
   setTimeout(() => {
     if (modal) modal.classList.add("hidden");
+    document.body.style.overflow = "auto"; // Re-enable scroll when modal is closed
   }, 200);
 }
