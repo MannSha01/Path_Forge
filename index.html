@@ -4,78 +4,144 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PATH FORGE - Interactive Tech Career Pathways</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+  <!-- Custom Animations CSS -->
+  <style>
+    /* Floating Ambient Glowing Orbs */
+    @keyframes float-slow {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(30px, -40px) scale(1.1); }
+    }
+    @keyframes float-reverse {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-40px, 30px) scale(1.15); }
+    }
+    .animate-blob-1 { animation: float-slow 12s ease-in-out infinite; }
+    .animate-blob-2 { animation: float-reverse 15s ease-in-out infinite; }
+
+    /* Card Stagger Cascade Effect */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+      animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Shimmer effect for progress bar */
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .animate-shimmer {
+      background: linear-gradient(90deg, rgba(99,102,241,1) 0%, rgba(34,211,238,1) 50%, rgba(99,102,241,1) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite linear;
+    }
+
+    /* Modal scale pop */
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .animate-pop-in { animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
-  <!-- Header -->
-  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
-    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/30">
-          <i data-lucide="compass" class="w-6 h-6 text-white"></i>
+  <!-- Ambient Animated Background Lights -->
+  <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-[120px] animate-blob-1"></div>
+    <div class="absolute top-1/2 -right-32 w-96 h-96 bg-cyan-600/15 rounded-full blur-[140px] animate-blob-2"></div>
+  </div>
+
+  <div class="relative z-10 flex flex-col min-h-screen">
+    <!-- Header -->
+    <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40 transition-all">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3 group cursor-pointer">
+          <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-500 rounded-xl shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-transform duration-300">
+            <i data-lucide="compass" class="w-6 h-6 text-white animate-spin-slow"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-black bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent tracking-tight">
+              PATH FORGE
+            </h1>
+            <p class="text-xs text-slate-400 font-medium">Forge Your Tech Career Path</p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-            PATH FORGE
-          </h1>
-          <p class="text-xs text-slate-400">Forge Your Tech Career Path</p>
+
+        <!-- Controls -->
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <select id="role-select" class="bg-slate-900/90 border border-slate-700/80 hover:border-slate-600 text-slate-200 text-sm rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none px-3 py-2.5 w-full sm:w-52 cursor-pointer transition shadow-sm">
+            <option value="frontend">Frontend Developer</option>
+            <option value="backend">Backend Developer</option>
+            <option value="data-analyst">Data Analyst</option>
+            <option value="uiux">UI/UX Designer</option>
+          </select>
+          
+          <button id="reset-btn" class="px-3.5 py-2.5 bg-slate-800/80 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-300 text-xs font-semibold rounded-xl transition-all border border-slate-700/80 flex items-center gap-2 whitespace-nowrap shadow-sm group">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 group-hover:-rotate-90 transition-transform duration-300"></i> Reset
+          </button>
         </div>
       </div>
+    </header>
 
-      <!-- Controls -->
-      <div class="flex items-center gap-3 w-full sm:w-auto">
-        <select id="role-select" class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none p-2.5 w-full sm:w-48 cursor-pointer">
-          <option value="frontend">Frontend Developer</option>
-          <option value="backend">Backend Developer</option>
-          <option value="data-analyst">Data Analyst</option>
-          <option value="uiux">UI/UX Designer</option>
-        </select>
-        
-        <button id="reset-btn" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5 whitespace-nowrap">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+      
+      <!-- Pathway Header & Progress Card -->
+      <section class="bg-slate-900/70 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 mb-8 shadow-2xl relative overflow-hidden group">
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all duration-500"></div>
+
+        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-4 relative z-10">
+          <div>
+            <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-2">
+              <span class="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span> Interactive Career Roadmap
+            </div>
+            <h2 id="pathway-title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Loading Pathway...</h2>
+            <p id="pathway-desc" class="text-sm text-slate-400 mt-1 max-w-2xl">Preparing step-by-step milestones...</p>
+          </div>
+          
+          <div class="flex items-center gap-3 bg-slate-950/50 border border-slate-800 px-4 py-3 rounded-xl self-start sm:self-auto">
+            <div class="text-right">
+              <span id="progress-percent" class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">0%</span>
+              <p class="text-[10px] uppercase font-bold tracking-wider text-slate-400">Completed</p>
+            </div>
+            <div id="trophy-icon" class="p-2 rounded-lg bg-slate-800 text-slate-500 transition-colors duration-300">
+              <i data-lucide="trophy" class="w-6 h-6"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bar Track -->
+        <div class="w-full bg-slate-950/80 rounded-full h-3.5 p-0.5 border border-slate-800/60 overflow-hidden relative">
+          <div id="progress-bar" class="animate-shimmer h-full rounded-full transition-all duration-500 w-0 shadow-lg shadow-indigo-500/50"></div>
+        </div>
+      </section>
+
+      <!-- Steps Container -->
+      <section id="steps-container" class="space-y-4">
+        <!-- Dynamic Steps Injected via JS -->
+      </section>
+    </main>
+
+    <!-- Detail Drawer / Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="modal-box" class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative transform transition-transform duration-300">
+        <button id="close-modal" class="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-6xl mx-auto px-4 py-8">
-    <!-- Progress Bar Section -->
-    <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-8 shadow-xl">
-      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-3">
-        <div>
-          <h2 id="pathway-title" class="text-2xl font-bold text-white">Frontend Developer Pathway</h2>
-          <p id="pathway-desc" class="text-sm text-slate-400">Master modern web development from fundamentals to deployment.</p>
+        <div id="modal-content">
+          <!-- Injected dynamic detail content -->
         </div>
-        <div class="text-right">
-          <span id="progress-percent" class="text-2xl font-extrabold text-indigo-400">0%</span>
-          <p class="text-xs text-slate-400">Completed</p>
-        </div>
-      </div>
-      <!-- Progress Bar Track -->
-      <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
-        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-3 rounded-full transition-all duration-500 w-0"></div>
-      </div>
-    </section>
-
-    <!-- Timeline / Steps Grid -->
-    <section id="steps-container" class="space-y-4">
-      <!-- Dynamic Steps Injected via JavaScript -->
-    </section>
-  </main>
-
-  <!-- Resource Detail Modal -->
-  <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
-      <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <div id="modal-content">
-        <!-- Injected dynamic detail content -->
       </div>
     </div>
   </div>
