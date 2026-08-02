@@ -13,14 +13,26 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <style>
-    /* Reset & Base Styles */
+    /* Base Reset */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    /* Dark Grid Background */
+    /* Fixed Canvas Style to Ensure Visibility */
+    #fx-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    /* Grid Overlay */
     .bg-tech-grid {
       background-size: 32px 32px;
       background-image: 
@@ -28,26 +40,19 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
 
-    /* Ambient Glow Animation */
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 0.35; transform: scale(1); }
-      50% { opacity: 0.65; transform: scale(1.08); }
-    }
-    .animate-glow { animation: pulse-slow 8s ease-in-out infinite; }
-
-    /* Glass Cards */
+    /* Glassmorphism Cards */
     .glass-card {
-      background: rgba(15, 23, 42, 0.65);
+      background: rgba(15, 23, 42, 0.75);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.2);
     }
     .glass-card:hover {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.25);
     }
 
-    /* Splash Screen Animation */
+    /* Splash Screen Overlay */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -57,7 +62,7 @@
       align-items: center;
       justify-content: center;
       background-color: #060913;
-      animation: fadeOutOverlay 0.8s ease-in-out 3.8s forwards;
+      animation: fadeOutOverlay 0.8s ease-in-out 3.5s forwards;
     }
 
     .brand-container {
@@ -85,11 +90,6 @@
       width: 28px;
       height: 28px;
       fill: #ffffff;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
     }
 
     .brand-title {
@@ -146,7 +146,6 @@
       animation: fillProgress 2s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
     }
 
-    /* Keyframes */
     @keyframes revealBrand {
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
@@ -169,10 +168,10 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
-  <!-- Dynamic Canvas Background Engine -->
-  <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+  <!-- BACKGROUND CANVAS ENGINE -->
+  <canvas id="fx-canvas"></canvas>
 
-  <!-- Splash Screen Animation Overlay -->
+  <!-- SPLASH SCREEN OVERLAY -->
   <div class="splash-screen" id="splash">
     <div class="brand-container">
       <div class="logo-icon">
@@ -194,14 +193,10 @@
     </div>
   </div>
 
-  <!-- Ambient Glow Backdrops -->
-  <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none animate-glow"></div>
-  <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
-
   <div class="relative z-10 flex flex-col min-h-screen">
     
-    <!-- Top Bar Navigation -->
-    <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-40">
+    <!-- HEADER & THEME SWITCHER -->
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl sticky top-0 z-40">
       <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
         
         <!-- Logo -->
@@ -217,11 +212,10 @@
           </div>
         </div>
 
-        <!-- Dynamic Header Controls -->
+        <!-- Theme Selector Dropdown -->
         <div class="flex items-center gap-3">
-          <!-- Background Theme Selector Dropdown (4 Concepts) -->
-          <div class="relative inline-block text-left">
-            <select id="bg-selector" class="px-3 py-2 bg-slate-900 text-xs font-semibold text-indigo-300 rounded-xl border border-indigo-500/30 hover:border-indigo-500/60 transition cursor-pointer focus:outline-none">
+          <div class="relative inline-block">
+            <select id="bg-selector" class="px-3.5 py-2 bg-slate-900 text-xs font-bold text-indigo-300 rounded-xl border border-indigo-500/40 hover:border-indigo-400 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
               <option value="synapses">✨ Neural Synapse Glow</option>
               <option value="codesnippets">✨ Floating Code Snippets</option>
               <option value="warprays">✨ Perspective Warp Rays</option>
@@ -234,7 +228,7 @@
           </button>
           
           <button id="trigger-quiz-btn" class="px-5 py-2.5 bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
-            ✨ Confused? Take Quiz
+            ✨ Take Quiz
           </button>
           
           <button id="reset-btn" class="px-3 py-2 bg-slate-900 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-medium rounded-xl transition border border-slate-800 flex items-center gap-1.5 whitespace-nowrap">
@@ -244,10 +238,10 @@
       </div>
     </header>
 
-    <!-- Main Content Containers -->
+    <!-- MAIN VIEWS CONTAINER -->
     <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full flex flex-col justify-center">
       
-      <!-- ================= VIEW 1: DOMAIN SELECTION ================= -->
+      <!-- VIEW 1: DOMAIN SELECTION -->
       <section id="view-landing" class="space-y-8 text-center transition-all duration-300">
         <div class="max-w-2xl mx-auto space-y-3">
           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
@@ -262,9 +256,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
-          <!-- Tech Option -->
           <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition"></div>
             <div>
               <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="code-2" class="w-6 h-6"></i>
@@ -279,9 +271,7 @@
             </div>
           </button>
 
-          <!-- Non-Tech Option -->
           <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition"></div>
             <div>
               <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
@@ -298,22 +288,18 @@
         </div>
       </section>
 
-      <!-- ================= VIEW 2: ROLE SELECTION GRID ================= -->
+      <!-- VIEW 2: ROLE SELECTION -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
         <div class="text-center max-w-xl mx-auto space-y-2">
           <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
             Step 2: Choose Role
           </span>
           <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
-          <p class="text-slate-400 text-xs sm:text-sm">Pick a role to generate your dynamic learning roadmap.</p>
         </div>
-
-        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          <!-- Dynamically Injected Role Cards -->
-        </div>
+        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2"></div>
       </section>
 
-      <!-- ================= VIEW 3: ROADMAP & COURSES TIMELINE ================= -->
+      <!-- VIEW 3: ROADMAP & TIMELINE -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
         <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
@@ -325,8 +311,7 @@
               <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">Pathway description goes here...</p>
             </div>
 
-            <!-- Progress Box -->
-            <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl self-stretch sm:self-auto justify-between">
+            <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl">
               <div>
                 <span id="progress-percent" class="text-3xl font-black bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">0%</span>
                 <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">Completed</p>
@@ -337,34 +322,18 @@
             </div>
           </div>
 
-          <!-- Progress Bar -->
           <div class="w-full bg-slate-950/80 rounded-full h-2.5 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
-            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_12px_rgba(99,102,241,0.6)]"></div>
+            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0"></div>
           </div>
         </div>
 
-        <!-- Connected Timeline -->
         <div class="relative pl-6 sm:pl-8">
           <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500/80 via-cyan-500/40 to-slate-800"></div>
-          <div id="steps-container" class="space-y-6 relative">
-            <!-- Dynamic Steps Injected via JS -->
-          </div>
+          <div id="steps-container" class="space-y-6 relative"></div>
         </div>
       </section>
 
     </main>
-
-    <!-- App Detail Modal -->
-    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="modal-box" class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <button id="close-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-        <div id="modal-content">
-          <!-- Dynamic details -->
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- Lucide Icons Initialization -->
@@ -376,34 +345,35 @@
     });
   </script>
 
-  <!-- 4-Theme Background Script Engine -->
+  <!-- ISOLATED & RELIABLE BACKGROUND CANVAS ENGINE -->
   <script>
-    (function () {
+    window.addEventListener('DOMContentLoaded', () => {
       const canvas = document.getElementById('fx-canvas');
       if (!canvas) return;
-      const ctx = canvas.getContext('2d');
 
+      const ctx = canvas.getContext('2d');
       let width = (canvas.width = window.innerWidth);
       let height = (canvas.height = window.innerHeight);
-      let activeMode = 'synapses'; // Default initial theme
+      let activeMode = 'synapses';
       let mouse = { x: width / 2, y: height / 2 };
 
-      window.addEventListener('resize', () => {
+      // Ensure canvas stretches properly across all displays
+      function resizeCanvas() {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
-      });
-
+      }
+      window.addEventListener('resize', resizeCanvas);
       window.addEventListener('mousemove', (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
       });
 
-      // --- Theme 1: Neural Synapse Glow ---
-      const nodes = Array.from({ length: 45 }, () => ({
+      // --- Mode 1: Neural Synapse Glow ---
+      const nodes = Array.from({ length: 50 }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
         pulse: Math.random() * Math.PI,
-        size: Math.random() * 2.5 + 1.5
+        size: Math.random() * 2 + 1.5
       }));
       let impulses = [];
 
@@ -414,15 +384,15 @@
           nodes[i].pulse += 0.03;
           for (let j = i + 1; j < nodes.length; j++) {
             const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-            if (dist < 180) {
+            if (dist < 170) {
               ctx.beginPath();
               ctx.moveTo(nodes[i].x, nodes[i].y);
               ctx.lineTo(nodes[j].x, nodes[j].y);
-              ctx.strokeStyle = `rgba(99, 102, 241, ${0.35 - dist / 180})`;
-              ctx.lineWidth = 0.8;
+              ctx.strokeStyle = `rgba(99, 102, 241, ${0.4 - dist / 170})`;
+              ctx.lineWidth = 1;
               ctx.stroke();
 
-              if (Math.random() < 0.0008) {
+              if (Math.random() < 0.001) {
                 impulses.push({
                   x: nodes[i].x,
                   y: nodes[i].y,
@@ -438,41 +408,41 @@
           ctx.beginPath();
           ctx.arc(nodes[i].x, nodes[i].y, nodes[i].size + glow, 0, Math.PI * 2);
           ctx.fillStyle = '#38bdf8';
-          ctx.shadowBlur = 12;
+          ctx.shadowBlur = 10;
           ctx.shadowColor = '#38bdf8';
           ctx.fill();
         }
 
         for (let k = impulses.length - 1; k >= 0; k--) {
           const imp = impulses[k];
-          imp.progress += 0.04;
+          imp.progress += 0.035;
           const currX = imp.x + (imp.tx - imp.x) * imp.progress;
           const currY = imp.y + (imp.ty - imp.y) * imp.progress;
 
           ctx.beginPath();
           ctx.arc(currX, currY, 3, 0, Math.PI * 2);
           ctx.fillStyle = '#ffffff';
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = '#818cf8';
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = '#38bdf8';
           ctx.fill();
 
           if (imp.progress >= 1) impulses.splice(k, 1);
         }
       }
 
-      // --- Theme 2: Floating Code Snippets ---
-      const techTags = ['<React/>', 'SQL', 'Python', 'UX/UI', 'GraphQL', 'API', 'Docker', 'AWS', 'System.out', 'Git', 'Agile', 'CSS3'];
+      // --- Mode 2: Floating Code Snippets ---
+      const techTags = ['<React/>', 'SQL', 'Python', 'UX/UI', 'GraphQL', 'API', 'Docker', 'AWS', 'System.out', 'Git', 'CSS3'];
       const floaters = techTags.map(tag => ({
         text: tag,
         x: Math.random() * width,
         y: Math.random() * height,
-        speed: Math.random() * 0.4 + 0.2,
-        opacity: Math.random() * 0.5 + 0.25
+        speed: Math.random() * 0.5 + 0.2,
+        opacity: Math.random() * 0.5 + 0.3
       }));
 
       function drawCodeSnippets() {
         ctx.clearRect(0, 0, width, height);
-        ctx.font = '13px monospace';
+        ctx.font = '14px monospace';
 
         floaters.forEach(f => {
           f.y -= f.speed;
@@ -488,26 +458,24 @@
         });
       }
 
-      // --- Theme 3: Perspective Warp Rays ---
+      // --- Mode 3: Perspective Warp Rays ---
       let warpAngle = 0;
       function drawWarpRays() {
         ctx.clearRect(0, 0, width, height);
-        warpAngle += 0.002;
-        const centerX = mouse.x;
-        const centerY = mouse.y;
+        warpAngle += 0.003;
 
         for (let i = 0; i < 16; i++) {
           const angle = warpAngle + (i * Math.PI) / 8;
           ctx.beginPath();
-          ctx.moveTo(centerX, centerY);
-          ctx.lineTo(centerX + Math.cos(angle) * width * 1.5, centerY + Math.sin(angle) * height * 1.5);
-          ctx.strokeStyle = i % 2 === 0 ? 'rgba(99, 102, 241, 0.08)' : 'rgba(56, 189, 248, 0.08)';
-          ctx.lineWidth = 15;
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(mouse.x + Math.cos(angle) * width * 1.5, mouse.y + Math.sin(angle) * height * 1.5);
+          ctx.strokeStyle = i % 2 === 0 ? 'rgba(99, 102, 241, 0.12)' : 'rgba(56, 189, 248, 0.12)';
+          ctx.lineWidth = 12;
           ctx.stroke();
         }
       }
 
-      // --- Theme 4: Digital Wave Frequency ---
+      // --- Mode 4: Digital Wave Frequency ---
       let freqTick = 0;
       function drawFrequencyWave() {
         ctx.clearRect(0, 0, width, height);
@@ -515,8 +483,8 @@
 
         for (let line = 0; line < 4; line++) {
           ctx.beginPath();
-          ctx.lineWidth = 1.5;
-          ctx.strokeStyle = line % 2 === 0 ? 'rgba(56, 189, 248, 0.4)' : 'rgba(168, 85, 247, 0.4)';
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = line % 2 === 0 ? 'rgba(56, 189, 248, 0.45)' : 'rgba(168, 85, 247, 0.45)';
           ctx.shadowBlur = 10;
           ctx.shadowColor = ctx.strokeStyle;
 
@@ -541,17 +509,17 @@
 
       render();
 
-      // Dropdown Switcher Event
+      // Selector Event Listener
       const selector = document.getElementById('bg-selector');
       if (selector) {
         selector.addEventListener('change', (e) => {
           activeMode = e.target.value;
         });
       }
-    })();
+    });
   </script>
 
-  <!-- JavaScript Modules -->
+  <!-- External JS File Imports -->
   <script src="app.js"></script>
   <script src="quiz.js"></script>
 
