@@ -7,20 +7,14 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
+  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <style>
-    /* Reset & Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Dark Grid Background */
     .bg-tech-grid {
       background-size: 32px 32px;
       background-image: 
@@ -28,14 +22,12 @@
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     }
 
-    /* Ambient Glow Animation */
     @keyframes pulse-slow {
       0%, 100% { opacity: 0.35; transform: scale(1); }
       50% { opacity: 0.65; transform: scale(1.08); }
     }
     .animate-glow { animation: pulse-slow 8s ease-in-out infinite; }
 
-    /* Glass Cards */
     .glass-card {
       background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(16px);
@@ -47,151 +39,69 @@
       box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.2);
     }
 
-    /* Splash Screen Animation */
+    /* Splash Overlay */
     .splash-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       background-color: #060913;
       animation: fadeOutOverlay 0.8s ease-in-out 3.8s forwards;
     }
-
     .brand-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      opacity: 0;
+      display: flex; align-items: center; gap: 16px; opacity: 0;
       transform: scale(0.9) translateY(10px);
       animation: revealBrand 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     }
-
     .logo-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
+      width: 56px; height: 56px; border-radius: 14px;
       background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
-      animation: pulseGlow 2s ease-in-out infinite alternate;
     }
-
-    .logo-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: #ffffff;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-    }
-
+    .logo-icon svg { width: 28px; height: 28px; fill: #ffffff; }
     .brand-title {
-      font-size: 2rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 2rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
       background: linear-gradient(to right, #ffffff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-
-    .brand-subtitle {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-    }
-
+    .brand-subtitle { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
     .init-container {
-      margin-top: 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      animation: fadeInInit 0.6s ease-out 1.2s forwards;
+      margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+      opacity: 0; animation: fadeInInit 0.6s ease-out 1.2s forwards;
     }
-
-    .init-text {
-      font-size: 0.9rem;
-      color: #64748b;
-      letter-spacing: 0.05em;
-      font-weight: 500;
-    }
-
-    .progress-bar-bg {
-      width: 180px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
-      overflow: hidden;
-      position: relative;
-    }
-
+    .init-text { font-size: 0.9rem; color: #64748b; font-weight: 500; }
+    .progress-bar-bg { width: 180px; height: 3px; background: rgba(255, 255, 255, 0.08); border-radius: 4px; overflow: hidden; position: relative; }
     .progress-bar-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
-      border-radius: 4px;
+      position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: 4px;
       animation: fillProgress 2s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
     }
 
-    /* Keyframes */
-    @keyframes revealBrand {
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    @keyframes pulseGlow {
-      from { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
-      to { box-shadow: 0 0 35px rgba(56, 189, 248, 0.7); }
-    }
-    @keyframes fadeInInit {
-      to { opacity: 1; }
-    }
-    @keyframes fillProgress {
-      0% { width: 0%; }
-      50% { width: 60%; }
-      100% { width: 100%; }
-    }
-    @keyframes fadeOutOverlay {
-      to { opacity: 0; visibility: hidden; pointer-events: none; }
-    }
+    @keyframes revealBrand { to { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes fadeInInit { to { opacity: 1; } }
+    @keyframes fillProgress { 0% { width: 0%; } 50% { width: 60%; } 100% { width: 100%; } }
+    @keyframes fadeOutOverlay { to { opacity: 0; visibility: hidden; pointer-events: none; } }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
-  <!-- Splash Screen Animation Overlay -->
+  <!-- Splash Screen Overlay -->
   <div class="splash-screen" id="splash">
     <div class="brand-container">
       <div class="logo-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-        </svg>
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
       </div>
-      <div class="brand-text">
-        <span class="brand-title">Path Forge</span>
+      <div>
+        <span class="brand-title">Path Forge</span><br>
         <span class="brand-subtitle">Career Pathway Generator</span>
       </div>
     </div>
-
     <div class="init-container">
       <span class="init-text">initialisation is in progress...</span>
-      <div class="progress-bar-bg">
-        <div class="progress-bar-fill"></div>
-      </div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
     </div>
   </div>
 
-  <!-- Ambient Glow Backdrops -->
+  <!-- Ambient Glow -->
   <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none animate-glow"></div>
   <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
 
@@ -200,8 +110,6 @@
     <!-- Top Bar Navigation -->
     <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-40">
       <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
-        
-        <!-- Logo -->
         <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group">
           <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition">
             <i data-lucide="zap" class="w-5 h-5 text-white"></i>
@@ -214,13 +122,13 @@
           </div>
         </div>
 
-        <!-- Dynamic Header Controls -->
         <div class="flex items-center gap-3">
           <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700/80 transition flex items-center gap-1.5">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
           
-          <button id="trigger-quiz-btn" class="px-5 py-2.5 bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
+          <!-- Direct Onclick Quiz Button -->
+          <button id="trigger-quiz-btn" onclick="openQuizModal()" class="px-5 py-2.5 bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
             ✨ Confused? Take Quiz
           </button>
           
@@ -231,10 +139,8 @@
       </div>
     </header>
 
-    <!-- Main Content Containers -->
+    <!-- Main Content -->
     <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full flex flex-col justify-center">
-      
-      <!-- ================= VIEW 1: DOMAIN SELECTION ================= -->
       <section id="view-landing" class="space-y-8 text-center transition-all duration-300">
         <div class="max-w-2xl mx-auto space-y-3">
           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
@@ -249,9 +155,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
-          <!-- Tech Option -->
-          <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition"></div>
+          <button onclick="if(typeof selectCategory==='function') selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60 cursor-pointer">
             <div>
               <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="code-2" class="w-6 h-6"></i>
@@ -266,9 +170,7 @@
             </div>
           </button>
 
-          <!-- Non-Tech Option -->
-          <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition"></div>
+          <button onclick="if(typeof selectCategory==='function') selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60 cursor-pointer">
             <div>
               <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
@@ -285,34 +187,23 @@
         </div>
       </section>
 
-      <!-- ================= VIEW 2: ROLE SELECTION GRID ================= -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
         <div class="text-center max-w-xl mx-auto space-y-2">
-          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
-            Step 2: Choose Role
-          </span>
+          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">Step 2: Choose Role</span>
           <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
           <p class="text-slate-400 text-xs sm:text-sm">Pick a role to generate your dynamic learning roadmap.</p>
         </div>
-
-        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          <!-- Dynamically Injected Role Cards -->
-        </div>
+        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2"></div>
       </section>
 
-      <!-- ================= VIEW 3: ROADMAP & COURSES TIMELINE ================= -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
         <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
             <div>
-              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">
-                Tech Pathway
-              </span>
+              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">Tech Pathway</span>
               <h2 id="pathway-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight">Role Name</h2>
               <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">Pathway description goes here...</p>
             </div>
-
-            <!-- Progress Box -->
             <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl self-stretch sm:self-auto justify-between">
               <div>
                 <span id="progress-percent" class="text-3xl font-black bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">0%</span>
@@ -323,22 +214,16 @@
               </div>
             </div>
           </div>
-
-          <!-- Progress Bar -->
           <div class="w-full bg-slate-950/80 rounded-full h-2.5 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
             <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_12px_rgba(99,102,241,0.6)]"></div>
           </div>
         </div>
 
-        <!-- Connected Timeline -->
         <div class="relative pl-6 sm:pl-8">
           <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500/80 via-cyan-500/40 to-slate-800"></div>
-          <div id="steps-container" class="space-y-6 relative">
-            <!-- Dynamic Steps Injected via JS -->
-          </div>
+          <div id="steps-container" class="space-y-6 relative"></div>
         </div>
       </section>
-
     </main>
 
     <!-- App Detail Modal -->
@@ -347,25 +232,130 @@
         <button id="close-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-        <div id="modal-content">
-          <!-- Dynamic details -->
-        </div>
+        <div id="modal-content"></div>
       </div>
     </div>
+
+    <!-- Embedded Quiz Modal (Always Injected & Ready) -->
+    <div id="pathforge-quiz-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 relative shadow-2xl">
+        <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition cursor-pointer text-xl font-bold">✕</button>
+        <div id="modal-content-quiz" class="mt-2"></div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Lucide Icons Initialization -->
+  <!-- Main App Script -->
+  <script src="app.js"></script>
+
+  <!-- Inline Quiz Engine Script -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     });
+
+    const QUIZ_QUESTIONS = [
+      {
+        question: "1. What sounds like the most fun thing to build or work on?",
+        options: [
+          { text: "🎨 Designing clean visual interfaces and mobile layouts", category: "non-tech", roleId: "uiux-designer" },
+          { text: "💻 Writing code to make websites interactive", category: "tech", roleId: "frontend" },
+          { text: "📊 Finding hidden patterns and trends in raw data", category: "tech", roleId: "data-analyst" },
+          { text: "🚀 Planning new app ideas and feature roadmaps", category: "non-tech", roleId: "product-manager" }
+        ]
+      },
+      {
+        question: "2. How do you prefer to solve problems day-to-day?",
+        options: [
+          { text: "🎧 Deep focus: Logic, fixing bugs, and backend systems", category: "tech", roleId: "backend" },
+          { text: "✏️ Creative mode: Sketching ideas and user testing", category: "non-tech", roleId: "uiux-designer" },
+          { text: "💬 People mode: Helping teams and organizing tasks", category: "non-tech", roleId: "product-manager" },
+          { text: "📊 Analyst mode: Finding trends in spreadsheet data", category: "tech", roleId: "data-analyst" }
+        ]
+      },
+      {
+        question: "3. How do you feel about coding vs. visual creativity?",
+        options: [
+          { text: "I want code to be my main superpower (HTML, JS, React)", category: "tech", roleId: "frontend" },
+          { text: "I prefer zero code — give me design tools like Figma", category: "non-tech", roleId: "uiux-designer" },
+          { text: "I prefer fullstack engineering across frontend & backend", category: "tech", roleId: "fullstack" },
+          { text: "I prefer business strategy, product features, and vision", category: "non-tech", roleId: "product-manager" }
+        ]
+      }
+    ];
+
+    let quizAnswers = [];
+    let currentQuizStep = 0;
+
+    function openQuizModal() {
+      quizAnswers = [];
+      currentQuizStep = 0;
+      renderQuizQuestion();
+      const modal = document.getElementById("pathforge-quiz-modal");
+      if (modal) {
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        document.body.style.overflow = "hidden";
+      }
+    }
+
+    function closeQuizModal() {
+      const modal = document.getElementById("pathforge-quiz-modal");
+      if (modal) {
+        modal.classList.add("opacity-0", "pointer-events-none");
+        document.body.style.overflow = "auto";
+      }
+    }
+
+    function renderQuizQuestion() {
+      const q = QUIZ_QUESTIONS[currentQuizStep];
+      const container = document.getElementById("modal-content-quiz");
+
+      if (!q) {
+        calculateQuizResults();
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase">
+            Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}
+          </span>
+          <span class="text-xs text-slate-500 font-semibold">1-Min Career Quiz</span>
+        </div>
+
+        <h3 class="text-lg font-bold text-white mt-1 mb-4">${q.question}</h3>
+
+        <div class="space-y-2.5">
+          ${q.options.map((opt, i) => `
+            <button onclick="handleQuizOption(${i})" class="w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between cursor-pointer">
+              <span>${opt.text}</span>
+              <span class="text-indigo-400 font-bold">→</span>
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function handleQuizOption(index) {
+      const q = QUIZ_QUESTIONS[currentQuizStep];
+      quizAnswers.push(q.options[index]);
+      currentQuizStep++;
+      renderQuizQuestion();
+    }
+
+    function calculateQuizResults() {
+      const container = document.getElementById("modal-content-quiz");
+      container.innerHTML = `
+        <div class="text-center mb-4">
+          <h3 class="text-xl font-bold text-white">✨ Quiz Completed!</h3>
+          <p class="text-xs text-slate-400 mt-1">Based on your choices, we recommend exploring Tech & Engineering roles!</p>
+        </div>
+        <button onclick="closeQuizModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
+          Start Exploring →
+        </button>
+      `;
+    }
   </script>
-
-  <!-- JavaScript Modules -->
-  <script src="app.js"></script>
-  <script src="quiz.js"></script>
-
 </body>
 </html>
