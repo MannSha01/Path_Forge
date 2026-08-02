@@ -55,3 +55,157 @@
     <!-- Top Bar Navigation -->
     <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-40">
       <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
+        
+        <!-- Logo -->
+        <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group">
+          <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition">
+            <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+          </div>
+          <div>
+            <h1 class="text-lg font-extrabold tracking-wider bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
+              PATH FORGE
+            </h1>
+            <p class="text-[11px] text-slate-400 font-medium">Career Pathway Generator</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Header Controls -->
+        <div class="flex items-center gap-3">
+          <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700/80 transition flex items-center gap-1.5">
+            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
+          </button>
+          
+          <button id="reset-btn" class="px-3 py-2 bg-slate-900 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-medium rounded-xl transition border border-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Containers -->
+    <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full flex flex-col justify-center">
+      
+      <!-- ================= VIEW 1: DOMAIN SELECTION (Tech vs Non-Tech) ================= -->
+      <section id="view-landing" class="space-y-8 text-center transition-all duration-300">
+        <div class="max-w-2xl mx-auto space-y-3">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
+            <i data-lucide="compass" class="w-3.5 h-3.5"></i> Step 1: Choose Your Field
+          </span>
+          <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+            Forge Your Ideal Career Path
+          </h2>
+          <p class="text-slate-400 text-sm sm:text-base">
+            Select your target domain to generate tailor-made roadmaps, key skills, and curated courses.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
+          <!-- Tech Option -->
+          <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition"></div>
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                <i data-lucide="code-2" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
+              Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+            </div>
+          </button>
+
+          <!-- Non-Tech Option -->
+          <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition"></div>
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                <i data-lucide="briefcase" class="w-6 h-6"></i>
+              </div>
+              <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+                Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
+              Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 2: ROLE SELECTION GRID ================= -->
+      <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
+        <div class="text-center max-w-xl mx-auto space-y-2">
+          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
+            Step 2: Choose Role
+          </span>
+          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
+          <p class="text-slate-400 text-xs sm:text-sm">Pick a role to generate your dynamic learning roadmap.</p>
+        </div>
+
+        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
+          <!-- Dynamically Injected Role Cards -->
+        </div>
+      </section>
+
+      <!-- ================= VIEW 3: ROADMAP & COURSES TIMELINE ================= -->
+      <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
+        <!-- Pathway Summary Header -->
+        <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
+            <div>
+              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">
+                Tech Pathway
+              </span>
+              <h2 id="pathway-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight">Role Name</h2>
+              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">Pathway description goes here...</p>
+            </div>
+
+            <!-- Progress Box -->
+            <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl self-stretch sm:self-auto justify-between">
+              <div>
+                <span id="progress-percent" class="text-3xl font-black bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">0%</span>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">Completed</p>
+              </div>
+              <div id="trophy-container" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 transition-all duration-300">
+                <i data-lucide="trophy" class="w-6 h-6"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-950/80 rounded-full h-2.5 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_12px_rgba(99,102,241,0.6)]"></div>
+          </div>
+        </div>
+
+        <!-- Connected Timeline -->
+        <div class="relative pl-6 sm:pl-8">
+          <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500/80 via-cyan-500/40 to-slate-800"></div>
+          <div id="steps-container" class="space-y-6 relative">
+            <!-- Dynamic Steps Injected via JS -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Detail Drawer / Modal -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div id="modal-box" class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
+        <button id="close-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div id="modal-content">
+          <!-- Dynamic details -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
