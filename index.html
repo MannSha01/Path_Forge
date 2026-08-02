@@ -39,12 +39,12 @@
       box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.2);
     }
 
-    /* Splash Overlay */
+    /* Splash Screen Animation */
     .splash-screen {
       position: fixed; inset: 0; z-index: 9999;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       background-color: #060913;
-      animation: fadeOutOverlay 0.8s ease-in-out 3.8s forwards;
+      animation: fadeOutOverlay 0.8s ease-in-out 3.2s forwards;
     }
     .brand-container {
       display: flex; align-items: center; gap: 16px; opacity: 0;
@@ -66,19 +66,19 @@
     .brand-subtitle { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
     .init-container {
       margin-top: 48px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-      opacity: 0; animation: fadeInInit 0.6s ease-out 1.2s forwards;
+      opacity: 0; animation: fadeInInit 0.6s ease-out 1s forwards;
     }
     .init-text { font-size: 0.9rem; color: #64748b; font-weight: 500; }
     .progress-bar-bg { width: 180px; height: 3px; background: rgba(255, 255, 255, 0.08); border-radius: 4px; overflow: hidden; position: relative; }
     .progress-bar-fill {
       position: absolute; top: 0; left: 0; height: 100%; width: 0%;
       background: linear-gradient(90deg, #38bdf8, #818cf8); border-radius: 4px;
-      animation: fillProgress 2s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
+      animation: fillProgress 1.8s cubic-bezier(0.65, 0, 0.35, 1) 1.2s forwards;
     }
 
     @keyframes revealBrand { to { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes fadeInInit { to { opacity: 1; } }
-    @keyframes fillProgress { 0% { width: 0%; } 50% { width: 60%; } 100% { width: 100%; } }
+    @keyframes fillProgress { 0% { width: 0%; } 100% { width: 100%; } }
     @keyframes fadeOutOverlay { to { opacity: 0; visibility: hidden; pointer-events: none; } }
   </style>
 </head>
@@ -96,12 +96,12 @@
       </div>
     </div>
     <div class="init-container">
-      <span class="init-text">initialisation is in progress...</span>
+      <span class="init-text">initialising environment...</span>
       <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
     </div>
   </div>
 
-  <!-- Ambient Glow -->
+  <!-- Ambient Glow Backdrops -->
   <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none animate-glow"></div>
   <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
 
@@ -110,7 +110,8 @@
     <!-- Top Bar Navigation -->
     <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-40">
       <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
-        <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group">
+        
+        <div onclick="resetToHome()" class="flex items-center gap-3 cursor-pointer group">
           <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition">
             <i data-lucide="zap" class="w-5 h-5 text-white"></i>
           </div>
@@ -123,46 +124,47 @@
         </div>
 
         <div class="flex items-center gap-3">
-          <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700/80 transition flex items-center gap-1.5">
+          <button id="nav-back-btn" onclick="goBack()" class="hidden px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700/80 transition flex items-center gap-1.5 cursor-pointer">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
           
-          <!-- Direct Onclick Quiz Button -->
-          <button id="trigger-quiz-btn" onclick="openQuizModal()" class="px-5 py-2.5 bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
-            ✨ Confused? Take Quiz
+          <button onclick="openQuizModal()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-indigo-500/25 transition cursor-pointer flex items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Take Career Quiz
           </button>
           
-          <button id="reset-btn" class="px-3 py-2 bg-slate-900 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-medium rounded-xl transition border border-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <button onclick="resetToHome()" class="px-3 py-2 bg-slate-900 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-medium rounded-xl transition border border-slate-800 flex items-center gap-1.5 whitespace-nowrap cursor-pointer">
             <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
           </button>
         </div>
       </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main App Container -->
     <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full flex flex-col justify-center">
+      
+      <!-- ================= VIEW 1: DOMAIN SELECTION ================= -->
       <section id="view-landing" class="space-y-8 text-center transition-all duration-300">
         <div class="max-w-2xl mx-auto space-y-3">
           <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
-            <i data-lucide="compass" class="w-3.5 h-3.5"></i> Step 1: Choose Your Field
+            <i data-lucide="compass" class="w-3.5 h-3.5"></i> Step 1: Choose Your Domain
           </span>
           <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             Forge Your Ideal Career Path
           </h2>
           <p class="text-slate-400 text-sm sm:text-base">
-            Select your target domain to generate tailor-made roadmaps, key skills, and curated courses.
+            Select a category to explore interactive roadmaps, skills, and curated tools.
           </p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
-          <button onclick="if(typeof selectCategory==='function') selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60 cursor-pointer">
+          <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60 cursor-pointer">
             <div>
               <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="code-2" class="w-6 h-6"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
               <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
+                Frontend, Backend, Fullstack, Data Engineering, DevOps, and Systems Architecture.
               </p>
             </div>
             <div class="flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
@@ -170,14 +172,14 @@
             </div>
           </button>
 
-          <button onclick="if(typeof selectCategory==='function') selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60 cursor-pointer">
+          <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60 cursor-pointer">
             <div>
               <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
               <p class="text-xs text-slate-400 mt-2 leading-relaxed">
-                Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
+                Product Management, UI/UX Design, Digital Marketing, and Strategy.
               </p>
             </div>
             <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
@@ -187,22 +189,24 @@
         </div>
       </section>
 
+      <!-- ================= VIEW 2: ROLES LIST ================= -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
         <div class="text-center max-w-xl mx-auto space-y-2">
           <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">Step 2: Choose Role</span>
-          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
-          <p class="text-slate-400 text-xs sm:text-sm">Pick a role to generate your dynamic learning roadmap.</p>
+          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Career Goal</h2>
+          <p class="text-slate-400 text-xs sm:text-sm">Click a role to generate your structured learning roadmap.</p>
         </div>
         <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2"></div>
       </section>
 
+      <!-- ================= VIEW 3: ROADMAP TIMELINE ================= -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
         <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
             <div>
-              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">Tech Pathway</span>
+              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">Pathway</span>
               <h2 id="pathway-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight">Role Name</h2>
-              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">Pathway description goes here...</p>
+              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed"></p>
             </div>
             <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl self-stretch sm:self-auto justify-between">
               <div>
@@ -224,136 +228,286 @@
           <div id="steps-container" class="space-y-6 relative"></div>
         </div>
       </section>
+
     </main>
 
-    <!-- App Detail Modal -->
-    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="modal-box" class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <button id="close-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+    <!-- Quiz Modal -->
+    <div id="quiz-modal" class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div class="w-full max-w-lg glass-card border border-slate-700/80 rounded-2xl p-6 sm:p-7 relative shadow-2xl">
+        <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition cursor-pointer p-1">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
-        <div id="modal-content"></div>
-      </div>
-    </div>
-
-    <!-- Embedded Quiz Modal (Always Injected & Ready) -->
-    <div id="pathforge-quiz-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 relative shadow-2xl">
-        <button onclick="closeQuizModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition cursor-pointer text-xl font-bold">✕</button>
-        <div id="modal-content-quiz" class="mt-2"></div>
+        <div id="quiz-modal-body"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- Main App Script -->
-  <script src="app.js"></script>
-
-  <!-- Inline Quiz Engine Script -->
+  <!-- Unified App & Quiz Engine -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-    });
+    // Database of Roles & Roadmaps
+    const CAREER_DATA = {
+      tech: [
+        {
+          id: "frontend",
+          title: "Frontend Developer",
+          desc: "Build modern, responsive web interfaces using HTML, CSS, JavaScript, and React.",
+          steps: [
+            { title: "1. Web Foundations", detail: "Master semantic HTML5, modern CSS layouts (Flexbox & Grid), and basic JavaScript DOM manipulations." },
+            { title: "2. JavaScript Mastery", detail: "Learn ES6+, Async/Await, Fetch API, closures, and modular JS architecture." },
+            { title: "3. React & Ecosystem", detail: "Understand React components, Hooks, State management, Tailwind CSS, and Next.js." }
+          ]
+        },
+        {
+          id: "backend",
+          title: "Backend Engineer",
+          desc: "Architect databases, API endpoints, microservices, and server logic.",
+          steps: [
+            { title: "1. Language Fundamentals", detail: "Learn Node.js/Express, Python/FastAPI, or Java/Spring Boot." },
+            { title: "2. Databases & Storage", detail: "Master relational SQL (PostgreSQL) and NoSQL (MongoDB) databases." },
+            { title: "3. API Architecture & Security", detail: "Design REST & GraphQL APIs, JWT authentication, and OAuth 2.0." }
+          ]
+        },
+        {
+          id: "fullstack",
+          title: "Fullstack Engineer",
+          desc: "Bridge frontend client applications with backend server systems and databases.",
+          steps: [
+            { title: "1. Frontend Essentials", detail: "HTML, CSS, JavaScript, React, and Responsive Design." },
+            { title: "2. Backend & Database", detail: "Node.js, Express, PostgreSQL, Prisma ORM." },
+            { title: "3. Deployment & DevOps", detail: "Docker, CI/CD pipelines, AWS/Vercel deployment." }
+          ]
+        }
+      ],
+      "non-tech": [
+        {
+          id: "uiux-designer",
+          title: "UI/UX Designer",
+          desc: "Design intuitive digital product experiences, wireframes, and design systems.",
+          steps: [
+            { title: "1. Design Principles", detail: "Learn typography, color theory, grid systems, and layout hierarchies." },
+            { title: "2. Figma & Wireframing", detail: "Master Figma, interactive prototyping, component variants, and design systems." },
+            { title: "3. User Research & Testing", detail: "Conduct user interviews, usability testing, and wireframe iterations." }
+          ]
+        },
+        {
+          id: "product-manager",
+          title: "Product Manager",
+          desc: "Drive product vision, align cross-functional teams, and prioritize feature roadmaps.",
+          steps: [
+            { title: "1. Agile & Scrum Basics", detail: "Learn sprint planning, user stories, user journey mapping, and backlog grooming." },
+            { title: "2. Product Strategy & Metrics", detail: "Define KPIs, track retention metrics, and analyze user feedback." },
+            { title: "3. Wireframing & Tech Specs", detail: "Draft PRDs (Product Requirement Documents) and collaborate with engineers." }
+          ]
+        }
+      ]
+    };
+
+    // State
+    let currentCategory = null;
+    let currentRole = null;
+    let completedSteps = new Set();
+    let currentQuizIndex = 0;
+    let quizScores = { tech: 0, "non-tech": 0 };
 
     const QUIZ_QUESTIONS = [
       {
-        question: "1. What sounds like the most fun thing to build or work on?",
+        question: "What type of tasks do you enjoy most?",
         options: [
-          { text: "🎨 Designing clean visual interfaces and mobile layouts", category: "non-tech", roleId: "uiux-designer" },
-          { text: "💻 Writing code to make websites interactive", category: "tech", roleId: "frontend" },
-          { text: "📊 Finding hidden patterns and trends in raw data", category: "tech", roleId: "data-analyst" },
-          { text: "🚀 Planning new app ideas and feature roadmaps", category: "non-tech", roleId: "product-manager" }
+          { text: "Building interactive websites & software logic", category: "tech" },
+          { text: "Designing visual layouts and creative interface concepts", category: "non-tech" },
+          { text: "Solving backend system logic & data problems", category: "tech" },
+          { text: "Planning product features & organizing team goals", category: "non-tech" }
         ]
       },
       {
-        question: "2. How do you prefer to solve problems day-to-day?",
+        question: "How do you prefer to work with computers?",
         options: [
-          { text: "🎧 Deep focus: Logic, fixing bugs, and backend systems", category: "tech", roleId: "backend" },
-          { text: "✏️ Creative mode: Sketching ideas and user testing", category: "non-tech", roleId: "uiux-designer" },
-          { text: "💬 People mode: Helping teams and organizing tasks", category: "non-tech", roleId: "product-manager" },
-          { text: "📊 Analyst mode: Finding trends in spreadsheet data", category: "tech", roleId: "data-analyst" }
-        ]
-      },
-      {
-        question: "3. How do you feel about coding vs. visual creativity?",
-        options: [
-          { text: "I want code to be my main superpower (HTML, JS, React)", category: "tech", roleId: "frontend" },
-          { text: "I prefer zero code — give me design tools like Figma", category: "non-tech", roleId: "uiux-designer" },
-          { text: "I prefer fullstack engineering across frontend & backend", category: "tech", roleId: "fullstack" },
-          { text: "I prefer business strategy, product features, and vision", category: "non-tech", roleId: "product-manager" }
+          { text: "Writing clean code in a code editor", category: "tech" },
+          { text: "Creating designs and visual assets in Figma", category: "non-tech" },
+          { text: "Analyzing data trends and spreadsheets", category: "tech" },
+          { text: "Communicating ideas, strategy, and user feedback", category: "non-tech" }
         ]
       }
     ];
 
-    let quizAnswers = [];
-    let currentQuizStep = 0;
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
 
-    function openQuizModal() {
-      quizAnswers = [];
-      currentQuizStep = 0;
-      renderQuizQuestion();
-      const modal = document.getElementById("pathforge-quiz-modal");
-      if (modal) {
-        modal.classList.remove("opacity-0", "pointer-events-none");
-        document.body.style.overflow = "hidden";
+    // Navigation Logic
+    function selectCategory(cat) {
+      currentCategory = cat;
+      const roles = CAREER_DATA[cat] || [];
+      
+      document.getElementById("view-landing").classList.add("hidden");
+      document.getElementById("view-roles").classList.remove("hidden");
+      document.getElementById("nav-back-btn").classList.remove("hidden");
+
+      document.getElementById("role-category-title").textContent = cat === "tech" ? "Tech & Engineering Roles" : "Non-Tech & Business Roles";
+
+      const grid = document.getElementById("roles-grid");
+      grid.innerHTML = roles.map(role => `
+        <div onclick="selectRole('${role.id}')" class="glass-card p-6 rounded-2xl cursor-pointer hover:-translate-y-1 transition duration-300 border border-slate-800 hover:border-indigo-500/50 flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-white mb-2">${role.title}</h3>
+            <p class="text-xs text-slate-400 leading-relaxed">${role.desc}</p>
+          </div>
+          <div class="mt-6 flex items-center justify-between text-xs font-bold text-indigo-400">
+            <span>View Roadmap</span>
+            <span>→</span>
+          </div>
+        </div>
+      `).join('');
+
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    function selectRole(roleId) {
+      const allRoles = [...CAREER_DATA.tech, ...CAREER_DATA["non-tech"]];
+      currentRole = allRoles.find(r => r.id === roleId);
+      completedSteps.clear();
+
+      if (!currentRole) return;
+
+      document.getElementById("view-roles").classList.add("hidden");
+      document.getElementById("view-roadmap").classList.remove("hidden");
+
+      document.getElementById("pathway-title").textContent = currentRole.title;
+      document.getElementById("pathway-desc").textContent = currentRole.desc;
+      
+      renderRoadmapSteps();
+    }
+
+    function renderRoadmapSteps() {
+      const container = document.getElementById("steps-container");
+      container.innerHTML = currentRole.steps.map((step, idx) => {
+        const isDone = completedSteps.has(idx);
+        return `
+          <div onclick="toggleStep(${idx})" class="glass-card p-5 rounded-2xl border ${isDone ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-slate-800'} transition cursor-pointer flex items-start gap-4">
+            <div class="w-6 h-6 rounded-lg ${isDone ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400'} flex items-center justify-center font-bold text-xs mt-0.5">
+              ${isDone ? '✓' : idx + 1}
+            </div>
+            <div>
+              <h4 class="text-sm font-bold text-white ${isDone ? 'line-through text-slate-400' : ''}">${step.title}</h4>
+              <p class="text-xs text-slate-400 mt-1 leading-relaxed">${step.detail}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      updateProgress();
+    }
+
+    function toggleStep(idx) {
+      if (completedSteps.has(idx)) {
+        completedSteps.delete(idx);
+      } else {
+        completedSteps.add(idx);
       }
+      renderRoadmapSteps();
+    }
+
+    function updateProgress() {
+      const total = currentRole.steps.length;
+      const done = completedSteps.size;
+      const pct = Math.round((done / total) * 100);
+
+      document.getElementById("progress-percent").textContent = `${pct}%`;
+      document.getElementById("progress-bar").style.width = `${pct}%`;
+
+      if (pct === 100 && typeof confetti === 'function') {
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+      }
+    }
+
+    function resetToHome() {
+      document.getElementById("view-landing").classList.remove("hidden");
+      document.getElementById("view-roles").classList.add("hidden");
+      document.getElementById("view-roadmap").classList.add("hidden");
+      document.getElementById("nav-back-btn").classList.add("hidden");
+      currentCategory = null;
+      currentRole = null;
+    }
+
+    function goBack() {
+      if (!document.getElementById("view-roadmap").classList.contains("hidden")) {
+        document.getElementById("view-roadmap").classList.add("hidden");
+        document.getElementById("view-roles").classList.remove("hidden");
+      } else {
+        resetToHome();
+      }
+    }
+
+    // Quiz System
+    function openQuizModal() {
+      currentQuizIndex = 0;
+      quizScores = { tech: 0, "non-tech": 0 };
+      renderQuizQuestion();
+      
+      const modal = document.getElementById("quiz-modal");
+      modal.classList.remove("opacity-0", "pointer-events-none");
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 
     function closeQuizModal() {
-      const modal = document.getElementById("pathforge-quiz-modal");
-      if (modal) {
-        modal.classList.add("opacity-0", "pointer-events-none");
-        document.body.style.overflow = "auto";
-      }
+      const modal = document.getElementById("quiz-modal");
+      modal.classList.add("opacity-0", "pointer-events-none");
     }
 
     function renderQuizQuestion() {
-      const q = QUIZ_QUESTIONS[currentQuizStep];
-      const container = document.getElementById("modal-content-quiz");
+      const q = QUIZ_QUESTIONS[currentQuizIndex];
+      const body = document.getElementById("quiz-modal-body");
 
       if (!q) {
-        calculateQuizResults();
+        showQuizResult();
         return;
       }
 
-      container.innerHTML = `
-        <div class="flex items-center justify-between mb-2">
+      body.innerHTML = `
+        <div class="flex items-center justify-between mb-3">
           <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase">
-            Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}
+            Question ${currentQuizIndex + 1} of ${QUIZ_QUESTIONS.length}
           </span>
-          <span class="text-xs text-slate-500 font-semibold">1-Min Career Quiz</span>
+          <span class="text-xs text-slate-500 font-medium">Career Matcher</span>
         </div>
-
-        <h3 class="text-lg font-bold text-white mt-1 mb-4">${q.question}</h3>
-
+        <h3 class="text-lg font-bold text-white mb-4">${q.question}</h3>
         <div class="space-y-2.5">
           ${q.options.map((opt, i) => `
-            <button onclick="handleQuizOption(${i})" class="w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between cursor-pointer">
+            <button onclick="answerQuiz('${opt.category}')" class="w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between cursor-pointer">
               <span>${opt.text}</span>
               <span class="text-indigo-400 font-bold">→</span>
             </button>
-          `).join("")}
+          `).join('')}
         </div>
       `;
     }
 
-    function handleQuizOption(index) {
-      const q = QUIZ_QUESTIONS[currentQuizStep];
-      quizAnswers.push(q.options[index]);
-      currentQuizStep++;
+    function answerQuiz(category) {
+      quizScores[category]++;
+      currentQuizIndex++;
       renderQuizQuestion();
     }
 
-    function calculateQuizResults() {
-      const container = document.getElementById("modal-content-quiz");
-      container.innerHTML = `
-        <div class="text-center mb-4">
-          <h3 class="text-xl font-bold text-white">✨ Quiz Completed!</h3>
-          <p class="text-xs text-slate-400 mt-1">Based on your choices, we recommend exploring Tech & Engineering roles!</p>
+    function showQuizResult() {
+      const body = document.getElementById("quiz-modal-body");
+      const recommendedCat = quizScores.tech >= quizScores["non-tech"] ? "tech" : "non-tech";
+      const catLabel = recommendedCat === "tech" ? "Tech & Engineering" : "Non-Tech & Business";
+
+      body.innerHTML = `
+        <div class="text-center space-y-3">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto border border-indigo-500/30">
+            ✨
+          </div>
+          <h3 class="text-xl font-bold text-white">Recommended Domain</h3>
+          <p class="text-xs text-slate-400">Based on your choices, we recommend exploring:</p>
+          <div class="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-300 font-bold text-base">
+            ${catLabel}
+          </div>
+          <button onclick="closeQuizModal(); selectCategory('${recommendedCat}');" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition cursor-pointer mt-2">
+            Explore ${catLabel} Roles →
+          </button>
         </div>
-        <button onclick="closeQuizModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition cursor-pointer">
-          Start Exploring →
-        </button>
       `;
     }
   </script>
