@@ -1,6 +1,5 @@
-// ===================================================
-// PATH FORGE - PLUG & PLAY QUIZ & CURSOR MODULE
-// ===================================================
+
+
 
 // 1. QUIZ DATASET
 const QUIZ_QUESTIONS = [
@@ -54,15 +53,15 @@ const QUIZ_QUESTIONS = [
 let quizAnswers = [];
 let currentQuizStep = 0;
 
-// 2. MAIN INITIALIZATION (Handles DOM readiness automatically)
+// 2. MAIN INITIALIZATION
 function initPathForgeModule() {
-  // Prevent duplicate injections
-  if (document.getElementById("detail-modal")) return;
+  // Prevent duplicate injections with a unique modal ID
+  if (document.getElementById("pathforge-quiz-modal")) return;
 
-  // A. Inject Modal HTML
+  // A. Inject Modal HTML (using pathforge-quiz-modal to prevent ID collisions)
   const modalHTML = `
-    <div id="detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-      <div id="modal-box" class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 relative shadow-2xl">
+    <div id="pathforge-quiz-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+      <div id="pf-modal-box" class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl p-6 relative shadow-2xl">
         <button id="close-modal-quiz" class="absolute top-4 right-4 text-slate-400 hover:text-white transition cursor-pointer text-xl font-bold">
           ✕
         </button>
@@ -72,20 +71,23 @@ function initPathForgeModule() {
   `;
   document.body.insertAdjacentHTML("beforeend", modalHTML);
 
-  // B. Attach Click Handlers
-  const triggerBtn = document.getElementById("trigger-quiz-btn");
-  const topBannerBtn = document.getElementById("top-banner-quiz-btn");
-  const closeBtn = document.getElementById("close-modal-quiz");
-  const modal = document.getElementById("detail-modal");
+  // B. Event Delegation for Open/Close Buttons (Failsafe against missing/dynamic IDs)
+  document.addEventListener("click", (e) => {
+    const trigger = e.target.closest("#trigger-quiz-btn, #top-banner-quiz-btn, .trigger-quiz-btn, [data-action='open-quiz']");
+    if (trigger) {
+      e.preventDefault();
+      openQuizModal();
+    }
 
-  if (triggerBtn) triggerBtn.addEventListener("click", openQuizModal);
-  if (topBannerBtn) topBannerBtn.addEventListener("click", openQuizModal);
-  if (closeBtn) closeBtn.addEventListener("click", closeQuizModal);
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeQuizModal();
-    });
-  }
+    if (e.target.closest("#close-modal-quiz")) {
+      closeQuizModal();
+    }
+
+    const modal = document.getElementById("pathforge-quiz-modal");
+    if (modal && e.target === modal) {
+      closeQuizModal();
+    }
+  });
 
   // C. Inject Custom Glowing Cursor
   initCustomCursor();
@@ -93,55 +95,55 @@ function initPathForgeModule() {
   console.log("🚀 Path Forge Quiz & Custom Cursor active!");
 }
 
-// 3. BULLETPROOF CUSTOM CURSOR
+// 3. DESKTOP-FRIENDLY CUSTOM CURSOR
 function initCustomCursor() {
   if (document.getElementById("custom-cursor-dot")) return;
 
-  // Universal Cursor CSS
   const style = document.createElement("style");
   style.id = "custom-cursor-styles";
   style.innerHTML = `
-    *, *::before, *::after {
-      cursor: none !important;
-    }
-    #custom-cursor-dot {
-      position: fixed;
-      top: 0; left: 0;
-      width: 8px; height: 8px;
-      background-color: #818cf8;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 999999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.15s ease-out, background-color 0.2s;
-      box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
-    }
-    #custom-cursor-ring {
-      position: fixed;
-      top: 0; left: 0;
-      width: 36px; height: 36px;
-      border: 1.5px solid rgba(129, 140, 248, 0.5);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 999998;
-      transform: translate(-50%, -50%);
-      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
-    }
-    #custom-cursor-ring.cursor-hover {
-      width: 52px; height: 52px;
-      background-color: rgba(99, 102, 241, 0.15);
-      border-color: #a5b4fc;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-    }
-    #custom-cursor-dot.cursor-hover {
-      transform: translate(-50%, -50%) scale(1.5);
-      background-color: #34d399;
-      box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+    @media (pointer: fine) {
+      *, *::before, *::after {
+        cursor: none !important;
+      }
+      #custom-cursor-dot {
+        position: fixed;
+        top: 0; left: 0;
+        width: 8px; height: 8px;
+        background-color: #818cf8;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 999999;
+        transform: translate(-50%, -50%);
+        transition: transform 0.15s ease-out, background-color 0.2s;
+        box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
+      }
+      #custom-cursor-ring {
+        position: fixed;
+        top: 0; left: 0;
+        width: 36px; height: 36px;
+        border: 1.5px solid rgba(129, 140, 248, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 999998;
+        transform: translate(-50%, -50%);
+        transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      }
+      #custom-cursor-ring.cursor-hover {
+        width: 52px; height: 52px;
+        background-color: rgba(99, 102, 241, 0.15);
+        border-color: #a5b4fc;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+      }
+      #custom-cursor-dot.cursor-hover {
+        transform: translate(-50%, -50%) scale(1.5);
+        background-color: #34d399;
+        box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+      }
     }
   `;
   document.head.appendChild(style);
 
-  // Inject Cursor Elements
   const dot = document.createElement("div");
   dot.id = "custom-cursor-dot";
   const ring = document.createElement("div");
@@ -168,7 +170,6 @@ function initCustomCursor() {
   }
   animateRing();
 
-  // Hover Effect for interactive elements
   window.addEventListener("mouseover", (e) => {
     if (e.target.closest("button, a, input, label, select, [role='button'], .quiz-opt-btn")) {
       ring.classList.add("cursor-hover");
@@ -185,13 +186,19 @@ function openQuizModal() {
   quizAnswers = [];
   currentQuizStep = 0;
   renderQuizQuestion();
-  const modal = document.getElementById("detail-modal");
-  if (modal) modal.classList.remove("opacity-0", "pointer-events-none");
+  const modal = document.getElementById("pathforge-quiz-modal");
+  if (modal) {
+    modal.classList.remove("opacity-0", "pointer-events-none");
+    document.body.style.overflow = "hidden";
+  }
 }
 
 function closeQuizModal() {
-  const modal = document.getElementById("detail-modal");
-  if (modal) modal.classList.add("opacity-0", "pointer-events-none");
+  const modal = document.getElementById("pathforge-quiz-modal");
+  if (modal) {
+    modal.classList.add("opacity-0", "pointer-events-none");
+    document.body.style.overflow = "auto";
+  }
 }
 
 function renderQuizQuestion() {
@@ -223,9 +230,9 @@ function renderQuizQuestion() {
     </div>
   `;
 
-  document.querySelectorAll(".quiz-opt-btn").forEach((btn) => {
+  container.querySelectorAll(".quiz-opt-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-      const idx = parseInt(e.currentTarget.getAttribute("data-index"));
+      const idx = parseInt(e.currentTarget.getAttribute("data-index"), 10);
       quizAnswers.push(q.options[idx]);
       currentQuizStep++;
       renderQuizQuestion();
@@ -252,7 +259,18 @@ function calculateQuizResults() {
   }
 
   allRoles.sort((a, b) => (roleScores[b.id] || 0) - (roleScores[a.id] || 0));
-  const topMatches = allRoles.slice(0, 2);
+  const topMatches = allRoles.length > 0 ? allRoles.slice(0, 2) : [];
+
+  if (topMatches.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-4 space-y-3">
+        <h3 class="text-lg font-bold text-white">Quiz Completed!</h3>
+        <p class="text-xs text-slate-400">Explore our available pathways from the main screen to get started.</p>
+        <button onclick="closeQuizModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">Close</button>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = `
     <div class="text-center mb-4">
@@ -279,18 +297,18 @@ function calculateQuizResults() {
     </div>
   `;
 
-  document.querySelectorAll(".select-quiz-option-btn").forEach((btn) => {
+  container.querySelectorAll(".select-quiz-option-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const targetRoleId = e.currentTarget.getAttribute("data-role-id");
       const targetCategory = e.currentTarget.getAttribute("data-category");
       
       closeQuizModal();
 
-      if (typeof PATHWAYS_DATA !== "undefined" && typeof selectRole === "function") {
-        const chosenRole = PATHWAYS_DATA[targetCategory].roles.find(r => r.id === targetRoleId);
+      if (typeof PATHWAYS_DATA !== "undefined") {
+        const chosenRole = PATHWAYS_DATA[targetCategory]?.roles.find(r => r.id === targetRoleId);
         if (chosenRole) {
-          if (typeof currentCategory !== "undefined") currentCategory = targetCategory;
-          selectRole(chosenRole);
+          if (typeof selectCategory === "function") selectCategory(targetCategory);
+          if (typeof selectRole === "function") selectRole(chosenRole);
         }
       }
     });
