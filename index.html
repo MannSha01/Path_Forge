@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PATH FORGE | Tailor-Made Career Pathways</title>
+  <!-- Tailwind CSS via CDN for quick styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
+
+  <!-- HERO SECTION -->
+  <header class="text-center max-w-2xl mb-10">
+    <h1 class="text-5xl font-extrabold text-orange-500 mb-4 tracking-tight">PATH FORGE</h1>
+    <p class="text-slate-400 text-lg">Stop following generic maps. Craft a personalized learning pathway tailored to your exact target role.</p>
+  </header>
+
+  <!-- ROLE SELECTOR / INPUT -->
+  <main class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+    <label class="block text-sm font-medium text-slate-300 mb-2">Select Your Dream Role:</label>
+    <select id="role-select" class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg p-3 mb-4 focus:ring-2 focus:ring-orange-500 outline-none">
+      <option value="">-- Choose a Role --</option>
+      <option value="frontend">Frontend Developer</option>
+      <option value="backend">Backend Developer</option>
+      <option value="data">Data Analyst</option>
+    </select>
+    <button onclick="generatePath()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded-lg transition-colors">
+      Forge My Pathway 🚀
+    </button>
+  </main>
+
+  <!-- ROADMAP DISPLAY AREA -->
+  <section id="pathway-output" class="w-full max-w-2xl mt-10 hidden">
+    <h2 class="text-2xl font-bold mb-4 text-orange-400">Your Custom Pathway:</h2>
+    <div id="pathway-steps" class="space-y-4">
+      <!-- Steps will be injected here via JavaScript -->
+    </div>
+  </section>
+
+  <script>
+    function generatePath() {
+      const role = document.getElementById('role-select').value;
+      const output = document.getElementById('pathway-output');
+      const stepsContainer = document.getElementById('pathway-steps');
+
+      if (!role) {
+        alert("Please select a role first!");
+        return;
+      }
+
+      output.classList.remove('hidden');
+      
+      stepsContainer.innerHTML = `
+        <div class="p-4 bg-slate-900 border-l-4 border-orange-500 rounded-r-lg">
+          <h3 class="font-bold text-lg">Phase 1: Fundamentals</h3>
+          <p class="text-slate-400 text-sm">Master core syntax, tools, and essential theories for ${role}.</p>
+        </div>
+        <div class="p-4 bg-slate-900 border-l-4 border-orange-500 rounded-r-lg">
+          <h3 class="font-bold text-lg">Phase 2: Portfolio Project</h3>
+          <p class="text-slate-400 text-sm">Build a practical proof-of-concept project demonstrating your skills.</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
