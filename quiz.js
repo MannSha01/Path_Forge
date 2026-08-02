@@ -199,3 +199,106 @@ function calculateQuizResults() {
     });
   });
 }
+// ===================================================
+// CUSTOM GLOWING CURSOR MODULE
+// ===================================================
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Inject Cursor Styles
+  const cursorStyle = document.createElement("style");
+  cursorStyle.innerHTML = `
+    /* Hide default cursor on interactive elements for custom cursor feel */
+    body, button, a, input, label {
+      cursor: none !important;
+    }
+
+    .cursor-dot {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 8px;
+      height: 8px;
+      background-color: #818cf8; /* indigo-400 */
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.15s ease-out, background-color 0.2s;
+      box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
+    }
+
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(129, 140, 248, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    /* Hover State for Buttons & Quiz Options */
+    .cursor-ring.cursor-hover {
+      width: 52px;
+      height: 52px;
+      background-color: rgba(99, 102, 241, 0.15); /* indigo glow fill */
+      border-color: #a5b4fc;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .cursor-dot.cursor-hover {
+      transform: translate(-50%, -50%) scale(1.5);
+      background-color: #34d399; /* emerald highlight on hover */
+      box-shadow: 0 0 12px rgba(52, 211, 153, 0.9);
+    }
+  `;
+  document.head.appendChild(cursorStyle);
+
+  // 2. Inject Cursor HTML Elements
+  const dot = document.createElement("div");
+  const ring = document.createElement("div");
+  dot.className = "cursor-dot";
+  ring.className = "cursor-ring";
+  document.body.appendChild(dot);
+  document.body.appendChild(ring);
+
+  // 3. Mouse Movement Tracking
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    // Instant update for precision dot
+    dot.style.left = `${mouseX}px`;
+    dot.style.top = `${mouseY}px`;
+  });
+
+  // Smooth trailing animation loop for outer ring
+  function renderCursor() {
+    ringX += (mouseX - ringX) * 0.18; // Smooth lerp delay
+    ringY += (mouseY - ringY) * 0.18;
+
+    ring.style.left = `${ringX}px`;
+    ring.style.top = `${ringY}px`;
+
+    requestAnimationFrame(renderCursor);
+  }
+  renderCursor();
+
+  // 4. Hover Expansion Effect on Interactive Elements
+  document.addEventListener("mouseover", (e) => {
+    const isInteractive = e.target.closest("button, a, input, label, .quiz-opt-btn, .glass-card");
+    if (isInteractive) {
+      ring.classList.add("cursor-hover");
+      dot.classList.add("cursor-hover");
+    } else {
+      ring.classList.remove("cursor-hover");
+      dot.classList.remove("cursor-hover");
+    }
+  });
+});
