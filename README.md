@@ -6,11 +6,12 @@ PATH FORGE helps users escape "tutorial hell" by generating personalized, projec
 
 ## 👥 Team
 - Mann Sharma (25BAI10379)
+- Jayant Yadav (25BAI11172)
 - Anmol Shrivastva (25BAI10263)
 - Apoorva Krishna Tripathi (25BAI11098)
 - Divyansh Mishra (25BAI11302)
 - Harshvardhan Singh (25BAI11615)
-- Jayant Yadav (25BAI11172)
+
   
 
 ## 📌 Target MVP Features
