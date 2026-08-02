@@ -170,6 +170,9 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
+  <!-- Matrix Background Canvas -->
+  <canvas id="matrix-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-25"></canvas>
+
   <!-- Splash Screen Animation Overlay -->
   <div class="splash-screen" id="splash">
     <div class="brand-container">
@@ -362,6 +365,74 @@
         lucide.createIcons();
       }
     });
+  </script>
+
+  <!-- Glowing Animated Matrix Code Script -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('matrix-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      let width = (canvas.width = window.innerWidth);
+      let height = (canvas.height = window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initColumns();
+      });
+
+      // Technical & Code symbols matching Path Forge theme
+      const characters = '01{}[]</>:=+*#%;&_10101010ABCDEF';
+      const fontSize = 14;
+      let columns = Math.floor(width / fontSize);
+      let drops = [];
+
+      function initColumns() {
+        columns = Math.floor(width / fontSize);
+        drops = [];
+        for (let i = 0; i < columns; i++) {
+          drops[i] = Math.floor(Math.random() * -100); // Stagger start heights
+        }
+      }
+
+      initColumns();
+
+      function drawMatrix() {
+        // Semi-transparent background wipe for trailing effect
+        ctx.fillStyle = 'rgba(6, 9, 19, 0.15)';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.font = `${fontSize}px monospace`;
+
+        for (let i = 0; i < drops.length; i++) {
+          const char = characters.charAt(Math.floor(Math.random() * characters.length));
+          const x = i * fontSize;
+          const y = drops[i] * fontSize;
+
+          // Glowing lead character effect
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#38bdf8';
+          ctx.fillStyle = '#e0f2fe';
+          ctx.fillText(char, x, y);
+
+          // Subtle cyan/indigo body characters
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(56, 189, 248, 0.7)' : 'rgba(99, 102, 241, 0.7)';
+          ctx.fillText(char, x, y - fontSize);
+
+          if (y > height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+
+        requestAnimationFrame(drawMatrix);
+      }
+
+      drawMatrix();
+    })();
   </script>
 
   <!-- JavaScript Modules -->
