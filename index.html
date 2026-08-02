@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PATH FORGE | Tailor-Made Career Pathways</title>
-  <!-- Tailwind CSS via CDN for quick styling -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PATH FORGE - Interactive Tech Career Pathways</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
 
-  <!-- HERO SECTION -->
-  <header class="text-center max-w-2xl mb-10">
-    <h1 class="text-5xl font-extrabold text-orange-500 mb-4 tracking-tight">PATH FORGE</h1>
-    <p class="text-slate-400 text-lg">Stop following generic maps. Craft a personalized learning pathway tailored to your exact target role.</p>
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/30">
+          <i data-lucide="compass" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+            PATH FORGE
+          </h1>
+          <p class="text-xs text-slate-400">Forge Your Tech Career Path</p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <select id="role-select" class="bg-slate-800 border border-slate-700 text-slate-200 text-sm rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none p-2.5 w-full sm:w-48 cursor-pointer">
+          <option value="frontend">Frontend Developer</option>
+          <option value="backend">Backend Developer</option>
+          <option value="data-analyst">Data Analyst</option>
+          <option value="uiux">UI/UX Designer</option>
+        </select>
+        
+        <button id="reset-btn" class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5 whitespace-nowrap">
+          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- ROLE SELECTOR / INPUT -->
-  <main class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-    <label class="block text-sm font-medium text-slate-300 mb-2">Select Your Dream Role:</label>
-    <select id="role-select" class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg p-3 mb-4 focus:ring-2 focus:ring-orange-500 outline-none">
-      <option value="">-- Choose a Role --</option>
-      <option value="frontend">Frontend Developer</option>
-      <option value="backend">Backend Developer</option>
-      <option value="data">Data Analyst</option>
-    </select>
-    <button onclick="generatePath()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded-lg transition-colors">
-      Forge My Pathway 🚀
-    </button>
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <!-- Progress Bar Section -->
+    <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 mb-8 shadow-xl">
+      <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 mb-3">
+        <div>
+          <h2 id="pathway-title" class="text-2xl font-bold text-white">Frontend Developer Pathway</h2>
+          <p id="pathway-desc" class="text-sm text-slate-400">Master modern web development from fundamentals to deployment.</p>
+        </div>
+        <div class="text-right">
+          <span id="progress-percent" class="text-2xl font-extrabold text-indigo-400">0%</span>
+          <p class="text-xs text-slate-400">Completed</p>
+        </div>
+      </div>
+      <!-- Progress Bar Track -->
+      <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+        <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 to-cyan-400 h-3 rounded-full transition-all duration-500 w-0"></div>
+      </div>
+    </section>
+
+    <!-- Timeline / Steps Grid -->
+    <section id="steps-container" class="space-y-4">
+      <!-- Dynamic Steps Injected via JavaScript -->
+    </section>
   </main>
 
-  <!-- ROADMAP DISPLAY AREA -->
-  <section id="pathway-output" class="w-full max-w-2xl mt-10 hidden">
-    <h2 class="text-2xl font-bold mb-4 text-orange-400">Your Custom Pathway:</h2>
-    <div id="pathway-steps" class="space-y-4">
-      <!-- Steps will be injected here via JavaScript -->
+  <!-- Resource Detail Modal -->
+  <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
+      <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="modal-content">
+        <!-- Injected dynamic detail content -->
+      </div>
     </div>
-  </section>
+  </div>
 
-  <script>
-    function generatePath() {
-      const role = document.getElementById('role-select').value;
-      const output = document.getElementById('pathway-output');
-      const stepsContainer = document.getElementById('pathway-steps');
-
-      if (!role) {
-        alert("Please select a role first!");
-        return;
-      }
-
-      output.classList.remove('hidden');
-      
-      stepsContainer.innerHTML = `
-        <div class="p-4 bg-slate-900 border-l-4 border-orange-500 rounded-r-lg">
-          <h3 class="font-bold text-lg">Phase 1: Fundamentals</h3>
-          <p class="text-slate-400 text-sm">Master core syntax, tools, and essential theories for ${role}.</p>
-        </div>
-        <div class="p-4 bg-slate-900 border-l-4 border-orange-500 rounded-r-lg">
-          <h3 class="font-bold text-lg">Phase 2: Portfolio Project</h3>
-          <p class="text-slate-400 text-sm">Build a practical proof-of-concept project demonstrating your skills.</p>
-        </div>
-      `;
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
