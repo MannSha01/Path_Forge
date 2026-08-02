@@ -171,22 +171,6 @@ const PATHWAYS_DATA = {
               { name: "Auth0 Docs & Security Guides", url: "https://auth0.com/docs" }
             ],
             project: "Implement secure login/signup with NextAuth or Clerk."
-          },
-          {
-            id: "tech-fs-3",
-            title: "Payment Gateways & Deployment",
-            duration: "3 Weeks",
-            summary: "Integrating Stripe webhooks, deploying to Vercel, and CI/CD triggers.",
-            concepts: ["Stripe Webhooks", "Vercel Deployment", "Environment Variables", "Serverless Functions"],
-            syllabus: [
-              "Week 1: Stripe Checkout API and webhook event handling.",
-              "Week 2: Production environment security and database pooling.",
-              "Week 3: Continuous integration, build optimization, and Vercel deployment."
-            ],
-            resources: [
-              { name: "Stripe API Reference", url: "https://stripe.com/docs/api" }
-            ],
-            project: "Build a SaaS subscription application with paid tier access."
           }
         ]
       },
@@ -211,40 +195,6 @@ const PATHWAYS_DATA = {
               { name: "Linux Journey Fundamentals", url: "https://linuxjourney.com/" }
             ],
             project: "Write a shell script to automate server log rotation and backup."
-          },
-          {
-            id: "tech-do-2",
-            title: "Containerization with Docker & Kubernetes",
-            duration: "4 Weeks",
-            summary: "Packaging software into containers and orchestrating cluster deployments.",
-            concepts: ["Dockerfiles", "Docker Compose", "Pods & Services", "Helm Charts"],
-            syllabus: [
-              "Week 1: Container isolation, Docker images, and multi-stage Dockerfiles.",
-              "Week 2: Multi-container orchestration using Docker Compose.",
-              "Week 3: Kubernetes architecture, Pods, Deployments, and Services.",
-              "Week 4: Ingress controllers and package management with Helm."
-            ],
-            resources: [
-              { name: "Docker Official Docs & Getting Started", url: "https://docs.docker.com/get-started/" }
-            ],
-            project: "Containerize a multi-container app with frontend, backend, and Redis."
-          },
-          {
-            id: "tech-do-3",
-            title: "CI/CD & Infrastructure as Code (IaC)",
-            duration: "4 Weeks",
-            summary: "Automating deployments with GitHub Actions and provisioning cloud via Terraform.",
-            concepts: ["GitHub Actions Workflows", "Terraform State", "AWS EC2/S3", "CloudWatch"],
-            syllabus: [
-              "Week 1: Automated testing and build pipelines in GitHub Actions.",
-              "Week 2: Terraform syntax, state management, and provider configuration.",
-              "Week 3: AWS core infrastructure (VPC, EC2, S3, RDS) provisioning.",
-              "Week 4: End-to-end automated deployment pipeline to AWS."
-            ],
-            resources: [
-              { name: "HashiCorp Terraform Tutorials", url: "https://developer.hashicorp.com/terraform/tutorials" }
-            ],
-            project: "Build a CI/CD pipeline that automatically provisions AWS resources and deploys code."
           }
         ]
       },
@@ -269,39 +219,6 @@ const PATHWAYS_DATA = {
               { name: "Mode Analytics SQL Tutorial", url: "https://mode.com/sql-tutorial/" }
             ],
             project: "Solve business analytics questions on an e-commerce database."
-          },
-          {
-            id: "tech-da-2",
-            title: "Python Data Wrangling (Pandas/NumPy)",
-            duration: "4 Weeks",
-            summary: "Cleaning, transforming, and aggregating datasets programmatically.",
-            concepts: ["DataFrames", "Missing Value Cleanup", "Data Aggregation", "Seaborn Visuals"],
-            syllabus: [
-              "Week 1: Pandas DataFrames, Series, and data importing (CSV/JSON/SQL).",
-              "Week 2: Data cleansing: handling null values, deduplication, and type casting.",
-              "Week 3: Grouping, pivoting, and merging complex datasets.",
-              "Week 4: Data visualization using Matplotlib and Seaborn."
-            ],
-            resources: [
-              { name: "Pandas Documentation & Tutorials", url: "https://pandas.pydata.org/" }
-            ],
-            project: "Perform Exploratory Data Analysis (EDA) on a Kaggle dataset."
-          },
-          {
-            id: "tech-da-3",
-            title: "Business Dashboards (Power BI / Tableau)",
-            duration: "2 - 3 Weeks",
-            summary: "Building interactive dashboards for executive stakeholders.",
-            concepts: ["Dashboard UX", "Calculated Measures", "Filters & Slicers", "Storytelling"],
-            syllabus: [
-              "Week 1: Connecting data sources and building calculated measures (DAX).",
-              "Week 2: Designing interactive UI visual filters, slicers, and KPI cards.",
-              "Week 3: Data storytelling and automated report scheduling."
-            ],
-            resources: [
-              { name: "Tableau Public Learning Resources", url: "https://public.tableau.com" }
-            ],
-            project: "Create an executive sales KPI dashboard."
           }
         ]
       },
@@ -326,40 +243,6 @@ const PATHWAYS_DATA = {
               { name: "Khan Academy Linear Algebra & Stats", url: "https://www.khanacademy.org/math" }
             ],
             project: "Build a statistical analysis notebook for housing market predictions."
-          },
-          {
-            id: "tech-ai-2",
-            title: "Machine Learning with Scikit-Learn",
-            duration: "4 Weeks",
-            summary: "Supervised and unsupervised learning, regression, classification, and evaluation.",
-            concepts: ["Decision Trees", "Random Forests", "Overfitting vs Underfitting", "Cross-Validation"],
-            syllabus: [
-              "Week 1: Linear & Logistic Regression models and evaluation metrics.",
-              "Week 2: Decision Trees, Random Forests, and Gradient Boosting.",
-              "Week 3: Unsupervised clustering algorithms (K-Means, PCA).",
-              "Week 4: Hyperparameter tuning and model cross-validation."
-            ],
-            resources: [
-              { name: "Scikit-Learn Official User Guide", url: "https://scikit-learn.org/stable/user_guide.html" }
-            ],
-            project: "Train a customer churn prediction model with high accuracy."
-          },
-          {
-            id: "tech-ai-3",
-            title: "LLMs, RAG & Vector Databases",
-            duration: "3 - 4 Weeks",
-            summary: "Building generative AI applications using LangChain, OpenAI API, and Pinecone.",
-            concepts: ["Embeddings", "Vector Databases", "Prompt Engineering", "RAG Pipelines"],
-            syllabus: [
-              "Week 1: OpenAI & Hugging Face APIs and prompt engineering techniques.",
-              "Week 2: Text embeddings, similarity search, and Pinecone/ChromaDB.",
-              "Week 3: LangChain / LlamaIndex retrieval-augmented generation (RAG).",
-              "Week 4: Fine-tuning and deploying AI agents to web production."
-            ],
-            resources: [
-              { name: "DeepLearning.AI Short Courses", url: "https://www.deeplearning.ai/short-courses/" }
-            ],
-            project: "Build a Custom Q&A Chatbot over your own PDF documents."
           }
         ]
       },
@@ -384,23 +267,6 @@ const PATHWAYS_DATA = {
               { name: "Cybrary Free Cybersecurity Fundamentals", url: "https://www.cybrary.it/" }
             ],
             project: "Analyze network traffic logs to detect suspicious activity."
-          },
-          {
-            id: "tech-sec-2",
-            title: "Vulnerability Scanning & Penetration Testing",
-            duration: "4 Weeks",
-            summary: "Identifying software flaws using tools like Nmap, Burp Suite, and Metasploit.",
-            concepts: ["Port Scanning", "OWASP Top 10", "SQL Injection", "XSS Vulnerabilities"],
-            syllabus: [
-              "Week 1: Network reconnaissance and port scanning with Nmap.",
-              "Week 2: OWASP Top 10 Web vulnerabilities (SQLi, XSS, CSRF).",
-              "Week 3: Web proxy analysis using Burp Suite.",
-              "Week 4: Ethical hacking methodology and reporting vulnerabilities."
-            ],
-            resources: [
-              { name: "TryHackMe Interactive Rooms", url: "https://tryhackme.com/" }
-            ],
-            project: "Perform an OWASP security audit on an intentionally vulnerable web app."
           }
         ]
       }
@@ -430,37 +296,6 @@ const PATHWAYS_DATA = {
               { name: "Product School Free PM Resources", url: "https://productschool.com/free-product-management-resources" }
             ],
             project: "Create a product opportunity document for a new app idea."
-          },
-          {
-            id: "nontech-pm-2",
-            title: "Agile, Scrum & Spec Writing (PRDs)",
-            duration: "3 Weeks",
-            summary: "Writing Product Requirement Documents (PRDs), user stories, and managing sprint backlogs.",
-            concepts: ["PRD Structure", "User Stories & Acceptance Criteria", "Jira / Linear Backlogs", "Sprint Ceremonies"],
-            syllabus: [
-              "Week 1: Writing PRDs with technical specs and scope boundaries.",
-              "Week 2: Drafting user stories with strict acceptance criteria.",
-              "Week 3: Backlog grooming, story pointing, and sprint planning in Jira."
-            ],
-            resources: [
-              { name: "Atlassian Agile Coach Guide", url: "https://www.atlassian.com/agile" }
-            ],
-            project: "Write a complete PRD with user stories for a mobile feature."
-          },
-          {
-            id: "nontech-pm-3",
-            title: "Product Analytics & Metrics",
-            duration: "2 Weeks",
-            summary: "Tracking user retention, funnel conversion, activation metrics, and A/B testing.",
-            concepts: ["North Star Metric", "AARRR Funnel", "Conversion Funnels", "Mixpanel / Amplitude"],
-            syllabus: [
-              "Week 1: Identifying North Star Metrics and setting up pirate metrics (AARRR).",
-              "Week 2: Cohort retention analysis, conversion funnels, and A/B test setup."
-            ],
-            resources: [
-              { name: "Mixpanel Analytics Guide", url: "https://mixpanel.com/blog/" }
-            ],
-            project: "Set up a product analytics tracking plan for an e-commerce funnel."
           }
         ]
       },
@@ -485,23 +320,6 @@ const PATHWAYS_DATA = {
               { name: "Nielsen Norman Group UX Articles", url: "https://www.nngroup.com/" }
             ],
             project: "Conduct interviews and create 2 user personas for a concept app."
-          },
-          {
-            id: "nontech-ux-2",
-            title: "Figma Prototyping & Design Systems",
-            duration: "3 - 4 Weeks",
-            summary: "Wireframing, Auto Layout, component variants, and micro-interactions.",
-            concepts: ["Auto Layout", "Component Variants", "Design Systems", "Interactive Prototypes"],
-            syllabus: [
-              "Week 1: Low-fidelity wireframing and layout hierarchy.",
-              "Week 2: Figma mastery: Auto Layout 5.0, constraints, and responsive frames.",
-              "Week 3: Building re-usable design tokens, component libraries, and variants.",
-              "Week 4: High-fidelity interactive prototyping and smart animation."
-            ],
-            resources: [
-              { name: "Figma Official Learn Hub", url: "https://www.figma.com/resources/learn/" }
-            ],
-            project: "Design an interactive mobile app prototype in Figma."
           }
         ]
       },
@@ -526,22 +344,6 @@ const PATHWAYS_DATA = {
               { name: "Ahrefs SEO Learning Center", url: "https://ahrefs.com/academy" }
             ],
             project: "Perform an SEO audit and keyword strategy for a SaaS blog."
-          },
-          {
-            id: "nontech-dm-2",
-            title: "Performance Marketing (Meta & Google Ads)",
-            duration: "3 Weeks",
-            summary: "Structuring paid ad campaigns, copywriting, conversion rate optimization (CRO), and ROAS.",
-            concepts: ["Ad Copywriting", "Audience Targeting", "ROAS Optimization", "A/B Testing"],
-            syllabus: [
-              "Week 1: Google Search/Display Ads setup, match types, and Quality Score.",
-              "Week 2: Meta Ads Manager targeting, custom audiences, and ad creative formats.",
-              "Week 3: Landing page CRO, conversion pixel tracking, and ROAS optimization."
-            ],
-            resources: [
-              { name: "Google Skillshop Ads Certification", url: "https://skillshop.exceedlms.com/" }
-            ],
-            project: "Design a $1,000 ad budget campaign strategy and creative copy."
           }
         ]
       },
@@ -566,22 +368,6 @@ const PATHWAYS_DATA = {
               { name: "IIBA Business Analysis Guide", url: "https://www.iiba.org/" }
             ],
             project: "Document and model an AS-IS vs TO-BE workflow for a business process."
-          },
-          {
-            id: "nontech-ba-2",
-            title: "Data Analysis with Excel & PowerBI",
-            duration: "3 Weeks",
-            summary: "Advanced PivotTables, VLOOKUP/XLOOKUP, DAX formulas, and stakeholder reports.",
-            concepts: ["PivotTables", "XLOOKUP", "DAX Formulas", "Executive Summaries"],
-            syllabus: [
-              "Week 1: Advanced Excel functions (XLOOKUP, INDEX/MATCH, Nested IFs).",
-              "Week 2: PivotTables, data modeling, and automated macro/Power Query scripts.",
-              "Week 3: PowerBI dashboard creation and automated reporting."
-            ],
-            resources: [
-              { name: "Microsoft Excel Learning Center", url: "https://support.microsoft.com/en-us/excel" }
-            ],
-            project: "Build an operational efficiency report in Excel for a logistics startup."
           }
         ]
       },
@@ -606,21 +392,6 @@ const PATHWAYS_DATA = {
               { name: "Official Scrum Guide", url: "https://scrumguides.org/" }
             ],
             project: "Set up a Jira project workspace with complete sprint board workflow rules."
-          },
-          {
-            id: "nontech-sm-2",
-            title: "Coaching & Conflict Resolution",
-            duration: "2 Weeks",
-            summary: "Servant leadership, removing team impedance, velocity tracking, and continuous improvement.",
-            concepts: ["Servant Leadership", "Team Velocity", "Story Point Estimation", "Impediment Removal"],
-            syllabus: [
-              "Week 1: Servant leadership techniques, team coaching, and psychological safety.",
-              "Week 2: Eliminating team impediments, tracking velocity, and burn-up/down charts."
-            ],
-            resources: [
-              { name: "Scrum.org Open Assessments", url: "https://www.scrum.org/open-assessments" }
-            ],
-            project: "Design an actionable Retrospective template for an underperforming sprint team."
           }
         ]
       },
@@ -645,22 +416,6 @@ const PATHWAYS_DATA = {
               { name: "AWS Cloud Practitioner Essentials", url: "https://aws.amazon.com/training/" }
             ],
             project: "Create a technical proposal and architecture outline responding to a sample RFP."
-          },
-          {
-            id: "nontech-sa-2",
-            title: "Technical Demos & Objection Handling",
-            duration: "2 - 3 Weeks",
-            summary: "Conducting engaging software live demos and handling technical enterprise objections.",
-            concepts: ["Live Demos", "Security & Compliance Objections", "ROI Pitching", "Value Selling"],
-            syllabus: [
-              "Week 1: Structuring customized, value-driven live product demonstrations.",
-              "Week 2: Addressing enterprise compliance, SOC2 security, and IT governance objections.",
-              "Week 3: ROI calculations and executive closing strategies."
-            ],
-            resources: [
-              { name: "HubSpot Sales Enablement Guides", url: "https://academy.hubspot.com/" }
-            ],
-            project: "Record a 5-minute sales demo video presenting an enterprise cloud software product."
           }
         ]
       }
@@ -668,10 +423,43 @@ const PATHWAYS_DATA = {
   }
 };
 
+// --- QUIZ QUESTIONS DATASET ---
+const QUIZ_QUESTIONS = [
+  {
+    question: "What type of daily problem-solving excites you the most?",
+    options: [
+      { text: "Designing visual UI layouts, colors, and user interactions", category: "non-tech", roleId: "uiux-designer" },
+      { text: "Writing logical code, building web apps, or managing databases", category: "tech", roleId: "frontend" },
+      { text: "Analyzing numbers, datasets, charts, and financial metrics", category: "tech", roleId: "data-analyst" },
+      { text: "Leading project strategy, managing teams, and defining features", category: "non-tech", roleId: "product-manager" }
+    ]
+  },
+  {
+    question: "How do you feel about writing deep programming code?",
+    options: [
+      { text: "I want code to be my core daily tool (HTML/JS/Python/SQL)", category: "tech", roleId: "fullstack" },
+      { text: "I prefer visual design tools (Figma) and zero heavy code", category: "non-tech", roleId: "uiux-designer" },
+      { text: "I like business logic, process mapping, and spreadsheets", category: "non-tech", roleId: "business-analyst" },
+      { text: "I enjoy high-level technical concepts and client pitches", category: "non-tech", roleId: "solutions-architect" }
+    ]
+  },
+  {
+    question: "What is your primary career target right now?",
+    options: [
+      { text: "Become a software developer or cloud engineer", category: "tech", roleId: "frontend" },
+      { text: "Become a UX designer crafting digital experiences", category: "non-tech", roleId: "uiux-designer" },
+      { text: "Become a product manager or agile facilitator", category: "non-tech", roleId: "product-manager" },
+      { text: "Work in data analytics, AI, or cybersecurity", category: "tech", roleId: "ai-engineer" }
+    ]
+  }
+];
+
 // --- APP STATE ---
 let currentCategory = null; // 'tech' | 'non-tech'
 let currentRole = null;     // role object
 let completedMap = JSON.parse(localStorage.getItem("pathforge_completed")) || {};
+let quizAnswers = [];
+let currentQuizStep = 0;
 let hasCelebrated = false;
 
 // --- DOM ELEMENTS ---
@@ -683,6 +471,10 @@ const navBackBtn = document.getElementById("nav-back-btn");
 const backBtnText = document.getElementById("back-btn-text");
 const logoBtn = document.getElementById("logo-btn");
 const resetBtn = document.getElementById("reset-btn");
+
+const startHeroBtn = document.getElementById("start-hero-btn");
+const triggerQuizBtn = document.getElementById("trigger-quiz-btn");
+const topBannerQuizBtn = document.getElementById("top-banner-quiz-btn");
 
 const roleCategoryBadge = document.getElementById("role-category-badge");
 const roleCategoryTitle = document.getElementById("role-category-title");
@@ -701,17 +493,28 @@ const modalBox = document.getElementById("modal-box");
 const modalContent = document.getElementById("modal-content");
 const closeModalBtn = document.getElementById("close-modal");
 
-// --- NAVIGATION & ROUTING CONTROLS ---
+// --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
   lucide.createIcons();
 
   logoBtn.addEventListener("click", showLandingView);
 
+  // Hero Actions
+  if (startHeroBtn) {
+    startHeroBtn.addEventListener("click", () => selectCategory("tech")); // default to tech grid or category choice
+  }
+  if (triggerQuizBtn) {
+    triggerQuizBtn.addEventListener("click", openQuizModal);
+  }
+  if (topBannerQuizBtn) {
+    topBannerQuizBtn.addEventListener("click", openQuizModal);
+  }
+
   navBackBtn.addEventListener("click", () => {
-    if (viewRoadmap.classList.contains("hidden")) {
-      showLandingView();
+    if (!viewRoadmap.classList.contains("hidden")) {
+      selectCategory(currentCategory || "tech");
     } else {
-      selectCategory(currentCategory);
+      showLandingView();
     }
   });
 
@@ -781,7 +584,7 @@ function selectCategory(categoryKey) {
   viewRoles.classList.remove("hidden");
   viewRoadmap.classList.add("hidden");
 
-  backBtnText.textContent = "Domains";
+  backBtnText.textContent = "Home";
   navBackBtn.classList.remove("hidden");
 }
 
@@ -799,7 +602,7 @@ function selectRole(role) {
   navBackBtn.classList.remove("hidden");
 }
 
-// --- RENDER ROADMAP WITH INLINE EXPANDABLE DETAILS ---
+// --- RENDER ROADMAP ---
 function renderRoadmap() {
   if (!currentRole) return;
 
@@ -871,7 +674,6 @@ function renderRoadmap() {
         <!-- COLLAPSIBLE EXPANDED DETAILS SECTION -->
         <div id="expand-${step.id}" class="hidden mt-5 pt-5 border-t border-slate-800/80 space-y-4 transition-all">
           
-          <!-- Weekly Module Breakdown -->
           ${step.syllabus && step.syllabus.length ? `
             <div>
               <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center gap-1.5">
@@ -888,7 +690,6 @@ function renderRoadmap() {
             </div>
           ` : ''}
 
-          <!-- Core Skills Tags -->
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Core Competencies
@@ -898,7 +699,6 @@ function renderRoadmap() {
             </div>
           </div>
 
-          <!-- Direct Free Course Links -->
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
               <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i> Direct Free Courses & Documentation
@@ -913,7 +713,6 @@ function renderRoadmap() {
             </div>
           </div>
 
-          <!-- Project Challenge Box -->
           <div class="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl">
             <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5 mb-1">
               <i data-lucide="code" class="w-3.5 h-3.5 text-indigo-400"></i> Milestone Project Challenge
@@ -934,7 +733,6 @@ function renderRoadmap() {
 }
 
 function bindStepEvents() {
-  // Handle Checkbox Toggles
   document.querySelectorAll(".step-checkbox").forEach((cb) => {
     cb.addEventListener("change", (e) => {
       const stepId = e.target.getAttribute("data-id");
@@ -944,7 +742,6 @@ function bindStepEvents() {
     });
   });
 
-  // Handle Inline Accordion Expansion
   document.querySelectorAll(".toggle-details-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       const targetId = e.currentTarget.getAttribute("data-target");
@@ -990,55 +787,112 @@ function saveProgress() {
   localStorage.setItem("pathforge_completed", JSON.stringify(completedMap));
 }
 
-// --- MODAL CONTROLS ---
-function openModal(stepId) {
-  const step = currentRole.steps.find((s) => s.id === stepId);
-  if (!step) return;
+// --- CAREER QUIZ ENGINE ---
+function openQuizModal() {
+  quizAnswers = [];
+  currentQuizStep = 0;
+  renderQuizQuestion();
 
-  modalContent.innerHTML = `
-    <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
-      Recommended Courses & Resources
-    </span>
-    <h3 class="text-xl font-extrabold text-white mt-2">${step.title}</h3>
-    <p class="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">${step.summary}</p>
-
-    <div class="mt-4">
-      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-        <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Core Skills to Learn
-      </h4>
-      <div class="flex flex-wrap gap-1.5">
-        ${step.concepts.map((c) => `<span class="bg-slate-950 text-slate-300 text-xs px-2.5 py-1 rounded-lg border border-slate-800 font-medium">${c}</span>`).join("")}
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-        <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i> Top Free Learning Courses & Docs
-      </h4>
-      <ul class="space-y-2 text-xs sm:text-sm">
-        ${step.resources.map((r) => `
-          <li class="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800">
-            <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 transition hover:underline inline-flex items-center gap-1.5 font-medium">
-              ${r.name} <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            </a>
-          </li>
-        `).join("")}
-      </ul>
-    </div>
-
-    <div class="mt-4 p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl">
-      <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-        <i data-lucide="code" class="w-3.5 h-3.5 text-indigo-400"></i> Milestone Project Challenge
-      </h4>
-      <p class="text-xs text-slate-300 leading-relaxed">${step.project}</p>
-    </div>
-  `;
-
-  lucide.createIcons();
   modal.classList.remove("opacity-0", "pointer-events-none");
   modalBox.classList.add("animate-modal-pop");
 }
 
+function renderQuizQuestion() {
+  const q = QUIZ_QUESTIONS[currentQuizStep];
+  if (!q) {
+    calculateQuizResults();
+    return;
+  }
+
+  modalContent.innerHTML = `
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+        Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}
+      </span>
+      <span class="text-xs text-slate-500 font-semibold">1-Min Quiz</span>
+    </div>
+
+    <h3 class="text-lg font-bold text-white mt-1 mb-4">${q.question}</h3>
+
+    <div class="space-y-2.5">
+      ${q.options.map((opt, i) => `
+        <button 
+          data-index="${i}"
+          class="quiz-opt-btn w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between group"
+        >
+          <span>${opt.text}</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-indigo-400"></i>
+        </button>
+      `).join("")}
+    </div>
+  `;
+
+  lucide.createIcons();
+
+  document.querySelectorAll(".quiz-opt-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const selectedIndex = parseInt(e.currentTarget.getAttribute("data-index"));
+      quizAnswers.push(q.options[selectedIndex]);
+      currentQuizStep++;
+      renderQuizQuestion();
+    });
+  });
+}
+
+function calculateQuizResults() {
+  // Find most frequent role ID or default to Frontend / PM
+  const roleVotes = {};
+  let bestCategory = "tech";
+
+  quizAnswers.forEach((ans) => {
+    roleVotes[ans.roleId] = (roleVotes[ans.roleId] || 0) + 1;
+    if (ans.category) bestCategory = ans.category;
+  });
+
+  const matchedRoleId = Object.keys(roleVotes).reduce((a, b) => roleVotes[a] > roleVotes[b] ? a : b, "frontend");
+
+  // Lookup role object
+  let matchedRole = PATHWAYS_DATA[bestCategory].roles.find(r => r.id === matchedRoleId);
+  if (!matchedRole) {
+    // fallback search across both categories
+    matchedRole = PATHWAYS_DATA["tech"].roles.find(r => r.id === matchedRoleId) || 
+                  PATHWAYS_DATA["non-tech"].roles.find(r => r.id === matchedRoleId) ||
+                  PATHWAYS_DATA["tech"].roles[0];
+  }
+
+  modalContent.innerHTML = `
+    <div class="text-center py-2">
+      <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+        <i data-lucide="sparkles" class="w-6 h-6"></i>
+      </div>
+      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+        Your Match Found!
+      </span>
+      <h3 class="text-2xl font-black text-white mt-2">${matchedRole.title}</h3>
+      <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">${matchedRole.tagline}</p>
+
+      <div class="mt-6">
+        <button 
+          id="launch-matched-roadmap"
+          class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+        >
+          <span>Launch ${matchedRole.title} Pathway</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  `;
+
+  lucide.createIcons();
+
+  document.getElementById("launch-matched-roadmap").addEventListener("click", () => {
+    closeModal();
+    currentCategory = bestCategory;
+    selectRole(matchedRole);
+  });
+}
+
+// --- GENERAL MODAL CLOSING ---
 function closeModal() {
   modal.classList.add("opacity-0", "pointer-events-none");
   modalBox.classList.remove("animate-modal-pop");
