@@ -4,6 +4,108 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PATH FORGE - Tech & Non-Tech Career Architect</title>
+
+
+
+  <!-- ================= SPLASH ANIMATION ================= -->
+  <div class="splash-screen" id="splash">
+    <div class="brand-container">
+      <div class="logo-icon-splash">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      </div>
+      <div>
+        <h1 class="gradient-text" style="font-size: 24px;">PATH FORGE</h1>
+        <p style="font-size: 12px; color: #94a3b8;">Career Pathway Generator</p>
+      </div>
+    </div>
+    <div class="init-container">
+      <span style="font-size: 12px; color: #64748b;">initialisation in progress...</span>
+      <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-container">
+      <div class="logo-group" onclick="resetToLanding()">
+        <div class="logo-badge">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
+        <div>
+          <h1 class="gradient-text" style="font-size: 18px;">PATH FORGE</h1>
+          <p style="font-size: 11px; color: #94a3b8;">Career Pathway Generator</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button id="back-btn" class="btn-action hidden" onclick="goBack()">← Back</button>
+        <button class="btn-action" onclick="resetToLanding()">🔄 Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWS -->
+  <main>
+    <!-- VIEW 1: LANDING -->
+    <section id="view-landing" class="view view-enter">
+      <div>
+        <span class="step-badge">🧭 Step 1: Choose Your Field</span>
+        <h2 style="font-size: 38px; font-weight: 900; color: #ffffff;">Forge Your Ideal Career Path</h2>
+        <p style="font-size: 15px; color: #94a3b8;">Select your domain to generate custom roadmaps.</p>
+      </div>
+
+      <div class="grid-container">
+        <div class="glass-card" onclick="handleCategoryClick('tech')">
+          <div class="card-icon-box tech-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+          </div>
+          <h3 style="font-size: 22px; color: #ffffff;">Tech & Engineering</h3>
+          <p style="font-size: 13px; color: #94a3b8;">Software, Web Dev, Data, Cloud, Architecture.</p>
+          <div style="margin-top: 24px; color: #818cf8; font-weight: 700;">Explore Tech Roles →</div>
+        </div>
+
+        <div class="glass-card" onclick="handleCategoryClick('non-tech')">
+          <div class="card-icon-box nontech-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </div>
+          <h3 style="font-size: 22px; color: #ffffff;">Non-Tech & Business</h3>
+          <p style="font-size: 13px; color: #94a3b8;">Product, UI/UX, Marketing, Sales, Strategy.</p>
+          <div style="margin-top: 24px; color: #22d3ee; font-weight: 700;">Explore Non-Tech Roles →</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ROLES -->
+    <section id="view-roles" class="view hidden">
+      <div>
+        <span class="step-badge">🎯 Step 2: Choose Role</span>
+        <h2 id="roles-title" style="font-size: 32px; color: #ffffff;">Select Your Goal</h2>
+      </div>
+      <div id="roles-grid" class="grid-container"></div>
+    </section>
+
+    <!-- VIEW 3: ROADMAP -->
+    <section id="view-roadmap" class="view hidden">
+      <div class="glass-card" style="text-align: left; margin-bottom: 24px;">
+        <span class="step-badge" id="roadmap-domain">PATHWAY</span>
+        <h2 id="roadmap-title" style="font-size: 28px; color: #fff;">Role Title</h2>
+        <p id="roadmap-desc" style="font-size: 14px; color: #94a3b8;">Description...</p>
+      </div>
+      <div style="text-align: left;" id="roadmap-steps"></div>
+    </section>
+  </main>
+
+  <!-- 2. THIS MAKES YOUR CLICK TRANSITIONS WORK -->
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
