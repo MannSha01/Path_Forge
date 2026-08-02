@@ -252,39 +252,57 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
+          
           <!-- Tech Option -->
           <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition"></div>
-            <div>
+            <!-- Background Glow -->
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition z-0"></div>
+
+            <!-- Half-Hidden Rightmost Speciality Symbol -->
+            <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
+              <i data-lucide="terminal" class="w-full h-full text-indigo-400/10 group-hover:text-indigo-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-10">
               <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="code-2" class="w-6 h-6"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
-              <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-[85%]">
                 Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
               </p>
             </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
+            <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
               Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
             </div>
           </button>
 
           <!-- Non-Tech Option -->
           <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition"></div>
-            <div>
+            <!-- Background Glow -->
+            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition z-0"></div>
+
+            <!-- Half-Hidden Rightmost Speciality Symbol -->
+            <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
+              <i data-lucide="trending-up" class="w-full h-full text-cyan-400/10 group-hover:text-cyan-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-10">
               <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
                 <i data-lucide="briefcase" class="w-6 h-6"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
-              <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-[85%]">
                 Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
               </p>
             </div>
-            <div class="flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
+            <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
               Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
             </div>
           </button>
+
         </div>
       </section>
 
@@ -299,7 +317,7 @@
         </div>
 
         <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          <!-- Dynamically Injected Role Cards -->
+          <!-- Dynamically Injected Role Cards (Update app.js to include watermark symbols for dynamic role cards) -->
         </div>
       </section>
 
