@@ -1,79 +1,97 @@
-// --- DATASET: TECH & NON-TECH PATHWAYS WITH COURSES ---
+
+// --- LOADING SCREEN CONTROLLER ---
+window.addEventListener("load", () => {
+  const loadingScreen = document.getElementById("loading-screen");
+  if (loadingScreen) {
+    setTimeout(() => {
+      loadingScreen.classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => {
+        loadingScreen.remove();
+      }, 700);
+    }, 600);
+  }
+});
+
+// --- DATASET: BEGINNER-FRIENDLY PATHWAYS ---
 const PATHWAYS_DATA = {
   tech: {
-    categoryName: "Tech & Engineering",
+    categoryName: "Tech & Coding",
     roles: [
       {
         id: "frontend",
         title: "Frontend Developer",
         icon: "layout",
-        tagline: "Build client-side web apps with HTML, CSS, JS & React.",
+        tagline: "Build the visual parts of websites that people see and interact with every day.",
         steps: [
           {
             id: "tech-fe-1",
-            title: "HTML5, Modern CSS3 & Responsive Design",
+            title: "Web Page Basics: HTML & CSS",
             duration: "2 - 3 Weeks",
-            summary: "Semantic markup, Flexbox, CSS Grid, and media queries for multi-device support.",
-            concepts: ["Semantic Tags", "Flexbox & Grid", "CSS Variables", "Responsive Breakpoints"],
+            summary: "Learn how to put text, buttons, and images on a screen, and color them so they look great on phones and laptops.",
+            whyMatters: "Without this, websites would just be boring black-and-white text documents with no buttons or layout!",
+            concepts: ["Page Structure (HTML)", "Colors & Fonts (CSS)", "Mobile Layouts"],
             syllabus: [
-              "Week 1: Document structure, accessibility (a11y), and semantic tags.",
-              "Week 2: CSS Layouts with Flexbox, CSS Grid, and container queries.",
-              "Week 3: Mobile-first responsive design, media queries, and design tokens."
+              "Week 1: Creating your first web page with titles, paragraphs, buttons, and pictures.",
+              "Week 2: Adding colors, custom fonts, and arranging elements neatly side-by-side.",
+              "Week 3: Making your website automatically adjust its size so it works on phone screens."
             ],
             resources: [
-              { name: "freeCodeCamp Responsive Web Design", url: "https://www.freecodecamp.org/learn/2022/responsive-web-design/" },
-              { name: "MDN Web Docs: HTML & CSS", url: "https://developer.mozilla.org" }
+              { name: "freeCodeCamp HTML/CSS for Beginners", url: "https://www.freecodecamp.org/learn/2022/responsive-web-design/" },
+              { name: "MDN Beginner's Web Guide", url: "https://developer.mozilla.org" }
             ],
-            project: "Build a responsive portfolio page from scratch."
+            project: "Build a personalized digital profile page about your favorite hobbies."
           },
           {
             id: "tech-fe-2",
-            title: "JavaScript Essentials (ES6+)",
+            title: "Making Pages Interactive: JavaScript",
             duration: "3 - 4 Weeks",
-            summary: "DOM manipulation, asynchronous JS, promises, and Fetch API.",
-            concepts: ["DOM Events", "Async/Await", "Promises", "ES6 Modules"],
+            summary: "Give your web pages a 'brain' so buttons actually do things when clicked, forms process input, and popups appear.",
+            whyMatters: "This turns a static picture of a website into an interactive app you can actually use.",
+            concepts: ["Click Events", "Storing Information (Variables)", "Fetching Live Data"],
             syllabus: [
-              "Week 1: Data types, closures, array methods (.map, .filter, .reduce).",
-              "Week 2: Event delegation, DOM manipulation, and dynamic HTML creation.",
-              "Week 3: Promises, Async/Await, and API integration via Fetch API."
+              "Week 1: How code makes decisions (if/else) and stores user details like names or scores.",
+              "Week 2: Reacting when a user clicks a button, types text, or scrolls down.",
+              "Week 3: Fetching live data from the internet (like getting today's real weather)."
             ],
             resources: [
-              { name: "JavaScript.info Modern Tutorial", url: "https://javascript.info/" },
-              { name: "Scrimba Learn JavaScript Free Course", url: "https://scrimba.com/learn/learnjavascript" }
+              { name: "JavaScript.info Easy Guide", url: "https://javascript.info/" },
+              { name: "Scrimba Interactive JavaScript Course", url: "https://scrimba.com/learn/learnjavascript" }
             ],
-            project: "Build an interactive weather web app fetching live API data."
+            project: "Build a simple weather app that shows today's temperature when you type in a city name."
           },
           {
             id: "tech-fe-3",
-            title: "Tailwind CSS & Component Styling",
+            title: "Fast & Easy Styling: Tailwind CSS",
             duration: "1 - 2 Weeks",
-            summary: "Utility-first CSS, dark mode design systems, and rapid UI development.",
-            concepts: ["Utility Classes", "Tailwind Config", "Dark Mode", "Custom Plugins"],
+            summary: "Learn a modern tool used by professional developers to style apps in minutes without writing repetitive CSS rules.",
+            whyMatters: "Saves you hours of time and helps you create slick dark-mode themes effortlessly.",
+            concepts: ["Pre-made Style Tags", "Dark Mode Toggle", "Speedy Layouts"],
             syllabus: [
-              "Week 1: Utility class patterns, layout setup, and dark mode toggles.",
-              "Week 2: Reusable UI component abstraction and responsive breakpoints."
+              "Week 1: Styling buttons, cards, and navigation bars instantly using simple shorthand tags.",
+              "Week 2: Creating a sleek Dark Mode button that flips your site from light to dark."
             ],
             resources: [
-              { name: "Official Tailwind CSS Docs & Lab", url: "https://tailwindcss.com/docs" }
+              { name: "Tailwind CSS Quick Start Guide", url: "https://tailwindcss.com/docs" }
             ],
-            project: "Recreate a popular SaaS landing page using Tailwind."
+            project: "Recreate the layout of your favorite app homepage (like Spotify or Twitter)."
           },
           {
             id: "tech-fe-4",
-            title: "React.js Framework & State Architecture",
-            duration: "4 - 5 Weeks",
-            summary: "JSX, props, component lifecycles, custom hooks, and routing.",
-            concepts: ["JSX Markup", "useState & useEffect", "Custom Hooks", "React Router"],
+            title: "Building Modern Web Apps: React",
+            duration: "4 Weeks",
+            summary: "Learn the #1 tool used by Airbnb, Netflix, and Instagram to build lightning-fast web applications.",
+            whyMatters: "React lets you build reusable Lego-like pieces (components) so you don't have to rewrite code over and over.",
+            concepts: ["Lego-block Components", "App Memory (State)", "Multi-page Links"],
             syllabus: [
-              "Week 1: Component architecture, JSX syntax, and props pattern.",
-              "Week 2: State management with useState and side effects with useEffect.",
-              "Week 3: Single Page Application (SPA) routing with React Router.",
-              "Week 4: Custom Hooks, Context API, and performance optimization."
+              "Week 1: Breaking a web page into small reusable pieces (like headers, cards, and buttons).",
+              "Week 2: Teaching components to 'remember' things (like items added to a shopping cart).",
+              "Week 3: Switching between pages smoothly without reloading the entire web browser.",
+              "Week 4: Combining everything into one polished app."
             ],
             resources: [
-              { name: "React Official Docs & Interactive Tutorials", url: "https://react.dev/learn" }
+              { name: "React Official Interactive Tutorial", url: "https://react.dev/learn" }
             ],
-            project: "Build a single-page e-commerce app with cart state management."
+            project: "Build an online store prototype where users can browse products and add them to a cart."
           }
         ]
       },
@@ -81,120 +99,101 @@ const PATHWAYS_DATA = {
         id: "backend",
         title: "Backend Developer",
         icon: "server",
-        tagline: "Design APIs, structure server runtimes, and query databases.",
+        tagline: "Build the behind-the-scenes engine that stores user data, powers logins, and processes security.",
         steps: [
           {
             id: "tech-be-1",
-            title: "Server Runtimes (Node.js/Python)",
+            title: "The Server Brain: Node.js",
             duration: "3 Weeks",
-            summary: "Understand server execution, I/O handling, and package managers.",
-            concepts: ["Event Loop", "File System API", "Package Managers", "Async I/O"],
+            summary: "Understand how computers process user requests behind the scenes outside of a web browser.",
+            whyMatters: "The frontend is what users see; the backend is the invisible server engine that handles all the actual work.",
+            concepts: ["How Servers Work", "Reading Files", "Handling Requests"],
             syllabus: [
-              "Week 1: Node.js runtime architecture, non-blocking I/O, and event loop.",
-              "Week 2: File system operations, environment variables, and NPM modules.",
-              "Week 3: Building basic HTTP servers and handling request stream data."
+              "Week 1: What is a server, and how does it talk to internet browsers?",
+              "Week 2: Writing code to read, write, and organize files on a computer server.",
+              "Week 3: Listening for visits from users and sending back messages."
             ],
             resources: [
-              { name: "Node.js Official Documentation", url: "https://nodejs.org/en/docs/" }
+              { name: "Node.js Beginner Guide", url: "https://nodejs.org/en/docs/" }
             ],
-            project: "Build a CLI file parser utility."
+            project: "Build a miniature server that logs visits and sends back dynamic messages."
           },
           {
             id: "tech-be-2",
-            title: "RESTful API Architecture & Express",
-            duration: "3 - 4 Weeks",
-            summary: "HTTP endpoints, custom middleware pipelines, and JSON validation.",
-            concepts: ["HTTP Verbs", "Express Routing", "Middleware", "JSON Schemas"],
+            title: "Connecting Front to Back: APIs",
+            duration: "3 Weeks",
+            summary: "Create secure pathways (APIs) so mobile phones and web apps can talk to your server software.",
+            whyMatters: "An API is like a waiter in a restaurant—it takes orders from the user and brings back data from the kitchen.",
+            concepts: ["API Endpoints", "Receiving Data", "Error Catching"],
             syllabus: [
-              "Week 1: Express route parameters, body parsing, and status codes.",
-              "Week 2: Custom middleware pipelines for authentication and logging.",
-              "Week 3: Request payload validation and error handling patterns."
+              "Week 1: Creating digital 'countertops' where apps can send requests for info.",
+              "Week 2: Checking incoming messages to make sure users sent the right information.",
+              "Week 3: Handling broken requests gracefully so the app doesn't crash."
             ],
             resources: [
-              { name: "FreeCodeCamp Node/Express Course", url: "https://www.freecodecamp.org/news/free-node-js-course-express-and-mongodb/" }
+              { name: "FreeCodeCamp API Primer", url: "https://www.freecodecamp.org/news/free-node-js-course-express-and-mongodb/" }
             ],
-            project: "Build a REST API for a blog platform."
+            project: "Create a backend service for a notebook app where users can create, edit, and delete notes."
           },
           {
             id: "tech-be-3",
-            title: "Databases (PostgreSQL & Prisma ORM)",
+            title: "Saving App Data: Databases",
             duration: "4 Weeks",
-            summary: "Relational modeling, SQL queries, table joins, and ORM migrations.",
-            concepts: ["PostgreSQL & SQL", "Indexing", "Prisma ORM", "Database Migrations"],
+            summary: "Learn how apps store user accounts, passwords, posts, and order histories safely forever.",
+            whyMatters: "Without a database, your app forgets everything as soon as you refresh the page!",
+            concepts: ["Digital Filing Cabinets", "Database Searching", "Prisma Connector"],
             syllabus: [
-              "Week 1: Relational data modeling, primary/foreign keys, and normalization.",
-              "Week 2: Complex SQL queries, JOINs, indexing, and performance tuning.",
-              "Week 3: Prisma ORM schemas, CRUD operations, and migrations.",
-              "Week 4: Connecting ORM data layer to Express REST API endpoints."
+              "Week 1: Organizing data into tidy digital spreadsheets (tables and columns).",
+              "Week 2: Writing searches to find specific rows (like 'find all users who joined today').",
+              "Week 3: Using a helper tool (Prisma) to connect your code directly to the database.",
+              "Week 4: Saving, updating, and deleting database records securely."
             ],
             resources: [
-              { name: "Prisma ORM Guide", url: "https://www.prisma.io/docs" }
+              { name: "Prisma Database Guide for Beginners", url: "https://www.prisma.io/docs" }
             ],
-            project: "Connect PostgreSQL database to your REST API with Prisma."
+            project: "Connect a user database to your API so user signups get stored permanently."
           }
         ]
       },
       {
         id: "fullstack",
-        title: "Fullstack Engineer",
+        title: "Fullstack Developer",
         icon: "code",
-        tagline: "Connect frontend interfaces directly to scalable backend infrastructure.",
+        tagline: "Master both the front user interface and the backend database server to build complete products.",
         steps: [
           {
             id: "tech-fs-1",
-            title: "Fullstack Frameworks (Next.js)",
+            title: "All-in-One App Building: Next.js",
             duration: "4 Weeks",
-            summary: "Server-Side Rendering (SSR), Static Site Generation (SSG), and Server Actions.",
-            concepts: ["App Router", "SSR vs SSG", "Server Actions", "API Routes"],
+            summary: "Combine screen layouts and database servers into one unified, super-powered modern framework.",
+            whyMatters: "Allows a single developer to build fully functional web applications by themselves.",
+            concepts: ["Fullstack Framework", "Fast Page Loading", "Server Actions"],
             syllabus: [
-              "Week 1: Next.js App Router, layout hierarchy, and page routing.",
-              "Week 2: Server Components vs Client Components rendering models.",
-              "Week 3: Data fetching strategies, SSR, and incremental static revalidation.",
-              "Week 4: Server Actions and backend integration within UI forms."
+              "Week 1: Creating pages and nested sub-pages effortlessly with modern routing.",
+              "Week 2: Pre-loading data on the server so pages load instantly for users.",
+              "Week 3: Connecting web forms directly to databases without complex setup.",
+              "Week 4: Deploying your app live onto the web for the world to see."
             ],
             resources: [
-              { name: "Next.js Official Learn Course", url: "https://nextjs.org/learn" }
+              { name: "Next.js Interactive Learn Portal", url: "https://nextjs.org/learn" }
             ],
-            project: "Build a fullstack blog platform with dynamic routes."
+            project: "Build a complete community message board where people can write public posts."
           },
           {
             id: "tech-fs-2",
-            title: "Authentication & Security",
+            title: "User Accounts & Logins",
             duration: "2 Weeks",
-            summary: "User authentication, JWTs, OAuth single sign-on, and role-based access.",
-            concepts: ["OAuth 2.0", "JWT Tokens", "Session Storage", "Middleware Protection"],
+            summary: "Safely allow users to sign up, log in, encrypt passwords, and protect private profile pages.",
+            whyMatters: "Keeps user information private and protects accounts from hackers.",
+            concepts: ["Password Protection", "Log In / Log Out", "Google Sign-In"],
             syllabus: [
-              "Week 1: Session vs JWT authentication and password hashing algorithms.",
-              "Week 2: NextAuth / Auth0 integration and route protection middleware."
+              "Week 1: Encrypting user passwords so no one can steal them.",
+              "Week 2: Adding 'Sign in with Google' and protecting secret user pages."
             ],
             resources: [
-              { name: "Auth0 Docs & Security Guides", url: "https://auth0.com/docs" }
+              { name: "Auth0 Security Basics", url: "https://auth0.com/docs" }
             ],
-            project: "Implement secure login/signup with NextAuth or Clerk."
-          }
-        ]
-      },
-      {
-        id: "devops",
-        title: "DevOps & Cloud Engineer",
-        icon: "cloud",
-        tagline: "Automate build pipelines, manage cloud infrastructure, and monitor systems.",
-        steps: [
-          {
-            id: "tech-do-1",
-            title: "Linux Administration & Bash Scripting",
-            duration: "3 Weeks",
-            summary: "Command line mastery, file permissions, process management, and shell scripting.",
-            concepts: ["SSH Keys", "Bash Scripts", "Systemd Services", "Cron Jobs"],
-            syllabus: [
-              "Week 1: Terminal navigation, permission models (chmod/chown), and package managers.",
-              "Week 2: Process management, system logging, and SSH server management.",
-              "Week 3: Automated Bash scripting for system updates and backups."
-            ],
-            resources: [
-              { name: "Linux Journey Fundamentals", url: "https://linuxjourney.com/" }
-            ],
-            project: "Write a shell script to automate server log rotation and backup."
+            project: "Add a full login system with password protection to your message board app."
           }
         ]
       },
@@ -202,220 +201,79 @@ const PATHWAYS_DATA = {
         id: "data-analyst",
         title: "Data Analyst",
         icon: "bar-chart-3",
-        tagline: "Turn raw datasets into business decisions via SQL, Python & Dashboards.",
+        tagline: "Turn numbers and spreadsheets into easy charts to answer big business questions.",
         steps: [
           {
             id: "tech-da-1",
-            title: "SQL Querying & Data Aggregation",
+            title: "Asking Questions with SQL",
             duration: "3 Weeks",
-            summary: "Extracting and filtering data from relational databases.",
-            concepts: ["JOINs", "GROUP BY & HAVING", "Window Functions", "Subqueries"],
+            summary: "Learn the universal language used to ask giant databases for specific numbers and answers.",
+            whyMatters: "SQL allows you to instantly search through millions of customer sales in seconds.",
+            concepts: ["Filtering Rows", "Combining Tables", "Calculating Totals"],
             syllabus: [
-              "Week 1: SELECT queries, filtering (WHERE, LIKE), and ordering data.",
-              "Week 2: Combining tables with INNER/LEFT/RIGHT JOINs and aggregations.",
-              "Week 3: Advanced analytical functions (RANK, ROW_NUMBER, NTILE)."
+              "Week 1: Filtering database lists to find specific items (e.g., 'orders over $50').",
+              "Week 2: Stitching two tables together (e.g., matching Customer Names with their Orders).",
+              "Week 3: Finding averages, totals, and peak sales months automatically."
             ],
             resources: [
-              { name: "Mode Analytics SQL Tutorial", url: "https://mode.com/sql-tutorial/" }
+              { name: "Mode Analytics Free SQL Course", url: "https://mode.com/sql-tutorial/" }
             ],
-            project: "Solve business analytics questions on an e-commerce database."
-          }
-        ]
-      },
-      {
-        id: "ai-engineer",
-        title: "Data Scientist & AI Specialist",
-        icon: "cpu",
-        tagline: "Train machine learning models, analyze big data, and integrate GenAI APIs.",
-        steps: [
-          {
-            id: "tech-ai-1",
-            title: "Mathematics & Scientific Python",
-            duration: "3 - 4 Weeks",
-            summary: "Linear algebra, probability, statistics, NumPy, and SciPy.",
-            concepts: ["Matrix Operations", "Probability Distributions", "Hypothesis Testing", "NumPy Arrays"],
-            syllabus: [
-              "Week 1: Vectors, matrices, dot products, and linear transformations.",
-              "Week 2: Descriptive statistics, probability distributions, and Z-scores.",
-              "Week 3: Hypothesis testing, p-values, and confidence intervals."
-            ],
-            resources: [
-              { name: "Khan Academy Linear Algebra & Stats", url: "https://www.khanacademy.org/math" }
-            ],
-            project: "Build a statistical analysis notebook for housing market predictions."
-          }
-        ]
-      },
-      {
-        id: "cybersecurity",
-        title: "Cybersecurity Analyst",
-        icon: "shield",
-        tagline: "Protect networks, audit security vulnerabilities, and monitor threat activity.",
-        steps: [
-          {
-            id: "tech-sec-1",
-            title: "Computer Networks & Security Fundamentals",
-            duration: "3 Weeks",
-            summary: "TCP/IP models, firewalls, DNS, VPNs, and common attack vectors.",
-            concepts: ["TCP/IP & OSI Layers", "Wireshark Packet Analysis", "DNS Spoofing", "Encryption Standards"],
-            syllabus: [
-              "Week 1: OSI 7-layer model, packet routing, and subnetting.",
-              "Week 2: Wireshark network traffic capture and log analysis.",
-              "Week 3: Cryptography basics, SSL/TLS certificates, and firewalls."
-            ],
-            resources: [
-              { name: "Cybrary Free Cybersecurity Fundamentals", url: "https://www.cybrary.it/" }
-            ],
-            project: "Analyze network traffic logs to detect suspicious activity."
+            project: "Analyze a real online store sales report to figure out their top 3 bestselling items."
           }
         ]
       }
     ]
   },
   "non-tech": {
-    categoryName: "Non-Tech & Business",
+    categoryName: "Design & Product",
     roles: [
-      {
-        id: "product-manager",
-        title: "Product Manager",
-        icon: "kanban",
-        tagline: "Lead product strategy, define roadmaps, and align cross-functional teams.",
-        steps: [
-          {
-            id: "nontech-pm-1",
-            title: "Product Discovery & Market Research",
-            duration: "2 - 3 Weeks",
-            summary: "Identifying target customer pain points, competitor analysis, and value proposition design.",
-            concepts: ["Customer Interviews", "Competitor Matrix", "Value Proposition", "TAM/SAM/SOM"],
-            syllabus: [
-              "Week 1: Conducting user interview sessions and mapping customer pain points.",
-              "Week 2: Competitor analysis, market sizing (TAM/SAM/SOM), and positioning.",
-              "Week 3: Defining unique value propositions and feature prioritizations."
-            ],
-            resources: [
-              { name: "Product School Free PM Resources", url: "https://productschool.com/free-product-management-resources" }
-            ],
-            project: "Create a product opportunity document for a new app idea."
-          }
-        ]
-      },
       {
         id: "uiux-designer",
         title: "UI/UX Designer",
         icon: "palette",
-        tagline: "Design human-centered user interfaces and wireframes in Figma.",
+        tagline: "Design intuitive screens, app prototypes, and beautiful user experiences using Figma.",
         steps: [
           {
             id: "nontech-ux-1",
-            title: "UX Research & User Journeys",
+            title: "Understanding Users & Wireframes",
             duration: "2 - 3 Weeks",
-            summary: "User interviews, persona creation, journey mapping, and information architecture.",
-            concepts: ["User Personas", "Journey Maps", "Usability Heuristics", "Card Sorting"],
+            summary: "Interview real people to learn what bugs them about existing apps, then draw simple visual blueprints.",
+            whyMatters: "Prevents teams from wasting months building an app nobody actually wants or understands.",
+            concepts: ["User Interviews", "Rough Blueprint Layouts", "App Flows"],
             syllabus: [
-              "Week 1: User research techniques, interviews, and synthesis into User Personas.",
-              "Week 2: Mapping User Journey maps, identifying friction points, and card sorting.",
-              "Week 3: Information Architecture (IA) and sitemap structuring."
+              "Week 1: Talking to people to discover their biggest pain points when using apps.",
+              "Week 2: Drawing rough pen-and-paper outlines (wireframes) of screen ideas.",
+              "Week 3: Mapping out the step-by-step clicks a user takes to complete a task."
             ],
             resources: [
-              { name: "Nielsen Norman Group UX Articles", url: "https://www.nngroup.com/" }
+              { name: "Nielsen Norman Group UX Basics", url: "https://www.nngroup.com/" }
             ],
-            project: "Conduct interviews and create 2 user personas for a concept app."
+            project: "Sketch rough layout blueprints for a mobile app that helps people track daily hydration."
           }
         ]
       },
       {
-        id: "digital-marketing",
-        title: "Digital Growth Marketer",
-        icon: "trending-up",
-        tagline: "Drive customer acquisition through SEO, paid ads, content, and analytics.",
+        id: "product-manager",
+        title: "Product Manager",
+        icon: "kanban",
+        tagline: "Guide app vision, guide team priorities, and make sure projects finish on schedule.",
         steps: [
           {
-            id: "nontech-dm-1",
-            title: "SEO & Content Marketing Strategy",
-            duration: "3 Weeks",
-            summary: "Keyword research, on-page optimization, content calendars, and search intent.",
-            concepts: ["Keyword Research", "On-Page SEO", "Backlink Strategy", "Content Funnels"],
-            syllabus: [
-              "Week 1: Keyword research tools (Ahrefs/SEMrush), search intent, and volume analysis.",
-              "Week 2: On-page SEO: headings, meta tags, schema markup, and internal linking.",
-              "Week 3: Content calendar planning and authority link-building outreach."
-            ],
-            resources: [
-              { name: "Ahrefs SEO Learning Center", url: "https://ahrefs.com/academy" }
-            ],
-            project: "Perform an SEO audit and keyword strategy for a SaaS blog."
-          }
-        ]
-      },
-      {
-        id: "business-analyst",
-        title: "Business Analyst",
-        icon: "pie-chart",
-        tagline: "Bridge business requirements with technical systems and operational strategy.",
-        steps: [
-          {
-            id: "nontech-ba-1",
-            title: "Business Requirements & Process Modeling",
-            duration: "3 Weeks",
-            summary: "Eliciting requirements, mapping process workflows (BPMN), and gap analysis.",
-            concepts: ["BPMN Flowcharts", "Gap Analysis", "Use Cases", "Stakeholder Mapping"],
-            syllabus: [
-              "Week 1: Stakeholder interview techniques and requirement gathering.",
-              "Week 2: Business Process Model and Notation (BPMN) mapping.",
-              "Week 3: Conducting AS-IS vs TO-BE gap analysis and feasibility studies."
-            ],
-            resources: [
-              { name: "IIBA Business Analysis Guide", url: "https://www.iiba.org/" }
-            ],
-            project: "Document and model an AS-IS vs TO-BE workflow for a business process."
-          }
-        ]
-      },
-      {
-        id: "scrum-master",
-        title: "Scrum Master / Agile Coach",
-        icon: "users",
-        tagline: "Facilitate team execution, clear blockers, and foster continuous delivery.",
-        steps: [
-          {
-            id: "nontech-sm-1",
-            title: "Agile Manifesto & Scrum Ceremonies",
+            id: "nontech-pm-1",
+            title: "Product Strategy & Feature Choices",
             duration: "2 - 3 Weeks",
-            summary: "Sprint planning, daily standups, sprint reviews, and retrospectives.",
-            concepts: ["Sprint Planning", "Burndown Charts", "Agile Principles", "Retrospectives"],
+            summary: "Figure out what app features to build first, research competitors, and write clear task instructions.",
+            whyMatters: "Keeps designers, coders, and business leads working on the exact same goals together.",
+            concepts: ["Competitor Spotting", "Prioritizing Ideas", "Feature Blueprints"],
             syllabus: [
-              "Week 1: The 4 Agile values, 12 principles, and Scrum framework roles.",
-              "Week 2: Facilitating Daily Standups, Sprint Planning, and Sprint Reviews.",
-              "Week 3: Organizing productive Retrospectives and metric tracking."
+              "Week 1: Studying competitor apps to find missed opportunities.",
+              "Week 2: Deciding which feature ideas are MUST-HAVES versus 'nice-to-haves'.",
+              "Week 3: Writing simple, clear feature requests for designers and developers."
             ],
             resources: [
-              { name: "Official Scrum Guide", url: "https://scrumguides.org/" }
+              { name: "Product School Free Resources", url: "https://productschool.com/free-product-management-resources" }
             ],
-            project: "Set up a Jira project workspace with complete sprint board workflow rules."
-          }
-        ]
-      },
-      {
-        id: "solutions-architect",
-        title: "Solutions Architect / Tech Sales",
-        icon: "layers",
-        tagline: "Drive high-value enterprise sales with technical demos and solution designs.",
-        steps: [
-          {
-            id: "nontech-sa-1",
-            title: "Discovery & Solution Scoping",
-            duration: "3 Weeks",
-            summary: "Uncovering client technical pain points and drafting architectural proposals.",
-            concepts: ["Discovery Calls", "RFP Responses", "Technical Proofs of Concept", "Solution Architecture"],
-            syllabus: [
-              "Week 1: Conducting technical discovery calls and pain-point identification.",
-              "Week 2: Architectural diagramming, cloud components selection, and cost estimation.",
-              "Week 3: Responding to RFPs (Request For Proposals) and scope documentation."
-            ],
-            resources: [
-              { name: "AWS Cloud Practitioner Essentials", url: "https://aws.amazon.com/training/" }
-            ],
-            project: "Create a technical proposal and architecture outline responding to a sample RFP."
+            project: "Write a 1-page proposal outlining an exciting new feature idea for your favorite mobile app."
           }
         ]
       }
@@ -426,37 +284,28 @@ const PATHWAYS_DATA = {
 // --- QUIZ QUESTIONS DATASET ---
 const QUIZ_QUESTIONS = [
   {
-    question: "What type of daily problem-solving excites you the most?",
+    question: "What kind of activity sounds most fun to you?",
     options: [
-      { text: "Designing visual UI layouts, colors, and user interactions", category: "non-tech", roleId: "uiux-designer" },
-      { text: "Writing logical code, building web apps, or managing databases", category: "tech", roleId: "frontend" },
-      { text: "Analyzing numbers, datasets, charts, and financial metrics", category: "tech", roleId: "data-analyst" },
-      { text: "Leading project strategy, managing teams, and defining features", category: "non-tech", roleId: "product-manager" }
+      { text: "Designing screen layouts, choosing colors, and making things look visual", category: "non-tech", roleId: "uiux-designer" },
+      { text: "Building website pages, writing basic code, or creating interactive buttons", category: "tech", roleId: "frontend" },
+      { text: "Searching through data to spot trends, charts, and patterns", category: "tech", roleId: "data-analyst" },
+      { text: "Planning project roadmaps, organizing team tasks, and brainstorm features", category: "non-tech", roleId: "product-manager" }
     ]
   },
   {
-    question: "How do you feel about writing deep programming code?",
+    question: "How do you feel about writing computer code?",
     options: [
-      { text: "I want code to be my core daily tool (HTML/JS/Python/SQL)", category: "tech", roleId: "fullstack" },
-      { text: "I prefer visual design tools (Figma) and zero heavy code", category: "non-tech", roleId: "uiux-designer" },
-      { text: "I like business logic, process mapping, and spreadsheets", category: "non-tech", roleId: "business-analyst" },
-      { text: "I enjoy high-level technical concepts and client pitches", category: "non-tech", roleId: "solutions-architect" }
-    ]
-  },
-  {
-    question: "What is your primary career target right now?",
-    options: [
-      { text: "Become a software developer or cloud engineer", category: "tech", roleId: "frontend" },
-      { text: "Become a UX designer crafting digital experiences", category: "non-tech", roleId: "uiux-designer" },
-      { text: "Become a product manager or agile facilitator", category: "non-tech", roleId: "product-manager" },
-      { text: "Work in data analytics, AI, or cybersecurity", category: "tech", roleId: "ai-engineer" }
+      { text: "I want to learn step-by-step programming from total scratch!", category: "tech", roleId: "frontend" },
+      { text: "I prefer using visual design software (like Figma) with no heavy code.", category: "non-tech", roleId: "uiux-designer" },
+      { text: "I like organizing data, numbers, and logical spreadsheets.", category: "tech", roleId: "data-analyst" },
+      { text: "I like high-level strategy, product ideas, and team management.", category: "non-tech", roleId: "product-manager" }
     ]
   }
 ];
 
 // --- APP STATE ---
-let currentCategory = null; // 'tech' | 'non-tech'
-let currentRole = null;     // role object
+let currentCategory = null; 
+let currentRole = null;     
 let completedMap = JSON.parse(localStorage.getItem("pathforge_completed")) || {};
 let quizAnswers = [];
 let currentQuizStep = 0;
@@ -495,13 +344,12 @@ const closeModalBtn = document.getElementById("close-modal");
 
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 
-  logoBtn.addEventListener("click", showLandingView);
+  if (logoBtn) logoBtn.addEventListener("click", showLandingView);
 
-  // Hero Actions
   if (startHeroBtn) {
-    startHeroBtn.addEventListener("click", () => selectCategory("tech")); // default to tech grid or category choice
+    startHeroBtn.addEventListener("click", () => selectCategory("tech"));
   }
   if (triggerQuizBtn) {
     triggerQuizBtn.addEventListener("click", openQuizModal);
@@ -510,82 +358,92 @@ document.addEventListener("DOMContentLoaded", () => {
     topBannerQuizBtn.addEventListener("click", openQuizModal);
   }
 
-  navBackBtn.addEventListener("click", () => {
-    if (!viewRoadmap.classList.contains("hidden")) {
-      selectCategory(currentCategory || "tech");
-    } else {
-      showLandingView();
-    }
-  });
+  if (navBackBtn) {
+    navBackBtn.addEventListener("click", () => {
+      if (viewRoadmap && !viewRoadmap.classList.contains("hidden")) {
+        selectCategory(currentCategory || "tech");
+      } else {
+        showLandingView();
+      }
+    });
+  }
 
-  resetBtn.addEventListener("click", () => {
-    if (confirm("Reset completion status across all career pathways?")) {
-      completedMap = {};
-      hasCelebrated = false;
-      saveProgress();
-      if (currentRole) renderRoadmap();
-    }
-  });
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (confirm("Reset completion status across all career pathways?")) {
+        completedMap = {};
+        hasCelebrated = false;
+        saveProgress();
+        if (currentRole) renderRoadmap();
+      }
+    });
+  }
 
-  closeModalBtn.addEventListener("click", closeModal);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
-  });
+  if (closeModalBtn) closeModalBtn.addEventListener("click", closeModal);
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+  }
 });
 
+// --- NAVIGATION & VIEWS ---
 function showLandingView() {
   currentCategory = null;
   currentRole = null;
 
-  viewLanding.classList.remove("hidden");
-  viewRoles.classList.add("hidden");
-  viewRoadmap.classList.add("hidden");
+  if (viewLanding) viewLanding.classList.remove("hidden");
+  if (viewRoles) viewRoles.classList.add("hidden");
+  if (viewRoadmap) viewRoadmap.classList.add("hidden");
 
-  navBackBtn.classList.add("hidden");
+  if (navBackBtn) navBackBtn.classList.add("hidden");
 }
 
 function selectCategory(categoryKey) {
   currentCategory = categoryKey;
   const categoryData = PATHWAYS_DATA[categoryKey];
+  if (!categoryData) return;
 
-  roleCategoryBadge.textContent = `Category: ${categoryData.categoryName}`;
-  roleCategoryTitle.textContent = `Select Your ${categoryData.categoryName} Role`;
+  if (roleCategoryBadge) roleCategoryBadge.textContent = `Track: ${categoryData.categoryName}`;
+  if (roleCategoryTitle) roleCategoryTitle.textContent = `Pick Your Career Goal`;
 
-  rolesGrid.innerHTML = "";
+  if (rolesGrid) {
+    rolesGrid.innerHTML = "";
 
-  categoryData.roles.forEach((role) => {
-    const card = document.createElement("button");
-    card.className = "glass-card p-6 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 border border-slate-800 hover:border-indigo-500/50 flex flex-col justify-between space-y-4 group";
-    
-    card.innerHTML = `
-      <div>
-        <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
-          <i data-lucide="${role.icon || 'compass'}" class="w-5 h-5"></i>
+    categoryData.roles.forEach((role) => {
+      const card = document.createElement("button");
+      card.className = "glass-card p-6 rounded-2xl text-left transition-all duration-300 hover:-translate-y-1 border border-slate-800 hover:border-indigo-500/50 flex flex-col justify-between space-y-4 group";
+      
+      card.innerHTML = `
+        <div>
+          <div class="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-3 group-hover:scale-110 transition">
+            <i data-lucide="${role.icon || 'compass'}" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition">${role.title}</h3>
+          <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">${role.tagline}</p>
         </div>
-        <h3 class="text-lg font-bold text-white group-hover:text-indigo-300 transition">${role.title}</h3>
-        <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">${role.tagline}</p>
-      </div>
 
-      <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 w-full text-xs">
-        <span class="text-slate-500 font-medium">${role.steps.length} Milestones</span>
-        <span class="text-indigo-400 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition">
-          View Path <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-        </span>
-      </div>
-    `;
+        <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 w-full text-xs">
+          <span class="text-slate-500 font-medium">${role.steps.length} Easy Milestones</span>
+          <span class="text-indigo-400 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition">
+            Start Learning <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+          </span>
+        </div>
+      `;
 
-    card.addEventListener("click", () => selectRole(role));
-    rolesGrid.appendChild(card);
-  });
+      card.addEventListener("click", () => selectRole(role));
+      rolesGrid.appendChild(card);
+    });
+  }
 
-  lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 
-  viewLanding.classList.add("hidden");
-  viewRoles.classList.remove("hidden");
-  viewRoadmap.classList.add("hidden");
+  if (viewLanding) viewLanding.classList.add("hidden");
+  if (viewRoles) viewRoles.classList.remove("hidden");
+  if (viewRoadmap) viewRoadmap.classList.add("hidden");
 
-  backBtnText.textContent = "Home";
-  navBackBtn.classList.remove("hidden");
+  if (backBtnText) backBtnText.textContent = "Home";
+  if (navBackBtn) navBackBtn.classList.remove("hidden");
 }
 
 function selectRole(role) {
@@ -594,192 +452,219 @@ function selectRole(role) {
 
   renderRoadmap();
 
-  viewLanding.classList.add("hidden");
-  viewRoles.classList.add("hidden");
-  viewRoadmap.classList.remove("hidden");
+  if (viewLanding) viewLanding.classList.add("hidden");
+  if (viewRoles) viewRoles.classList.add("hidden");
+  if (viewRoadmap) viewRoadmap.classList.remove("hidden");
 
-  backBtnText.textContent = "Roles";
-  navBackBtn.classList.remove("hidden");
+  if (backBtnText) backBtnText.textContent = "Roles";
+  if (navBackBtn) navBackBtn.classList.remove("hidden");
 }
 
-// --- RENDER ROADMAP ---
+// --- RENDER ROADMAP & PROGRESS ---
 function renderRoadmap() {
   if (!currentRole) return;
 
-  roadmapDomainTag.textContent = PATHWAYS_DATA[currentCategory].categoryName;
-  pathwayTitle.textContent = currentRole.title;
-  pathwayDesc.textContent = currentRole.tagline;
+  if (roadmapDomainTag) roadmapDomainTag.textContent = PATHWAYS_DATA[currentCategory].categoryName;
+  if (pathwayTitle) pathwayTitle.textContent = currentRole.title;
+  if (pathwayDesc) pathwayDesc.textContent = currentRole.tagline;
 
-  stepsContainer.innerHTML = "";
+  if (stepsContainer) {
+    stepsContainer.innerHTML = "";
 
-  currentRole.steps.forEach((step, index) => {
-    const isChecked = !!completedMap[step.id];
+    currentRole.steps.forEach((step, index) => {
+      const isChecked = !!completedMap[step.id];
 
-    const stepCard = document.createElement("div");
-    stepCard.className = "relative group flex items-start gap-4 sm:gap-6";
+      const stepCard = document.createElement("div");
+      stepCard.className = "relative group flex items-start gap-4 sm:gap-6";
 
-    stepCard.innerHTML = `
-      <!-- Node Checkbox -->
-      <label class="relative z-10 flex items-center justify-center -ml-[31px] sm:-ml-[39px] mt-4 cursor-pointer">
-        <input 
-          type="checkbox" 
-          data-id="${step.id}" 
-          ${isChecked ? "checked" : ""}
-          class="step-checkbox sr-only"
-        />
-        <div class="w-8 h-8 rounded-full bg-slate-950 border-2 ${isChecked ? 'border-emerald-400 bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]' : 'border-indigo-500/50 text-indigo-400 group-hover:border-indigo-400'} flex items-center justify-center transition-all duration-300">
-          ${isChecked 
-            ? '<i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>' 
-            : `<span class="text-xs font-bold">${index + 1}</span>`
-          }
-        </div>
-      </label>
-
-      <!-- Glass Step Card -->
-      <div class="glass-card flex-1 p-5 sm:p-6 rounded-2xl transition-all duration-300 ${isChecked ? 'opacity-75 border-emerald-500/30' : ''}">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2 flex-wrap mb-1.5">
-              <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${isChecked ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'} uppercase tracking-wider">
-                Step ${index + 1}
-              </span>
-              <h3 class="text-base sm:text-lg font-bold text-white ${isChecked ? 'line-through text-slate-400' : ''}">
-                ${step.title}
-              </h3>
-            </div>
-
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${step.summary}</p>
-
-            <div class="flex items-center gap-4 mt-3 text-xs text-slate-400 font-medium">
-              <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-400"></i> ${step.duration}
-              </span>
-              <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
-                <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i> ${step.resources.length} Courses/Docs
-              </span>
-            </div>
+      stepCard.innerHTML = `
+        <!-- Node Checkbox -->
+        <label class="relative z-10 flex items-center justify-center -ml-[31px] sm:-ml-[39px] mt-4 cursor-pointer" title="Click to mark milestone as done">
+          <input 
+            type="checkbox" 
+            data-id="${step.id}" 
+            ${isChecked ? "checked" : ""}
+            class="step-checkbox sr-only"
+          />
+          <div class="w-8 h-8 rounded-full bg-slate-950 border-2 ${isChecked ? 'border-emerald-400 bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]' : 'border-indigo-500/50 text-indigo-400 group-hover:border-indigo-400'} flex items-center justify-center transition-all duration-300">
+            ${isChecked 
+              ? '<i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>' 
+              : `<span class="text-xs font-bold">${index + 1}</span>`
+            }
           </div>
+        </label>
 
-          <!-- Toggle Expand Button -->
-          <button 
-            data-target="expand-${step.id}" 
-            class="toggle-details-btn self-end sm:self-center px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-slate-300 hover:text-white text-xs font-semibold rounded-xl transition border border-slate-700/80 hover:border-indigo-500 flex items-center gap-2 whitespace-nowrap shadow-sm group/btn"
-          >
-            <i data-lucide="book-open-check" class="w-3.5 h-3.5"></i>
-            <span class="btn-label">View Course Syllabus</span>
-            <i data-lucide="chevron-down" class="w-3.5 h-3.5 chevron-icon transition-transform duration-300"></i>
-          </button>
-        </div>
-
-        <!-- COLLAPSIBLE EXPANDED DETAILS SECTION -->
-        <div id="expand-${step.id}" class="hidden mt-5 pt-5 border-t border-slate-800/80 space-y-4 transition-all">
-          
-          ${step.syllabus && step.syllabus.length ? `
+        <!-- Glass Step Card -->
+        <div class="glass-card flex-1 p-5 sm:p-6 rounded-2xl transition-all duration-300 ${isChecked ? 'opacity-75 border-emerald-500/30' : ''}">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center gap-1.5">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i> Step-by-Step Curriculum
-              </h4>
-              <ul class="space-y-1.5 pl-1">
-                ${step.syllabus.map(item => `
-                  <li class="text-xs text-slate-300 flex items-start gap-2">
-                    <span class="text-indigo-400 font-bold">•</span>
-                    <span>${item}</span>
-                  </li>
-                `).join('')}
-              </ul>
-            </div>
-          ` : ''}
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${isChecked ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'} uppercase tracking-wider">
+                  Milestone ${index + 1}
+                </span>
+                <h3 class="text-base sm:text-lg font-bold text-white ${isChecked ? 'line-through text-slate-400' : ''}">
+                  ${step.title}
+                </h3>
+              </div>
 
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Core Competencies
-            </h4>
-            <div class="flex flex-wrap gap-1.5">
-              ${step.concepts.map(c => `<span class="bg-slate-950 text-slate-300 text-[11px] px-2.5 py-1 rounded-lg border border-slate-800 font-medium">${c}</span>`).join('')}
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">${step.summary}</p>
+
+              <!-- WHY THIS MATTERS CALLOUT (ELI5) -->
+              <div class="mt-2.5 p-2.5 rounded-xl bg-indigo-950/40 border border-indigo-500/20 flex items-start gap-2">
+                <i data-lucide="lightbulb" class="w-4 h-4 text-amber-400 shrink-0 mt-0.5"></i>
+                <p class="text-xs text-indigo-200">
+                  <strong class="text-amber-300">Why this matters:</strong> ${step.whyMatters}
+                </p>
+              </div>
+
+              <div class="flex items-center gap-4 mt-3 text-xs text-slate-400 font-medium">
+                <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
+                  <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-400"></i> Estimated: ${step.duration}
+                </span>
+                <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
+                  <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i> ${step.resources ? step.resources.length : 0} Free Guides
+                </span>
+              </div>
             </div>
+
+            <!-- Toggle Expand Button -->
+            <button 
+              data-target="expand-${step.id}" 
+              class="toggle-details-btn self-end sm:self-center px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-slate-300 hover:text-white text-xs font-semibold rounded-xl transition border border-slate-700/80 hover:border-indigo-500 flex items-center gap-2 whitespace-nowrap shadow-sm group/btn"
+            >
+              <i data-lucide="book-open-check" class="w-3.5 h-3.5"></i>
+              <span class="btn-label">View Simple Breakdown</span>
+              <i data-lucide="chevron-down" class="w-3.5 h-3.5 chevron-icon transition-transform duration-300"></i>
+            </button>
           </div>
 
-          <div>
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-              <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i> Direct Free Courses & Documentation
-            </h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              ${step.resources.map(r => `
-                <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-950/80 hover:bg-slate-900 p-2.5 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-indigo-400 hover:text-indigo-300 text-xs transition flex items-center justify-between font-medium group/link">
-                  <span class="truncate">${r.name}</span>
-                  <i data-lucide="external-link" class="w-3.5 h-3.5 shrink-0 group-hover/link:translate-x-0.5 transition"></i>
-                </a>
-              `).join('')}
-            </div>
-          </div>
+          <!-- COLLAPSIBLE EXPANDED DETAILS SECTION -->
+          <div id="expand-${step.id}" class="hidden mt-5 pt-5 border-t border-slate-800/80 space-y-4 transition-all">
+            
+            ${step.syllabus && step.syllabus.length ? `
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i> Step-by-Step Learning Plan
+                </h4>
+                <ul class="space-y-1.5 pl-1">
+                  ${step.syllabus.map(item => `
+                    <li class="text-xs text-slate-300 flex items-start gap-2">
+                      <span class="text-indigo-400 font-bold">•</span>
+                      <span>${item}</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            ` : ''}
 
-          <div class="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl">
-            <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-              <i data-lucide="code" class="w-3.5 h-3.5 text-indigo-400"></i> Milestone Project Challenge
-            </h4>
-            <p class="text-xs text-slate-300 leading-relaxed">${step.project}</p>
-          </div>
+            ${step.concepts && step.concepts.length ? `
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                  <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Key Skills You Will Pick Up
+                </h4>
+                <div class="flex flex-wrap gap-1.5">
+                  ${step.concepts.map(c => `<span class="bg-slate-950 text-slate-300 text-[11px] px-2.5 py-1 rounded-lg border border-slate-800 font-medium">${c}</span>`).join('')}
+                </div>
+              </div>
+            ` : ''}
 
+            ${step.resources && step.resources.length ? `
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
+                  <i data-lucide="external-link" class="w-3.5 h-3.5 text-cyan-400"></i> Beginner Free Tutorials
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                  ${step.resources.map(r => `
+                    <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 bg-cyan-950/30 border border-cyan-800/50 hover:border-cyan-500 px-3 py-1.5 rounded-lg transition font-medium">
+                      <i data-lucide="link" class="w-3 h-3"></i> ${r.name}
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${step.project ? `
+              <div class="p-3.5 rounded-xl bg-slate-950/80 border border-indigo-500/20 flex items-start gap-3">
+                <i data-lucide="trophy" class="w-5 h-5 text-amber-400 shrink-0 mt-0.5"></i>
+                <div>
+                  <h5 class="text-xs font-bold text-amber-300 uppercase tracking-wider">Beginner Hands-On Practice Project</h5>
+                  <p class="text-xs text-slate-300 mt-1">${step.project}</p>
+                </div>
+              </div>
+            ` : ''}
+
+          </div>
         </div>
-      </div>
-    `;
+      `;
 
-    stepsContainer.appendChild(stepCard);
-  });
+      stepsContainer.appendChild(stepCard);
+    });
 
-  lucide.createIcons();
-  bindStepEvents();
+    // Attach step event listeners
+    document.querySelectorAll(".step-checkbox").forEach((cb) => {
+      cb.addEventListener("change", (e) => {
+        const id = e.target.getAttribute("data-id");
+        completedMap[id] = e.target.checked;
+        saveProgress();
+        renderRoadmap();
+      });
+    });
+
+    document.querySelectorAll(".toggle-details-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-target");
+        const targetEl = document.getElementById(targetId);
+        const chevron = btn.querySelector(".chevron-icon");
+        const label = btn.querySelector(".btn-label");
+
+        if (targetEl) {
+          const isHidden = targetEl.classList.contains("hidden");
+          if (isHidden) {
+            targetEl.classList.remove("hidden");
+            if (chevron) chevron.classList.add("rotate-180");
+            if (label) label.textContent = "Hide Breakdown";
+          } else {
+            targetEl.classList.add("hidden");
+            if (chevron) chevron.classList.remove("rotate-180");
+            if (label) label.textContent = "View Simple Breakdown";
+          }
+        }
+      });
+    });
+  }
+
   updateProgress();
+  if (window.lucide) lucide.createIcons();
 }
 
-function bindStepEvents() {
-  document.querySelectorAll(".step-checkbox").forEach((cb) => {
-    cb.addEventListener("change", (e) => {
-      const stepId = e.target.getAttribute("data-id");
-      completedMap[stepId] = e.target.checked;
-      saveProgress();
-      renderRoadmap();
-    });
-  });
-
-  document.querySelectorAll(".toggle-details-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const targetId = e.currentTarget.getAttribute("data-target");
-      const contentEl = document.getElementById(targetId);
-      const chevronIcon = e.currentTarget.querySelector(".chevron-icon");
-      const labelEl = e.currentTarget.querySelector(".btn-label");
-
-      if (contentEl.classList.contains("hidden")) {
-        contentEl.classList.remove("hidden");
-        chevronIcon.style.transform = "rotate(180deg)";
-        if (labelEl) labelEl.textContent = "Hide Syllabus";
-      } else {
-        contentEl.classList.add("hidden");
-        chevronIcon.style.transform = "rotate(0deg)";
-        if (labelEl) labelEl.textContent = "View Course Syllabus";
-      }
-    });
-  });
-}
-
+// --- ENHANCED BEGINNER-FRIENDLY PROGRESS TRACKER ---
 function updateProgress() {
-  const steps = currentRole.steps;
-  const completedCount = steps.filter((s) => completedMap[s.id]).length;
-  const percentage = Math.round((completedCount / steps.length) * 100) || 0;
+  if (!currentRole) return;
 
-  progressBar.style.width = `${percentage}%`;
-  progressPercent.textContent = `${percentage}%`;
+  const total = currentRole.steps.length;
+  const completedCount = currentRole.steps.filter((s) => completedMap[s.id]).length;
+  const percentage = Math.round((completedCount / total) * 100);
 
-  if (percentage === 100) {
-    trophyContainer.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center animate-bounce shadow-[0_0_20px_rgba(245,158,11,0.4)]";
-    if (!hasCelebrated) {
-      if (typeof confetti === "function") {
-        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
-      }
-      hasCelebrated = true;
+  if (progressBar) progressBar.style.width = `${percentage}%`;
+  
+  if (progressPercent) {
+    let friendlyStatus = `${completedCount} of ${total} Milestones Done (${percentage}%)`;
+    if (percentage === 100) {
+      friendlyStatus = `🎉 Pathway Mastered! (100%)`;
+    } else if (percentage > 0) {
+      friendlyStatus = `🚀 ${completedCount}/${total} Done (${percentage}%) - Keep Going!`;
     }
-  } else {
-    trophyContainer.className = "w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-slate-600 flex items-center justify-center";
+    progressPercent.textContent = friendlyStatus;
+  }
+
+  if (percentage === 100 && !hasCelebrated) {
+    hasCelebrated = true;
+    if (trophyContainer) {
+      trophyContainer.classList.remove("hidden");
+      trophyContainer.classList.add("animate-bounce");
+    }
+  } else if (percentage < 100 && trophyContainer) {
+    trophyContainer.classList.add("hidden");
   }
 }
 
@@ -787,113 +672,120 @@ function saveProgress() {
   localStorage.setItem("pathforge_completed", JSON.stringify(completedMap));
 }
 
-// --- CAREER QUIZ ENGINE ---
+// --- QUIZ MODAL CONTROLLER ---
 function openQuizModal() {
-  quizAnswers = [];
   currentQuizStep = 0;
-  renderQuizQuestion();
-
-  modal.classList.remove("opacity-0", "pointer-events-none");
-  modalBox.classList.add("animate-modal-pop");
+  quizAnswers = [];
+  renderQuizStep();
+  openModal();
 }
 
-function renderQuizQuestion() {
-  const q = QUIZ_QUESTIONS[currentQuizStep];
-  if (!q) {
-    calculateQuizResults();
+function renderQuizStep() {
+  if (!modalContent) return;
+
+  if (currentQuizStep >= QUIZ_QUESTIONS.length) {
+    const recommendedRole = recommendRole(quizAnswers);
+    modalContent.innerHTML = `
+      <div class="text-center space-y-4 py-4">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mx-auto">
+          <i data-lucide="sparkles" class="w-8 h-8 animate-pulse"></i>
+        </div>
+        <h3 class="text-2xl font-black text-white">Your Career Pathway Match</h3>
+        <p class="text-sm text-slate-300">Based on what you enjoy doing, here is the perfect starting role:</p>
+
+        <div class="glass-card p-5 rounded-2xl border border-indigo-500/40 my-4 text-left">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">${recommendedRole.categoryName}</span>
+          <h4 class="text-xl font-bold text-white mt-1">${recommendedRole.role.title}</h4>
+          <p class="text-xs text-slate-300 mt-2">${recommendedRole.role.tagline}</p>
+        </div>
+
+        <button id="apply-quiz-role-btn" class="w-full py-3 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold rounded-xl shadow-lg transition">
+          Start Learning This Pathway
+        </button>
+      </div>
+    `;
+
+    document.getElementById("apply-quiz-role-btn")?.addEventListener("click", () => {
+      closeModal();
+      selectCategory(recommendedRole.categoryKey);
+      selectRole(recommendedRole.role);
+    });
+
+    if (window.lucide) lucide.createIcons();
     return;
   }
 
+  const q = QUIZ_QUESTIONS[currentQuizStep];
   modalContent.innerHTML = `
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
-        Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}
-      </span>
-      <span class="text-xs text-slate-500 font-semibold">1-Min Quiz</span>
-    </div>
+    <div class="space-y-5">
+      <div class="flex items-center justify-between text-xs text-slate-400">
+        <span>Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}</span>
+        <span class="font-mono text-indigo-400">${Math.round(((currentQuizStep + 1) / QUIZ_QUESTIONS.length) * 100)}%</span>
+      </div>
 
-    <h3 class="text-lg font-bold text-white mt-1 mb-4">${q.question}</h3>
+      <h3 class="text-lg font-bold text-white">${q.question}</h3>
 
-    <div class="space-y-2.5">
-      ${q.options.map((opt, i) => `
-        <button 
-          data-index="${i}"
-          class="quiz-opt-btn w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between group"
-        >
-          <span>${opt.text}</span>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-indigo-400"></i>
-        </button>
-      `).join("")}
+      <div class="space-y-2.5">
+        ${q.options.map((opt, idx) => `
+          <button data-opt-idx="${idx}" class="quiz-opt-btn w-full p-4 rounded-xl text-left bg-slate-900/80 hover:bg-indigo-950/50 border border-slate-800 hover:border-indigo-500/50 text-xs sm:text-sm text-slate-200 hover:text-white transition flex items-center justify-between group">
+            <span>${opt.text}</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 text-slate-600 group-hover:text-indigo-400 transition transform group-hover:translate-x-1"></i>
+          </button>
+        `).join('')}
+      </div>
     </div>
   `;
-
-  lucide.createIcons();
 
   document.querySelectorAll(".quiz-opt-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      const selectedIndex = parseInt(e.currentTarget.getAttribute("data-index"));
-      quizAnswers.push(q.options[selectedIndex]);
+    btn.addEventListener("click", () => {
+      const idx = parseInt(btn.getAttribute("data-opt-idx"), 10);
+      quizAnswers.push(q.options[idx]);
       currentQuizStep++;
-      renderQuizQuestion();
+      renderQuizStep();
     });
   });
+
+  if (window.lucide) lucide.createIcons();
 }
 
-function calculateQuizResults() {
-  // Find most frequent role ID or default to Frontend / PM
-  const roleVotes = {};
-  let bestCategory = "tech";
+function recommendRole(answers) {
+  const techCount = answers.filter(a => a.category === "tech").length;
+  const nonTechCount = answers.filter(a => a.category === "non-tech").length;
+  const categoryKey = techCount >= nonTechCount ? "tech" : "non-tech";
 
-  quizAnswers.forEach((ans) => {
-    roleVotes[ans.roleId] = (roleVotes[ans.roleId] || 0) + 1;
-    if (ans.category) bestCategory = ans.category;
-  });
+  const specificRole = answers.find(a => a.roleId)?.roleId;
+  let matchedRole = PATHWAYS_DATA[categoryKey].roles.find(r => r.id === specificRole);
 
-  const matchedRoleId = Object.keys(roleVotes).reduce((a, b) => roleVotes[a] > roleVotes[b] ? a : b, "frontend");
-
-  // Lookup role object
-  let matchedRole = PATHWAYS_DATA[bestCategory].roles.find(r => r.id === matchedRoleId);
   if (!matchedRole) {
-    // fallback search across both categories
-    matchedRole = PATHWAYS_DATA["tech"].roles.find(r => r.id === matchedRoleId) || 
-                  PATHWAYS_DATA["non-tech"].roles.find(r => r.id === matchedRoleId) ||
-                  PATHWAYS_DATA["tech"].roles[0];
+    matchedRole = PATHWAYS_DATA[categoryKey].roles[0];
   }
 
-  modalContent.innerHTML = `
-    <div class="text-center py-2">
-      <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3">
-        <i data-lucide="sparkles" class="w-6 h-6"></i>
-      </div>
-      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
-        Your Match Found!
-      </span>
-      <h3 class="text-2xl font-black text-white mt-2">${matchedRole.title}</h3>
-      <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">${matchedRole.tagline}</p>
-
-      <div class="mt-6">
-        <button 
-          id="launch-matched-roadmap"
-          class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
-        >
-          <span>Launch ${matchedRole.title} Pathway</span>
-          <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
-      </div>
-    </div>
-  `;
-
-  lucide.createIcons();
-
-  document.getElementById("launch-matched-roadmap").addEventListener("click", () => {
-    closeModal();
-    currentCategory = bestCategory;
-    selectRole(matchedRole);
-  });
+  return {
+    categoryKey,
+    categoryName: PATHWAYS_DATA[categoryKey].categoryName,
+    role: matchedRole
+  };
 }
 
-// --- GENERAL MODAL CLOSING ---
+// --- GENERAL MODAL UTILS ---
+function openModal() {
+  if (modal) {
+    modal.classList.remove("hidden");
+    setTimeout(() => {
+      if (modalBox) {
+        modalBox.classList.remove("scale-95", "opacity-0");
+        modalBox.classList.add("scale-100", "opacity-100");
+      }
+    }, 10);
+  }
+}
+
 function closeModal() {
-  modal.classList.add("opacity-0", "pointer-events-none");
-  modalBox.classList.remove("animate-modal-pop");
+  if (modalBox) {
+    modalBox.classList.remove("scale-100", "opacity-100");
+    modalBox.classList.add("scale-95", "opacity-0");
+  }
+  setTimeout(() => {
+    if (modal) modal.classList.add("hidden");
+  }, 200);
 }
