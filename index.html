@@ -253,19 +253,14 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
           
-          <!-- Tech Option -->
+          <!-- Tech Option (Laptop Symbol Overlay) -->
           <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
             <!-- Background Glow -->
             <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition z-0"></div>
 
-            <!-- Half-Hidden Rightmost Speciality Symbol -->
+            <!-- Half-Hidden LAPTOP Speciality Symbol -->
             <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
-              <i data-lucide="terminal" class="w-full h-full text-indigo-400/10 group-hover:text-indigo-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
-            </div>
-
-            <!-- 👇 2. PUT THE 50% OVERLAY CODE HERE (Directly behind card text) -->
-            <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
-              <i data-lucide="terminal" class="w-full h-full text-indigo-400/10 group-hover:text-indigo-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+              <i data-lucide="laptop" class="w-full h-full text-indigo-400/10 group-hover:text-indigo-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
             </div>
 
             <!-- Content -->
@@ -283,14 +278,14 @@
             </div>
           </button>
 
-          <!-- Non-Tech Option -->
+          <!-- Non-Tech Option (Indian Rupee Sign Overlay) -->
           <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
             <!-- Background Glow -->
             <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition z-0"></div>
 
-            <!-- Half-Hidden Rightmost Speciality Symbol -->
+            <!-- Half-Hidden RUPEE SIGN Speciality Symbol -->
             <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
-              <i data-lucide="trending-up" class="w-full h-full text-cyan-400/10 group-hover:text-cyan-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+              <i data-lucide="indian-rupee" class="w-full h-full text-cyan-400/10 group-hover:text-cyan-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
             </div>
 
             <!-- Content -->
@@ -322,7 +317,7 @@
         </div>
 
         <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          <!-- Dynamically Injected Role Cards (Update app.js to include watermark symbols for dynamic role cards) -->
+          <!-- Dynamically Injected Role Cards -->
         </div>
       </section>
 
