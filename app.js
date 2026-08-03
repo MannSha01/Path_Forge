@@ -897,3 +897,80 @@ function closeModal() {
   modal.classList.add("opacity-0", "pointer-events-none");
   modalBox.classList.remove("animate-modal-pop");
 }
+
+// ==========================================
+// --- PATH FORGE AI ADVISOR INTEGRATION ---
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const aiModal = document.getElementById('ai-modal');
+  const closeAiBtn = document.getElementById('close-ai-modal');
+  const aiForm = document.getElementById('ai-form');
+  const aiInput = document.getElementById('ai-user-input');
+  const aiResponseBox = document.getElementById('ai-response-box');
+  const aiSubmitBtn = document.getElementById('ai-submit-btn');
+
+  // 1. Close Modal Handlers
+  if (closeAiBtn) {
+    closeAiBtn.addEventListener('click', () => {
+      aiModal.classList.add('opacity-0', 'pointer-events-none');
+    });
+  }
+
+  if (aiModal) {
+    aiModal.addEventListener('click', (e) => {
+      if (e.target === aiModal) {
+        aiModal.classList.add('opacity-0', 'pointer-events-none');
+      }
+    });
+  }
+
+  // 2. Handle AI Form Submission
+  if (aiForm) {
+    aiForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userPrompt = aiInput.value.trim();
+      if (!userPrompt) return;
+
+      // Show Loading State
+      aiResponseBox.innerHTML = `
+        <div class="flex items-center gap-2 text-indigo-400 font-medium">
+          <i data-lucide="sparkles" class="w-4 h-4 animate-spin"></i>
+          <span>Path Forge AI is thinking...</span>
+        </div>
+      `;
+      aiSubmitBtn.disabled = true;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      try {
+        const response = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userPrompt })
+        });
+
+        const data = await response.json();
+
+        if (data.result) {
+          aiResponseBox.innerHTML = data.result;
+        } else {
+          aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Error: ${data.error || 'Failed to get response'}</span>`;
+        }
+      } catch (err) {
+        aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Network Error. Please try again.</span>`;
+      } finally {
+        aiSubmitBtn.disabled = false;
+        aiInput.value = '';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    });
+  }
+});
+
+// Helper Function to Open the AI Modal from anywhere
+function openAIAdvisor() {
+  const aiModal = document.getElementById('ai-modal');
+  if (aiModal) {
+    aiModal.classList.remove('opacity-0', 'pointer-events-none');
+  }
+}
