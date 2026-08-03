@@ -672,5 +672,50 @@
   <script src="app.js"></script>
   <script src="quiz.js"></script>
 
+<!-- AI Career Advisor Modal -->
+<div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+  <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl relative border border-indigo-500/30">
+    
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+      <div class="flex items-center gap-2.5">
+        <div class="p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-400">
+          <i data-lucide="bot" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white">Path Forge AI Advisor</h3>
+          <p class="text-[11px] text-slate-400">Powered by Gemini AI</p>
+        </div>
+      </div>
+      <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- AI Output Box -->
+    <div id="ai-response-box" class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 min-h-[120px] max-h-[250px] overflow-y-auto leading-relaxed">
+      Ask anything! E.g., <em>"What real-world projects should I build to land my first job?"</em>
+    </div>
+
+    <!-- AI Input Form -->
+    <form id="ai-form" class="flex gap-2">
+      <input 
+        type="text" 
+        id="ai-user-input" 
+        placeholder="Type your career question..." 
+        required
+        class="flex-1 bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+      />
+      <button 
+        type="submit" 
+        id="ai-submit-btn" 
+        class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5 active:scale-95 whitespace-nowrap"
+      >
+        <i data-lucide="send" class="w-3.5 h-3.5"></i> Ask AI
+      </button>
+    </form>
+
+  </div>
+</div>
 </body>
 </html>
