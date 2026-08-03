@@ -31,4 +31,15 @@ PATH FORGE helps users escape "tutorial hell" by generating personalized, projec
 | **HTML5 Canvas API** | Native Web API | Renders the interactive, mouse-reactive constellation particle background |
 | **Lucide Icons** | CDN (`unpkg`) | Lightweight vector iconography throughout the navigation, controls, and UI cards |
 | **Canvas Confetti** | v1.9.2 CDN | Particle burst animation engine triggered upon completing roadmap milestones |
+
+- **Backend:**
+Because Path Forge prioritizes speed, zero latency, and offline capabilities, it uses a **Client-Side Architecture** with browser-native persistent storage rather than a traditional server framework.
+
+| *Component* | *Technology* | *Description & Usage* |
+| :--- | :--- | :--- |
+| **Data Engine** | Vanilla JS (ES6 Modules) | In-memory roadmap structures, quiz decision logic, and role pathway resolution |
+| **Persistence** | Browser `localStorage` API | Saves quiz results, active roadmap progress, and user preferences across sessions |
+| **Routing** | View State Machine | Custom single-page application (SPA) state engine handling view switches without full page reloads |
+| **Execution Context** | Client-Side Runtime | Fast, serverless operation with zero latency and complete privacy |
+
 - **Deployment:** Vercel
