@@ -21,5 +21,14 @@ PATH FORGE helps users escape "tutorial hell" by generating personalized, projec
 - [ ] Interactive User Dashboard
 
 ## 🛠️ Tech Stack (TBD)
-- **Frontend:** 
+- **Frontend:**      
+
+| *Technology / Library* | *Version / Type* | *Description & Usage* |
+| :--- | :--- | :--- |
+| **HTML5** | Markup | Semantic structure, accessibility foundation, and application shell |
+| **Tailwind CSS** | CDN / Utility-First | Glassmorphism UI styling, responsive layouts, gradients, and theme tokens |
+| **Vanilla JavaScript (ES6+)** | Dynamic Runtime | Modular application logic, dynamic DOM injection, and state management |
+| **HTML5 Canvas API** | Native Web API | Renders the interactive, mouse-reactive constellation particle background |
+| **Lucide Icons** | CDN (`unpkg`) | Lightweight vector iconography throughout the navigation, controls, and UI cards |
+| **Canvas Confetti** | v1.9.2 CDN | Particle burst animation engine triggered upon completing roadmap milestones |
 - **Deployment:** Vercel
