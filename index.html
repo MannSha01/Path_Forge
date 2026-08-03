@@ -57,8 +57,8 @@
       align-items: center;
       justify-content: center;
       background-color: #060913;
-      /* Fades out seamlessly into welcome animation at 2.58s */
-      animation: fadeOutOverlay 0.5s ease-in-out 2.58s forwards;
+      /* Starting animation fades out at exactly 3.00s */
+      animation: fadeOutOverlay 0.5s ease-in-out 3.00s forwards;
     }
 
     .brand-container {
@@ -144,8 +144,8 @@
       width: 0%;
       background: linear-gradient(90deg, #38bdf8, #818cf8);
       border-radius: 4px;
-      /* Adjusted to finish filling precisely at 2.58s (1.4s start + 1.18s duration) */
-      animation: fillProgress 1.18s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
+      /* Fills up across 1.6s from 1.4s start to hit 100% at 3.00s */
+      animation: fillProgress 1.6s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
     }
 
     /* ================= WELCOME SCREEN ANIMATION ================= */
@@ -160,10 +160,10 @@
       background-color: #060913;
       opacity: 0;
       pointer-events: none;
-      /* Fade in begins at exactly 2.58s */
+      /* Welcome fade in starts at 2.58s */
       animation: 
         fadeInWelcome 0.5s ease-out 2.58s forwards,
-        fadeOutWelcome 0.8s ease-in-out 5.18s forwards;
+        fadeOutWelcome 0.8s ease-in-out 5.58s forwards;
     }
 
     .welcome-box {
@@ -491,7 +491,7 @@
           </div>
         </div>
 
-        <!-- Core Technologies Used (Option A Format) -->
+        <!-- Core Technologies Used -->
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Core Technologies Used</span>
           <div class="grid grid-cols-1 gap-2 text-xs">
@@ -510,7 +510,7 @@
           </div>
         </div>
 
-        <!-- App Architecture (Option A Format) -->
+        <!-- App Architecture -->
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">App Architecture</span>
           <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 flex items-center gap-2.5 text-xs">
