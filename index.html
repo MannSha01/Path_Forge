@@ -301,11 +301,17 @@
 
         <!-- Dynamic Header Controls -->
         <div class="flex items-center gap-2 sm:gap-3">
+          
+          <!-- NEW: ASK AI ADVISOR BUTTON -->
+          <button onclick="openAIAdvisor()" class="px-3.5 py-2 bg-gradient-to-r from-indigo-600/30 to-cyan-600/30 hover:from-indigo-600/50 hover:to-cyan-600/50 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/40 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
+            <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Ask </span>AI Advisor
+          </button>
+
           <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 transition items-center gap-1.5 active:scale-95">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
           
-          <button id="trigger-quiz-btn" class="px-3.5 sm:px-4 py-2 bg-gradient-to-r from-indigo-600/20 to-cyan-600/20 hover:from-indigo-600/30 hover:to-cyan-600/30 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/30 hover:border-indigo-500/50 transition cursor-pointer flex items-center gap-1.5 active:scale-95">
+          <button id="trigger-quiz-btn" class="px-3.5 sm:px-4 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition cursor-pointer flex items-center gap-1.5 active:scale-95">
             <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Confused? </span>Take Quiz
           </button>
 
@@ -342,15 +348,10 @@
           
           <!-- Tech Option -->
           <button onclick="selectCategory('tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-indigo-500/20">
-            <!-- Background Glow -->
             <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-indigo-600/15 rounded-full blur-3xl group-hover:bg-indigo-600/30 transition-all duration-500"></div>
-
-            <!-- Half-Hidden LAPTOP Speciality Symbol -->
             <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
               <i data-lucide="laptop" class="w-48 h-48 text-indigo-400 stroke-[1]"></i>
             </div>
-
-            <!-- Content -->
             <div class="relative z-10 space-y-3">
               <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 transition duration-300">
                 <i data-lucide="code-2" class="w-7 h-7"></i>
@@ -360,7 +361,6 @@
                 Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
               </p>
             </div>
-            
             <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
               Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
             </div>
@@ -368,15 +368,10 @@
 
           <!-- Non-Tech Option -->
           <button onclick="selectCategory('non-tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-cyan-500/20">
-            <!-- Background Glow -->
             <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-cyan-600/15 rounded-full blur-3xl group-hover:bg-cyan-600/30 transition-all duration-500"></div>
-
-            <!-- Half-Hidden RUPEE SIGN Speciality Symbol -->
             <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
               <i data-lucide="indian-rupee" class="w-48 h-48 text-cyan-400 stroke-[1]"></i>
             </div>
-
-            <!-- Content -->
             <div class="relative z-10 space-y-3">
               <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500/20 transition duration-300">
                 <i data-lucide="briefcase" class="w-7 h-7"></i>
@@ -386,7 +381,6 @@
                 Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
               </p>
             </div>
-            
             <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
               Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
             </div>
@@ -451,6 +445,58 @@
 
     </main>
 
+    <!-- NEW: FLOATING AI BOT ACTION BUTTON (Bottom Right) -->
+    <button onclick="openAIAdvisor()" class="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-tr from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white rounded-full shadow-2xl shadow-indigo-500/40 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group" title="Ask AI Advisor">
+      <i data-lucide="bot" class="w-6 h-6"></i>
+      <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-bold pl-0 group-hover:pl-2">Ask AI Advisor</span>
+    </button>
+
+    <!-- NEW: AI ADVISOR MODAL -->
+    <div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl relative border border-indigo-500/30">
+        
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-400">
+              <i data-lucide="bot" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-white">Path Forge AI Advisor</h3>
+              <p class="text-[11px] text-slate-400">Powered by Gemini AI</p>
+            </div>
+          </div>
+          <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- AI Output Box -->
+        <div id="ai-response-box" class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 min-h-[120px] max-h-[250px] overflow-y-auto leading-relaxed">
+          Ask anything! E.g., <em>"What real-world projects should I build to land my first job?"</em>
+        </div>
+
+        <!-- AI Input Form -->
+        <form id="ai-form" class="flex gap-2">
+          <input 
+            type="text" 
+            id="ai-user-input" 
+            placeholder="Type your career question..." 
+            required
+            class="flex-1 bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+          />
+          <button 
+            type="submit" 
+            id="ai-submit-btn" 
+            class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5 active:scale-95 whitespace-nowrap cursor-pointer"
+          >
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Ask AI
+          </button>
+        </form>
+
+      </div>
+    </div>
+
     <!-- App Detail Modal -->
     <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
       <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-700/60">
@@ -467,7 +513,6 @@
     <div id="credits-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
       <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
         
-        <!-- Modal Header -->
         <div class="flex items-center justify-between border-b border-slate-800/80 pb-3.5">
           <div class="flex items-center gap-2.5">
             <div class="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400">
@@ -480,7 +525,6 @@
           </button>
         </div>
 
-        <!-- Author / Creator Card -->
         <div class="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 text-left space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Developer Team</span>
@@ -511,7 +555,6 @@
           </div>
         </div>
 
-        <!-- Core Technologies Used -->
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Core Technologies Used</span>
           <div class="grid grid-cols-1 gap-2 text-xs">
@@ -530,7 +573,6 @@
           </div>
         </div>
 
-        <!-- App Architecture -->
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">App Architecture</span>
           <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2.5 text-xs">
@@ -539,7 +581,6 @@
           </div>
         </div>
 
-        <!-- Footer Meta -->
         <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
           <span>Path Forge v1.0.0</span>
           <span>MIT License</span>
@@ -557,7 +598,7 @@
         lucide.createIcons();
       }
 
-      // Modal open/close handler for Credits
+      // Credits Modal
       const creditsBtn = document.getElementById('trigger-credits-btn');
       const creditsModal = document.getElementById('credits-modal');
       const closeCreditsBtn = document.getElementById('close-credits-modal');
@@ -601,7 +642,6 @@
         mouse.y = e.clientY;
       });
 
-      // Interactive Constellation Particles
       const numParticles = 65;
       const particles = [];
       for (let i = 0; i < numParticles; i++) {
@@ -632,7 +672,6 @@
           ctx.shadowColor = '#38bdf8';
           ctx.fill();
 
-          // Connect nearby particles
           for (let j = i + 1; j < particles.length; j++) {
             let p2 = particles[j];
             let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
@@ -646,7 +685,6 @@
             }
           }
 
-          // Mouse connection
           let mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
           if (mDist < 160) {
             ctx.beginPath();
@@ -672,50 +710,5 @@
   <script src="app.js"></script>
   <script src="quiz.js"></script>
 
-<!-- AI Career Advisor Modal -->
-<div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-  <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl relative border border-indigo-500/30">
-    
-    <!-- Modal Header -->
-    <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-      <div class="flex items-center gap-2.5">
-        <div class="p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-400">
-          <i data-lucide="bot" class="w-5 h-5"></i>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-white">Path Forge AI Advisor</h3>
-          <p class="text-[11px] text-slate-400">Powered by Gemini AI</p>
-        </div>
-      </div>
-      <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
-    </div>
-
-    <!-- AI Output Box -->
-    <div id="ai-response-box" class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 min-h-[120px] max-h-[250px] overflow-y-auto leading-relaxed">
-      Ask anything! E.g., <em>"What real-world projects should I build to land my first job?"</em>
-    </div>
-
-    <!-- AI Input Form -->
-    <form id="ai-form" class="flex gap-2">
-      <input 
-        type="text" 
-        id="ai-user-input" 
-        placeholder="Type your career question..." 
-        required
-        class="flex-1 bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
-      />
-      <button 
-        type="submit" 
-        id="ai-submit-btn" 
-        class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5 active:scale-95 whitespace-nowrap"
-      >
-        <i data-lucide="send" class="w-3.5 h-3.5"></i> Ask AI
-      </button>
-    </form>
-
-  </div>
-</div>
 </body>
 </html>
