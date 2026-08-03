@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,9 +20,24 @@
       padding: 0;
     }
 
-    /* Dark Grid Background */
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #030712;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Dark Grid Background with Radial Mask */
     .bg-tech-grid {
-      background-size: 32px 32px;
+      background-size: 36px 36px;
       background-image: 
         linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
@@ -30,21 +45,28 @@
 
     /* Ambient Glow Animation */
     @keyframes pulse-slow {
-      0%, 100% { opacity: 0.35; transform: scale(1); }
-      50% { opacity: 0.65; transform: scale(1.08); }
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.1); }
     }
-    .animate-glow { animation: pulse-slow 8s ease-in-out infinite; }
+    .animate-glow { 
+      animation: pulse-slow 8s ease-in-out infinite; 
+    }
 
-    /* Glass Cards */
+    /* Modern Glassmorphic Cards */
     .glass-card {
       background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(99, 102, 241, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     }
-    .glass-card:hover {
+    .glass-card-hover {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card-hover:hover {
       border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.2);
+      box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.05);
+      transform: translateY(-4px);
     }
 
     /* Splash Screen Animation */
@@ -56,8 +78,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #060913;
-      /* Starting animation fades out at exactly 3.00s */
+      background-color: #030712;
       animation: fadeOutOverlay 0.5s ease-in-out 3.00s forwards;
     }
 
@@ -73,12 +94,12 @@
     .logo-icon {
       width: 56px;
       height: 56px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
+      border-radius: 16px;
+      background: linear-gradient(135deg, #38bdf8 0%, #4f46e5 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
       animation: pulseGlow 2s ease-in-out infinite alternate;
     }
 
@@ -94,8 +115,8 @@
     }
 
     .brand-title {
-      font-size: 2rem;
-      font-weight: 800;
+      font-size: 2.25rem;
+      font-weight: 900;
       letter-spacing: 0.05em;
       text-transform: uppercase;
       background: linear-gradient(to right, #ffffff, #93c5fd);
@@ -107,7 +128,7 @@
       font-size: 0.85rem;
       color: #94a3b8;
       font-weight: 500;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.04em;
     }
 
     .init-container {
@@ -121,17 +142,18 @@
     }
 
     .init-text {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: #64748b;
-      letter-spacing: 0.05em;
-      font-weight: 500;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .progress-bar-bg {
-      width: 180px;
-      height: 3px;
+      width: 200px;
+      height: 4px;
       background: rgba(255, 255, 255, 0.08);
-      border-radius: 4px;
+      border-radius: 9999px;
       overflow: hidden;
       position: relative;
     }
@@ -143,12 +165,11 @@
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #38bdf8, #818cf8);
-      border-radius: 4px;
-      /* Fills up across 1.6s from 1.4s start to hit 100% at 3.00s */
+      border-radius: 9999px;
       animation: fillProgress 1.6s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
     }
 
-    /* ================= WELCOME SCREEN ANIMATION ================= */
+    /* Welcome Screen Animation */
     .welcome-screen {
       position: fixed;
       inset: 0;
@@ -157,10 +178,9 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background-color: #060913;
+      background-color: #030712;
       opacity: 0;
       pointer-events: none;
-      /* Welcome fade in starts at 2.58s */
       animation: 
         fadeInWelcome 0.5s ease-out 2.58s forwards,
         fadeOutWelcome 0.8s ease-in-out 5.58s forwards;
@@ -173,15 +193,15 @@
     }
 
     .welcome-glow-icon {
-      width: 72px;
-      height: 72px;
-      margin: 0 auto 20px auto;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #6366f1 0%, #38bdf8 100%);
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 24px auto;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
     }
 
     /* Keyframes */
@@ -190,7 +210,7 @@
     }
     @keyframes pulseGlow {
       from { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
-      to { box-shadow: 0 0 35px rgba(56, 189, 248, 0.7); }
+      to { box-shadow: 0 0 40px rgba(56, 189, 248, 0.8); }
     }
     @keyframes fadeInInit {
       to { opacity: 1; }
@@ -203,8 +223,6 @@
     @keyframes fadeOutOverlay {
       to { opacity: 0; visibility: hidden; pointer-events: none; }
     }
-
-    /* Keyframes for Welcome Animation */
     @keyframes fadeInWelcome {
       to { opacity: 1; pointer-events: auto; }
     }
@@ -236,7 +254,7 @@
     </div>
 
     <div class="init-container">
-      <span class="init-text">initialisation is in progress...</span>
+      <span class="init-text">initialisation in progress...</span>
       <div class="progress-bar-bg">
         <div class="progress-bar-fill"></div>
       </div>
@@ -245,130 +263,132 @@
 
   <!-- Welcome Screen Animation Overlay -->
   <div class="welcome-screen" id="welcome-overlay">
-    <div class="welcome-box px-6">
-      <div class="welcome-glow-icon">
-        <i data-lucide="sparkles" class="w-9 h-9 text-white"></i>
+    <div class="welcome-box px-6 max-w-md">
+      <div class="welcome-glow-icon ring-4 ring-white/10">
+        <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
       </div>
-      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+      <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
         Welcome to <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Path Forge</span>
       </h2>
-      <p class="text-slate-400 text-sm sm:text-base max-w-sm mx-auto font-medium">
+      <p class="text-slate-400 text-sm sm:text-base font-medium leading-relaxed">
         Ready to architect your ultimate career roadmap? Let’s get started.
       </p>
     </div>
   </div>
 
   <!-- Ambient Glow Backdrops -->
-  <div class="fixed top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none animate-glow"></div>
-  <div class="fixed bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-600/10 rounded-full blur-[140px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
+  <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none animate-glow"></div>
+  <div class="fixed bottom-0 right-1/4 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
 
   <div class="relative z-10 flex flex-col min-h-screen">
     
     <!-- Top Bar Navigation -->
-    <header class="border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-40">
-      <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between gap-4">
+    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-2xl sticky top-0 z-40">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
         
         <!-- Logo -->
-        <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group">
-          <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition">
+        <div id="logo-btn" class="flex items-center gap-3.5 cursor-pointer group select-none">
+          <div class="p-2.5 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition duration-300">
             <i data-lucide="zap" class="w-5 h-5 text-white"></i>
           </div>
           <div>
-            <h1 class="text-lg font-extrabold tracking-wider bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
+            <h1 class="text-base sm:text-lg font-black tracking-wider bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent leading-none">
               PATH FORGE
             </h1>
-            <p class="text-[11px] text-slate-400 font-medium">Career Pathway Generator</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 font-semibold tracking-wide mt-0.5">Career Pathway Generator</p>
           </div>
         </div>
 
-        <!-- Dynamic Header Controls (Top Right Corner) -->
-        <div class="flex items-center gap-3">
-          <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700/80 transition flex items-center gap-1.5">
+        <!-- Dynamic Header Controls -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 transition items-center gap-1.5 active:scale-95">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
           
-          <button id="trigger-quiz-btn" class="px-5 py-2.5 bg-slate-900 text-slate-200 font-bold text-xs rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
-            ✨ Confused? Take Quiz
+          <button id="trigger-quiz-btn" class="px-3.5 sm:px-4 py-2 bg-gradient-to-r from-indigo-600/20 to-cyan-600/20 hover:from-indigo-600/30 hover:to-cyan-600/30 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/30 hover:border-indigo-500/50 transition cursor-pointer flex items-center gap-1.5 active:scale-95">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Confused? </span>Take Quiz
           </button>
 
-          <button id="reset-btn" class="px-3 py-2 bg-slate-900 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-medium rounded-xl transition border border-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+          <button id="reset-btn" class="px-3 py-2 bg-slate-900/80 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-semibold rounded-xl transition border border-slate-800 flex items-center gap-1.5 active:scale-95">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Reset</span>
           </button>
 
-          <!-- Credits Button (Top Rightmost Position) -->
-          <button id="trigger-credits-btn" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 hover:border-indigo-500/40 transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400"></i> Credits
+          <!-- Credits Button -->
+          <button id="trigger-credits-btn" class="px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 hover:border-indigo-500/40 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
+            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400 fill-rose-400/20"></i> <span class="hidden sm:inline">Credits</span>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Main Content Containers -->
-    <main class="max-w-5xl mx-auto px-4 py-10 flex-grow w-full flex flex-col justify-center">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full flex flex-col justify-center">
       
       <!-- ================= VIEW 1: DOMAIN SELECTION ================= -->
-      <section id="view-landing" class="space-y-8 text-center transition-all duration-300">
-        <div class="max-w-2xl mx-auto space-y-3">
-          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
-            <i data-lucide="compass" class="w-3.5 h-3.5"></i> Step 1: Choose Your Field
+      <section id="view-landing" class="space-y-10 text-center transition-all duration-300">
+        <div class="max-w-2xl mx-auto space-y-4">
+          <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-wide">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-400"></i> Step 1: Choose Your Field
           </span>
           <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Forge Your Ideal Career Path
+            Forge Your Ideal <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Career Path</span>
           </h2>
-          <p class="text-slate-400 text-sm sm:text-base">
-            Select your target domain to generate tailor-made roadmaps, key skills, and curated courses.
+          <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
+            Select your target domain to generate tailor-made roadmaps, key skills, and curated learning modules.
           </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto pt-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto pt-2">
           
-          <!-- Tech Option (Laptop Symbol Overlay) -->
-          <button onclick="selectCategory('tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-indigo-500/20 hover:border-indigo-500/60">
+          <!-- Tech Option -->
+          <button onclick="selectCategory('tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-indigo-500/20">
             <!-- Background Glow -->
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/25 transition z-0"></div>
+            <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-indigo-600/15 rounded-full blur-3xl group-hover:bg-indigo-600/30 transition-all duration-500"></div>
 
             <!-- Half-Hidden LAPTOP Speciality Symbol -->
-            <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
-              <i data-lucide="laptop" class="w-full h-full text-indigo-400/10 group-hover:text-indigo-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+            <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
+              <i data-lucide="laptop" class="w-48 h-48 text-indigo-400 stroke-[1]"></i>
             </div>
 
             <!-- Content -->
-            <div class="relative z-10">
-              <div class="w-12 h-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                <i data-lucide="code-2" class="w-6 h-6"></i>
+            <div class="relative z-10 space-y-3">
+              <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 transition duration-300">
+                <i data-lucide="code-2" class="w-7 h-7"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
-              <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-[85%]">
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-[85%] font-medium">
                 Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
               </p>
             </div>
+            
             <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
-              Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+              Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
             </div>
           </button>
 
-          <!-- Non-Tech Option (Indian Rupee Sign Overlay) -->
-          <button onclick="selectCategory('non-tech')" class="glass-card group p-8 rounded-3xl text-left transition-all duration-300 hover:-translate-y-1 relative overflow-hidden flex flex-col justify-between h-64 border border-cyan-500/20 hover:border-cyan-500/60">
+          <!-- Non-Tech Option -->
+          <button onclick="selectCategory('non-tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-cyan-500/20">
             <!-- Background Glow -->
-            <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition z-0"></div>
+            <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-cyan-600/15 rounded-full blur-3xl group-hover:bg-cyan-600/30 transition-all duration-500"></div>
 
             <!-- Half-Hidden RUPEE SIGN Speciality Symbol -->
-            <div class="absolute right-0 top-0 bottom-0 w-1/2 flex items-center justify-end pointer-events-none z-0 overflow-hidden">
-              <i data-lucide="indian-rupee" class="w-full h-full text-cyan-400/10 group-hover:text-cyan-400/20 group-hover:scale-110 transition-all duration-500 transform translate-x-1/2 stroke-[1]"></i>
+            <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
+              <i data-lucide="indian-rupee" class="w-48 h-48 text-cyan-400 stroke-[1]"></i>
             </div>
 
             <!-- Content -->
-            <div class="relative z-10">
-              <div class="w-12 h-12 rounded-2xl bg-cyan-600/20 border border-cyan-500/30 text-cyan-400 flex items-center justify-center mb-4 group-hover:scale-110 transition">
-                <i data-lucide="briefcase" class="w-6 h-6"></i>
+            <div class="relative z-10 space-y-3">
+              <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500/20 transition duration-300">
+                <i data-lucide="briefcase" class="w-7 h-7"></i>
               </div>
               <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
-              <p class="text-xs text-slate-400 mt-2 leading-relaxed max-w-[85%]">
+              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-[85%] font-medium">
                 Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
               </p>
             </div>
+            
             <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
-              Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+              Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
             </div>
           </button>
 
@@ -377,8 +397,8 @@
 
       <!-- ================= VIEW 2: ROLE SELECTION GRID ================= -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
-        <div class="text-center max-w-xl mx-auto space-y-2">
-          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
+        <div class="text-center max-w-xl mx-auto space-y-3">
+          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
             Step 2: Choose Role
           </span>
           <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
@@ -392,37 +412,37 @@
 
       <!-- ================= VIEW 3: ROADMAP & COURSES TIMELINE ================= -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
-        <div class="glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
             <div>
-              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-[11px] font-semibold mb-2">
+              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
                 Tech Pathway
               </span>
-              <h2 id="pathway-title" class="text-2xl sm:text-3xl font-black text-white tracking-tight">Role Name</h2>
-              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">Pathway description goes here...</p>
+              <h2 id="pathway-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Role Name</h2>
+              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">Pathway description goes here...</p>
             </div>
 
             <!-- Progress Box -->
-            <div class="flex items-center gap-4 bg-slate-950/60 border border-slate-800/80 px-5 py-3.5 rounded-2xl self-stretch sm:self-auto justify-between">
+            <div class="flex items-center gap-5 bg-slate-950/80 border border-slate-800/80 px-6 py-4 rounded-2xl self-stretch sm:self-auto justify-between shadow-inner">
               <div>
-                <span id="progress-percent" class="text-3xl font-black bg-gradient-to-r from-indigo-400 to-cyan-300 bg-clip-text text-transparent">0%</span>
-                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-0.5">Completed</p>
+                <span id="progress-percent" class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">0%</span>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-0.5">Completed</p>
               </div>
-              <div id="trophy-container" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 transition-all duration-300">
+              <div id="trophy-container" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 transition-all duration-500">
                 <i data-lucide="trophy" class="w-6 h-6"></i>
               </div>
             </div>
           </div>
 
           <!-- Progress Bar -->
-          <div class="w-full bg-slate-950/80 rounded-full h-2.5 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
-            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_12px_rgba(99,102,241,0.6)]"></div>
+          <div class="w-full bg-slate-950/90 rounded-full h-3 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_16px_rgba(99,102,241,0.6)]"></div>
           </div>
         </div>
 
         <!-- Connected Timeline -->
         <div class="relative pl-6 sm:pl-8">
-          <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500/80 via-cyan-500/40 to-slate-800"></div>
+          <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500 via-cyan-500/50 to-slate-800"></div>
           <div id="steps-container" class="space-y-6 relative">
             <!-- Dynamic Steps Injected via JS -->
           </div>
@@ -433,8 +453,8 @@
 
     <!-- App Detail Modal -->
     <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="modal-box" class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <button id="close-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+      <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-700/60">
+        <button id="close-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
         <div id="modal-content">
@@ -443,33 +463,33 @@
       </div>
     </div>
 
-    <!-- Option A Credits Modal -->
+    <!-- Credits Modal -->
     <div id="credits-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative border border-slate-700/60">
+      <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
         
         <!-- Modal Header -->
-        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-          <div class="flex items-center gap-2">
-            <div class="p-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-lg text-indigo-400">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3.5">
+          <div class="flex items-center gap-2.5">
+            <div class="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400">
               <i data-lucide="info" class="w-4 h-4"></i>
             </div>
             <h3 class="text-base font-bold text-white">Credits & Acknowledgments</h3>
           </div>
-          <button id="close-credits-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+          <button id="close-credits-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- Author / Creator Card (Developer Team Details) -->
-        <div class="p-4 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-left space-y-2.5">
+        <!-- Author / Creator Card -->
+        <div class="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 text-left space-y-3">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Developer Team</span>
-            <span class="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold">
+            <span class="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold">
               <i data-lucide="heart" class="w-3 h-3 text-rose-400 fill-rose-400"></i> Open Source
             </span>
           </div>
 
-          <div class="space-y-1.5 text-xs">
+          <div class="space-y-2 text-xs">
             <div class="flex items-center gap-2 text-slate-200">
               <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
               <span class="font-bold">Jayant Yadav</span>
@@ -483,7 +503,7 @@
           </div>
 
           <div class="pt-1">
-            <a href="https://github.com/MannSha01/Path_Forge" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-900 hover:bg-indigo-600/20 border border-indigo-500/30 hover:border-indigo-500/60 rounded-lg text-indigo-300 hover:text-white text-xs font-medium transition w-full justify-center">
+            <a href="https://github.com/MannSha01/Path_Forge" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 bg-slate-900/90 hover:bg-indigo-600/20 border border-indigo-500/30 hover:border-indigo-500/60 rounded-xl text-indigo-300 hover:text-white text-xs font-medium transition w-full justify-center active:scale-95">
               <i data-lucide="github" class="w-3.5 h-3.5"></i>
               <span>View Repository on GitHub</span>
               <i data-lucide="external-link" class="w-3 h-3"></i>
@@ -495,15 +515,15 @@
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Core Technologies Used</span>
           <div class="grid grid-cols-1 gap-2 text-xs">
-            <div class="flex items-center gap-2.5 p-2 rounded-lg bg-slate-900/60 border border-slate-800">
+            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
               <i data-lucide="palette" class="w-4 h-4 text-cyan-400"></i>
               <div><strong class="text-slate-200">Tailwind CSS:</strong> UI Styling & Glassmorphism system</div>
             </div>
-            <div class="flex items-center gap-2.5 p-2 rounded-lg bg-slate-900/60 border border-slate-800">
+            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
               <i data-lucide="heart" class="w-4 h-4 text-rose-400 fill-rose-400"></i>
               <div><strong class="text-slate-200">Lucide Icons:</strong> Vector Iconography Set</div>
             </div>
-            <div class="flex items-center gap-2.5 p-2 rounded-lg bg-slate-900/60 border border-slate-800">
+            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
               <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
               <div><strong class="text-slate-200">Canvas Confetti:</strong> Milestone Achievement FX</div>
             </div>
@@ -513,14 +533,14 @@
         <!-- App Architecture -->
         <div class="space-y-2 text-left">
           <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">App Architecture</span>
-          <div class="p-2.5 rounded-lg bg-slate-900/60 border border-slate-800 flex items-center gap-2.5 text-xs">
+          <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2.5 text-xs">
             <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
             <span class="text-slate-300">Interactive Constellation Canvas FX Background Engine</span>
           </div>
         </div>
 
         <!-- Footer Meta -->
-        <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
           <span>Path Forge v1.0.0</span>
           <span>MIT License</span>
         </div>
@@ -581,7 +601,7 @@
         mouse.y = e.clientY;
       });
 
-      // --- Interactive Constellation Particles ---
+      // Interactive Constellation Particles
       const numParticles = 65;
       const particles = [];
       for (let i = 0; i < numParticles; i++) {
