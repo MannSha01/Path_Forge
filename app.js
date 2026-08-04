@@ -902,14 +902,6 @@ function closeModal() {
 // --- PATH FORGE AI ADVISOR INTEGRATION ---
 // ==========================================
 
-// Explicitly bind to window so HTML onclick="openAIAdvisor()" works anywhere
-window.openAIAdvisor = function () {
-  const aiModal = document.getElementById('ai-modal');
-  if (aiModal) {
-    aiModal.classList.remove('opacity-0', 'pointer-events-none');
-  }
-};
-
 document.addEventListener("DOMContentLoaded", () => {
   const aiModal = document.getElementById('ai-modal');
   const closeAiBtn = document.getElementById('close-ai-modal');
@@ -918,7 +910,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const aiResponseBox = document.getElementById('ai-response-box');
   const aiSubmitBtn = document.getElementById('ai-submit-btn');
 
-  // 1. Modal Close Handlers
+  // 1. Close Modal Handlers
   if (closeAiBtn) {
     closeAiBtn.addEventListener('click', () => {
       aiModal.classList.add('opacity-0', 'pointer-events-none');
@@ -933,14 +925,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 2. Safe Form Submit Handler
+  // 2. Handle AI Form Submission
   if (aiForm) {
     aiForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const userPrompt = aiInput.value.trim();
       if (!userPrompt) return;
 
-      // Loading State
+      // Show Loading State
       aiResponseBox.innerHTML = `
         <div class="flex items-center gap-2 text-indigo-400 font-medium">
           <i data-lucide="sparkles" class="w-4 h-4 animate-spin"></i>
@@ -951,32 +943,21 @@ document.addEventListener("DOMContentLoaded", () => {
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
       try {
-        // Fetch using absolute path relative to domain root
         const response = await fetch('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userPrompt })
         });
 
-        // Safe status check before parsing JSON
-        if (!response.ok) {
-          const rawText = await response.text();
-          console.error(`HTTP Status ${response.status}:`, rawText);
-          aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Error ${response.status}: Failed to reach /api/generate backend.</span>`;
-          return;
-        }
-
         const data = await response.json();
 
         if (data.result) {
           aiResponseBox.innerHTML = data.result;
         } else {
-          aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Error: ${data.error || 'No AI response returned.'}</span>`;
+          aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Error: ${data.error || 'Failed to get response'}</span>`;
         }
-
       } catch (err) {
-        console.error("Execution error:", err);
-        aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Client Error: ${err.message}</span>`;
+        aiResponseBox.innerHTML = `<span class="text-red-400 font-semibold">Network Error. Please try again.</span>`;
       } finally {
         aiSubmitBtn.disabled = false;
         aiInput.value = '';
@@ -985,3 +966,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+// Helper Function to Open the AI Modal from anywhere
+function openAIAdvisor() {
+  const aiModal = document.getElementById('ai-modal');
+  if (aiModal) {
+    aiModal.classList.remove('opacity-0', 'pointer-events-none');
+  }
+}
