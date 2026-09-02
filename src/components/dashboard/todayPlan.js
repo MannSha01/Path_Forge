@@ -31,7 +31,17 @@ export function renderTodayPlanWidget(todayTasks = []) {
             .map((task, idx) => {
               const isCurrent = task.status === "current" || idx === 0;
               const typeIcon = task.type === "project" ? "folder-git-2" : task.type === "reinforcement" ? "rotate-ccw" : "book-open";
-              const badgeBg = task.type === "reinforcement" ? "bg-amber-500/20 text-amber-300 border-amber-500/30" : "bg-indigo-500/10 text-indigo-300 border-indigo-500/30";
+              const badgeBg =
+                task.status === "adapted" || task.adapted
+                  ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/30"
+                  : task.type === "reinforcement" || task.status === "needs_revision"
+                  ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                  : "bg-indigo-500/10 text-indigo-300 border-indigo-500/30";
+
+              const badgeLabel =
+                task.status === "adapted" || task.adapted
+                  ? "Adapted for you ✨"
+                  : task.status || "Scheduled";
 
               return `
                 <div class="p-3.5 rounded-2xl bg-slate-950/70 border ${isCurrent ? "border-indigo-500/50 ring-1 ring-indigo-500/20" : "border-slate-800/80"} flex items-center justify-between gap-3 transition">
@@ -45,7 +55,7 @@ export function renderTodayPlanWidget(todayTasks = []) {
                     </div>
                   </div>
                   <span class="text-[10px] px-2 py-0.5 rounded-full border uppercase tracking-wider font-bold shrink-0 ${badgeBg}">
-                    ${task.status || "Scheduled"}
+                    ${badgeLabel}
                   </span>
                 </div>
               `;
