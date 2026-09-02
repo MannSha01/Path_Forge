@@ -6,6 +6,10 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { databaseService } from "../src/services/database/databaseService.js";
 import { aiService } from "../src/services/ai/aiService.js";
 import {
@@ -16,6 +20,16 @@ import {
 import { generateSchedule } from "../src/services/scheduler/scheduler.js";
 import { getTopicsForRole } from "../src/data/curriculum.js";
 import { LocalStorageService } from "../src/services/storage/localStorageService.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+try {
+  const localEnv = path.join(__dirname, "..", ".env.local");
+  const defaultEnv = path.join(__dirname, "..", ".env");
+  if (fs.existsSync(localEnv)) process.loadEnvFile(localEnv);
+  else if (fs.existsSync(defaultEnv)) process.loadEnvFile(defaultEnv);
+} catch {}
 
 describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
   it("Executes the complete multi-topic adaptive learning journey", async () => {

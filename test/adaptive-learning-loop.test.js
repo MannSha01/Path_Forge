@@ -26,6 +26,13 @@ import { LocalStorageService } from "../src/services/storage/localStorageService
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+try {
+  const localEnv = path.join(__dirname, "..", ".env.local");
+  const defaultEnv = path.join(__dirname, "..", ".env");
+  if (fs.existsSync(localEnv)) process.loadEnvFile(localEnv);
+  else if (fs.existsSync(defaultEnv)) process.loadEnvFile(defaultEnv);
+} catch {}
+
 describe("Adaptive Topic Learning Loop V2", () => {
   const testUserId = "test_user_v2";
   const testUserBId = "test_user_b";
