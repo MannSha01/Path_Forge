@@ -10,6 +10,22 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Automatically load local .env.local or .env if present (for local development).
+// In deployment environments (Vercel, Render, Railway, Docker, etc.),
+// hosting platform environment variables are used directly.
+try {
+  const localEnv = path.join(__dirname, ".env.local");
+  const defaultEnv = path.join(__dirname, ".env");
+  if (fs.existsSync(localEnv)) {
+    process.loadEnvFile(localEnv);
+  } else if (fs.existsSync(defaultEnv)) {
+    process.loadEnvFile(defaultEnv);
+  }
+} catch {
+  // Gracefully continue in environments where env files do not exist
+}
+
 const PORT = process.env.PORT || 3000;
 
 const MIME_TYPES = {
