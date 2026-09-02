@@ -1,0 +1,21 @@
+{
+  "name": "path-forge",
+  "version": "1.0.0",
+  "description": "Custom-crafted learning pathways tailored to your target role.",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve -l 3000",
+    "start": "npx serve -l 3000"
+  },
+  "keywords": [
+    "career-roadmap",
+    "learning-path",
+    "developer-roadmap",
+    "tech-career"
+  ],
+  "author": "Path Forge Team",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^12.18.0"
+  }
+}

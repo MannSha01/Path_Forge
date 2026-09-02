@@ -1,0 +1,148 @@
+/* ===================================================
+   PATH FORGE - COMPONENT STYLES
+   =================================================== */
+
+/* Modern Glassmorphic Cards */
+.glass-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.glass-card-hover {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-hover:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.05);
+  transform: translateY(-4px);
+}
+
+/* Splash Screen Component */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #030712;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+}
+
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #38bdf8 0%, #4f46e5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+}
+
+.logo-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: #ffffff;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: linear-gradient(to right, #ffffff, #93c5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-subtitle {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.init-container {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+}
+
+.init-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.progress-bar-bg {
+  width: 200px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  border-radius: 9999px;
+}
+
+/* Welcome Screen Component */
+.welcome-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #030712;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.welcome-box {
+  text-align: center;
+  transform: translateY(20px) scale(0.95);
+}
+
+.welcome-glow-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px auto;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
+}
