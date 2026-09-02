@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PATH FORGE - Tech & Non-Tech Career Architect</title>
+  <title>PATH FORGE - AI-Powered Adaptive Career Preparation Platform</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,227 +12,10 @@
   <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
-  <style>
-    /* Reset & Base Styles */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #030712;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
-    }
-
-    /* Dark Grid Background with Radial Mask */
-    .bg-tech-grid {
-      background-size: 36px 36px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    }
-
-    /* Ambient Glow Animation */
-    @keyframes pulse-slow {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 0.55; transform: scale(1.1); }
-    }
-    .animate-glow { 
-      animation: pulse-slow 8s ease-in-out infinite; 
-    }
-
-    /* Modern Glassmorphic Cards */
-    .glass-card {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    }
-    .glass-card-hover {
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .glass-card-hover:hover {
-      border-color: rgba(99, 102, 241, 0.4);
-      box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.05);
-      transform: translateY(-4px);
-    }
-
-    /* Splash Screen Animation */
-    .splash-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #030712;
-      animation: fadeOutOverlay 0.5s ease-in-out 3.00s forwards;
-    }
-
-    .brand-container {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      opacity: 0;
-      transform: scale(0.9) translateY(10px);
-      animation: revealBrand 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-    }
-
-    .logo-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #38bdf8 0%, #4f46e5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
-      animation: pulseGlow 2s ease-in-out infinite alternate;
-    }
-
-    .logo-icon svg {
-      width: 28px;
-      height: 28px;
-      fill: #ffffff;
-    }
-
-    .brand-text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand-title {
-      font-size: 2.25rem;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      background: linear-gradient(to right, #ffffff, #93c5fd);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-subtitle {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-    }
-
-    .init-container {
-      margin-top: 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      animation: fadeInInit 0.6s ease-out 1.2s forwards;
-    }
-
-    .init-text {
-      font-size: 0.85rem;
-      color: #64748b;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .progress-bar-bg {
-      width: 200px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 9999px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-bar-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #38bdf8, #818cf8);
-      border-radius: 9999px;
-      animation: fillProgress 1.6s cubic-bezier(0.65, 0, 0.35, 1) 1.4s forwards;
-    }
-
-    /* Welcome Screen Animation */
-    .welcome-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 9998;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background-color: #030712;
-      opacity: 0;
-      pointer-events: none;
-      animation: 
-        fadeInWelcome 0.5s ease-out 2.58s forwards,
-        fadeOutWelcome 0.8s ease-in-out 5.58s forwards;
-    }
-
-    .welcome-box {
-      text-align: center;
-      transform: translateY(20px) scale(0.95);
-      animation: popWelcome 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.58s forwards;
-    }
-
-    .welcome-glow-icon {
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 24px auto;
-      border-radius: 24px;
-      background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
-    }
-
-    /* Keyframes */
-    @keyframes revealBrand {
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    @keyframes pulseGlow {
-      from { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); }
-      to { box-shadow: 0 0 40px rgba(56, 189, 248, 0.8); }
-    }
-    @keyframes fadeInInit {
-      to { opacity: 1; }
-    }
-    @keyframes fillProgress {
-      0% { width: 0%; }
-      50% { width: 60%; }
-      100% { width: 100%; }
-    }
-    @keyframes fadeOutOverlay {
-      to { opacity: 0; visibility: hidden; pointer-events: none; }
-    }
-    @keyframes fadeInWelcome {
-      to { opacity: 1; pointer-events: auto; }
-    }
-    @keyframes popWelcome {
-      to { transform: translateY(0) scale(1); }
-    }
-    @keyframes fadeOutWelcome {
-      to { opacity: 0; visibility: hidden; pointer-events: none; }
-    }
-  </style>
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="src/styles/base.css" />
+  <link rel="stylesheet" href="src/styles/components.css" />
+  <link rel="stylesheet" href="src/styles/animations.css" />
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
 
@@ -249,7 +32,7 @@
       </div>
       <div class="brand-text">
         <span class="brand-title">Path Forge</span>
-        <span class="brand-subtitle">Career Pathway Generator</span>
+        <span class="brand-subtitle">AI Adaptive Career Architect</span>
       </div>
     </div>
 
@@ -261,21 +44,6 @@
     </div>
   </div>
 
-  <!-- Welcome Screen Animation Overlay -->
-  <div class="welcome-screen" id="welcome-overlay">
-    <div class="welcome-box px-6 max-w-md">
-      <div class="welcome-glow-icon ring-4 ring-white/10">
-        <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight mb-3">
-        Welcome to <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Path Forge</span>
-      </h2>
-      <p class="text-slate-400 text-sm sm:text-base font-medium leading-relaxed">
-        Ready to architect your ultimate career roadmap? Let’s get started.
-      </p>
-    </div>
-  </div>
-
   <!-- Ambient Glow Backdrops -->
   <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none animate-glow"></div>
   <div class="fixed bottom-0 right-1/4 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
@@ -284,136 +52,316 @@
     
     <!-- Top Bar Navigation -->
     <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-2xl sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-4">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
         
         <!-- Logo -->
-        <div id="logo-btn" class="flex items-center gap-3.5 cursor-pointer group select-none">
-          <div class="p-2.5 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition duration-300">
+        <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group select-none shrink-0">
+          <div class="p-2 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition duration-300">
             <i data-lucide="zap" class="w-5 h-5 text-white"></i>
           </div>
           <div>
             <h1 class="text-base sm:text-lg font-black tracking-wider bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent leading-none">
               PATH FORGE
             </h1>
-            <p class="text-[10px] sm:text-[11px] text-slate-400 font-semibold tracking-wide mt-0.5">Career Pathway Generator</p>
+            <p class="text-[9px] sm:text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5 uppercase">Adaptive Career Platform</p>
           </div>
         </div>
 
-        <!-- Dynamic Header Controls -->
-        <div class="flex items-center gap-2 sm:gap-3">
-          
-          <!-- NEW: ASK AI ADVISOR BUTTON -->
-          <button onclick="openAIAdvisor()" class="px-3.5 py-2 bg-gradient-to-r from-indigo-600/30 to-cyan-600/30 hover:from-indigo-600/50 hover:to-cyan-600/50 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/40 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
-            <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Ask </span>AI Advisor
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800/80 text-xs">
+          <button id="nav-goal-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="target" class="w-3.5 h-3.5 text-indigo-400"></i> Set Goal
           </button>
+          <button id="nav-dashboard-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-cyan-400"></i> Dashboard
+          </button>
+          <button id="nav-roadmap-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Roadmap
+          </button>
+          <button id="nav-notes-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="book-marked" class="w-3.5 h-3.5 text-amber-400"></i> Notes
+          </button>
+        </nav>
 
-          <button id="nav-back-btn" class="hidden px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 transition items-center gap-1.5 active:scale-95">
+        <!-- Right Side Controls & Auth -->
+        <div class="flex items-center gap-2 sm:gap-2.5">
+          <!-- Back Button (conditional) -->
+          <button id="nav-back-btn" class="hidden px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 transition items-center gap-1.5 active:scale-95 cursor-pointer">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
-          
-          <button id="trigger-quiz-btn" class="px-3.5 sm:px-4 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition cursor-pointer flex items-center gap-1.5 active:scale-95">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Confused? </span>Take Quiz
+
+          <!-- Ask AI Advisor Button -->
+          <button id="nav-ai-btn" class="px-3 py-1.5 bg-gradient-to-r from-indigo-600/30 to-cyan-600/30 hover:from-indigo-600/50 hover:to-cyan-600/50 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/40 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
+            <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Ask </span>AI
           </button>
 
-          <button id="reset-btn" class="px-3 py-2 bg-slate-900/80 hover:bg-red-500/10 hover:border-red-500/40 hover:text-red-400 text-slate-400 text-xs font-semibold rounded-xl transition border border-slate-800 flex items-center gap-1.5 active:scale-95">
-            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Reset</span>
+          <!-- Career Quiz Trigger -->
+          <button id="trigger-quiz-btn" class="hidden sm:flex px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition cursor-pointer items-center gap-1.5 active:scale-95">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> <span>Quiz</span>
           </button>
+
+          <!-- Login Button (when unauthenticated) -->
+          <button id="header-login-btn" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-600/30 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
+            <i data-lucide="log-in" class="w-3.5 h-3.5"></i> <span>Sign In</span>
+          </button>
+
+          <!-- User Menu Container (when authenticated) -->
+          <div id="user-menu-container" class="hidden flex items-center gap-2">
+            <div id="user-profile-trigger" class="flex items-center gap-2.5 bg-slate-900/80 border border-slate-800 hover:border-indigo-500/50 px-3 py-1.5 rounded-xl cursor-pointer transition">
+              <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=PathForge" alt="User Avatar" class="w-6 h-6 rounded-full border border-indigo-400/40 shrink-0" />
+              <div class="flex flex-col text-left leading-tight hidden sm:flex">
+                <span id="user-name-display" class="text-xs font-bold text-slate-100 max-w-[150px] truncate">Candidate</span>
+                <span id="user-email-display" class="text-[10px] text-indigo-400 font-mono max-w-[150px] truncate">candidate@domain.com</span>
+              </div>
+            </div>
+            <button id="user-signout-btn" class="p-2 bg-slate-900 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-slate-800 rounded-xl transition cursor-pointer" title="Sign Out">
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
 
           <!-- Credits Button -->
-          <button id="trigger-credits-btn" class="px-3.5 py-2 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 hover:border-indigo-500/40 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
-            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400 fill-rose-400/20"></i> <span class="hidden sm:inline">Credits</span>
+          <button id="trigger-credits-btn" class="p-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-white text-xs rounded-xl border border-slate-800 transition cursor-pointer" title="Credits">
+            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400 fill-rose-400/20"></i>
           </button>
         </div>
       </div>
     </header>
 
     <!-- Main Content Containers -->
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full flex flex-col justify-center">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full flex flex-col justify-center">
       
-      <!-- ================= VIEW 1: DOMAIN SELECTION ================= -->
-      <section id="view-landing" class="space-y-10 text-center transition-all duration-300">
-        <div class="max-w-2xl mx-auto space-y-4">
+      <!-- ================= VIEW 1: LANDING & HERO ================= -->
+      <section id="view-landing" class="space-y-12 text-center transition-all duration-300">
+        <div class="max-w-3xl mx-auto space-y-5">
           <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-wide">
-            <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-400"></i> Step 1: Choose Your Field
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> AI-Powered Adaptive Career Preparation
           </span>
-          <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Forge Your Ideal <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Career Path</span>
+          <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+            Stop Guessing. <br class="hidden sm:inline" />
+            <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Forge Your Job Readiness</span>
           </h2>
-          <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
-            Select your target domain to generate tailor-made roadmaps, key skills, and curated learning modules.
+          <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+            Path Forge continuously analyzes your resume, diagnoses skill gaps against target roles, and generates a living, adaptive daily curriculum that reschedules in real time based on your test performance.
           </p>
+
+          <!-- Primary Hero CTAs -->
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
+            <button id="hero-set-goal-btn" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold text-sm rounded-2xl shadow-xl shadow-indigo-600/30 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer">
+              <i data-lucide="target" class="w-4 h-4"></i>
+              <span>SET YOUR GOAL</span>
+            </button>
+            <button id="hero-take-quiz-btn" class="w-full sm:w-auto px-6 py-3.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-sm rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+              <span>Take 1-Min Career Quiz</span>
+            </button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto pt-2">
-          
-          <!-- Tech Option -->
-          <button onclick="selectCategory('tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-indigo-500/20">
-            <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-indigo-600/15 rounded-full blur-3xl group-hover:bg-indigo-600/30 transition-all duration-500"></div>
-            <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
-              <i data-lucide="laptop" class="w-48 h-48 text-indigo-400 stroke-[1]"></i>
-            </div>
-            <div class="relative z-10 space-y-3">
-              <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 transition duration-300">
-                <i data-lucide="code-2" class="w-7 h-7"></i>
+        <!-- Domain Exploration Cards -->
+        <div class="space-y-4 pt-4">
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Or Explore Standard Baseline Roles</div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <!-- Tech Option -->
+            <button id="btn-select-tech" data-category="tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-indigo-500/20 cursor-pointer">
+              <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-indigo-600/15 rounded-full blur-3xl group-hover:bg-indigo-600/30 transition-all duration-500"></div>
+              <div class="relative z-10 space-y-3">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 transition duration-300">
+                  <i data-lucide="code-2" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+                  Frontend, Backend, Fullstack, AI/ML, Data Analytics, Cloud & Cybersecurity tracks.
+                </p>
               </div>
-              <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
-              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-[85%] font-medium">
-                Software engineering, Web Development, Data Analytics, Cloud, and Systems Architecture.
-              </p>
-            </div>
-            <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
-              Explore Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
-            </div>
-          </button>
-
-          <!-- Non-Tech Option -->
-          <button onclick="selectCategory('non-tech')" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-cyan-500/20">
-            <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-cyan-600/15 rounded-full blur-3xl group-hover:bg-cyan-600/30 transition-all duration-500"></div>
-            <div class="absolute -right-4 -bottom-4 w-1/2 h-full flex items-center justify-end pointer-events-none z-0 overflow-hidden opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 transform translate-x-4 translate-y-4">
-              <i data-lucide="indian-rupee" class="w-48 h-48 text-cyan-400 stroke-[1]"></i>
-            </div>
-            <div class="relative z-10 space-y-3">
-              <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500/20 transition duration-300">
-                <i data-lucide="briefcase" class="w-7 h-7"></i>
+              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
+                Explore Tech Tracks <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
               </div>
-              <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
-              <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-[85%] font-medium">
-                Product Management, UI/UX Design, Digital Marketing, Technical Sales, and Strategy.
-              </p>
-            </div>
-            <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
-              Explore Non-Tech Roles <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
-            </div>
-          </button>
+            </button>
 
+            <!-- Non-Tech Option -->
+            <button id="btn-select-non-tech" data-category="non-tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-cyan-500/20 cursor-pointer">
+              <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-cyan-600/15 rounded-full blur-3xl group-hover:bg-cyan-600/30 transition-all duration-500"></div>
+              <div class="relative z-10 space-y-3">
+                <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500/20 transition duration-300">
+                  <i data-lucide="briefcase" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
+                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+                  Product Management, UI/UX Design, Digital Marketing, Business Analysis & Scrum tracks.
+                </p>
+              </div>
+              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
+                Explore Non-Tech Tracks <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
+              </div>
+            </button>
+          </div>
         </div>
       </section>
 
-      <!-- ================= VIEW 2: ROLE SELECTION GRID ================= -->
+      <!-- ================= VIEW 2: GOAL SETUP & GAP SUMMARY ================= -->
+      <section id="view-goal" class="hidden space-y-8 transition-all duration-300 max-w-4xl mx-auto w-full">
+        <!-- Goal Form Container -->
+        <div id="goal-form-wrapper" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-slate-800 text-left">
+          <div class="border-b border-slate-800 pb-4">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+              Step 1: Set Target Career Goal
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">Target Role & Skill Diagnosis</h2>
+            <p class="text-xs sm:text-sm text-slate-400 mt-1">Provide your target job details and resume for personalized AI gap analysis.</p>
+          </div>
+
+          <form id="goal-setup-form" class="space-y-5">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Target Position -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Position *</label>
+                <input
+                  type="text"
+                  id="goal-position"
+                  list="role-suggestions"
+                  placeholder="e.g. Frontend Developer, Product Manager"
+                  required
+                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition"
+                />
+                <datalist id="role-suggestions">
+                  <option value="Frontend Developer" />
+                  <option value="Backend Developer" />
+                  <option value="Full Stack Developer" />
+                  <option value="AI/ML Engineer" />
+                  <option value="Data Analyst" />
+                  <option value="DevOps & Cloud Engineer" />
+                  <option value="Cybersecurity Analyst" />
+                  <option value="Product Manager" />
+                  <option value="UI/UX Designer" />
+                  <option value="Digital Growth Marketer" />
+                </datalist>
+              </div>
+
+              <!-- Target Company -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Company</label>
+                <input
+                  type="text"
+                  id="goal-company"
+                  placeholder="e.g. Google, Stripe, or leave blank for industry standard"
+                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition"
+                />
+              </div>
+            </div>
+
+            <!-- Job Description -->
+            <div class="space-y-1.5">
+              <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Job Description (Optional)</label>
+              <textarea
+                id="goal-job-description"
+                rows="3"
+                placeholder="Paste key responsibilities or qualifications from job post..."
+                class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+              ></textarea>
+            </div>
+
+            <!-- Timeline & Daily Study Minutes -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Deadline *</label>
+                <input
+                  type="date"
+                  id="goal-deadline"
+                  required
+                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white outline-none transition"
+                />
+              </div>
+
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Daily Study Time *</label>
+                <select
+                  id="goal-daily-minutes"
+                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white outline-none transition"
+                >
+                  <option value="30">30 Minutes / day</option>
+                  <option value="60" selected>1 Hour / day</option>
+                  <option value="120">2 Hours / day</option>
+                  <option value="180">3 Hours / day</option>
+                  <option value="240">4+ Hours / day</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Resume Upload / Paste -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Your Resume / Background (Optional)</label>
+                <label class="text-[11px] text-indigo-400 hover:text-indigo-300 cursor-pointer font-semibold flex items-center gap-1">
+                  <i data-lucide="upload" class="w-3 h-3"></i> Upload TXT/MD
+                  <input type="file" id="goal-resume-file" accept=".txt,.md,.json" class="hidden" />
+                </label>
+              </div>
+              <textarea
+                id="goal-resume-text"
+                rows="4"
+                placeholder="Paste your resume text or describe your current skills and past projects..."
+                class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+              ></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              id="goal-submit-btn"
+              class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+            >
+              <i data-lucide="zap" class="w-4 h-4 text-white"></i>
+              <span>Generate Adaptive Study Plan</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Goal Summary / Gap Matrix (Populated by goalSummary.js) -->
+        <div id="goal-summary-container"></div>
+      </section>
+
+      <!-- ================= VIEW 3: PERSONALIZED DASHBOARD ================= -->
+      <section id="view-dashboard" class="hidden space-y-8 transition-all duration-300 w-full">
+        <div id="dashboard-content"></div>
+      </section>
+
+      <!-- ================= VIEW 4: ACTIVE LEARNING SESSION ================= -->
+      <section id="view-learning" class="hidden space-y-6 transition-all duration-300 w-full">
+        <div id="learning-session-container"></div>
+      </section>
+
+      <!-- ================= VIEW 5: STUDY NOTES ================= -->
+      <section id="view-notes" class="hidden space-y-6 transition-all duration-300 w-full">
+        <div id="notes-list-view">
+          <div id="notes-list-container"></div>
+        </div>
+        <div id="notes-detail-view" class="hidden">
+          <div id="notes-detail-container"></div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW 6: ROLE SELECTION GRID ================= -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
         <div class="text-center max-w-xl mx-auto space-y-3">
           <span id="role-category-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
-            Step 2: Choose Role
+            Standard Tracks
           </span>
-          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Career Goal</h2>
-          <p class="text-slate-400 text-xs sm:text-sm">Pick a role to generate your dynamic learning roadmap.</p>
+          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Role</h2>
+          <p class="text-slate-400 text-xs sm:text-sm">Explore standard curriculums or customize via Set Goal.</p>
         </div>
-
-        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2">
-          <!-- Dynamically Injected Role Cards -->
-        </div>
+        <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2"></div>
       </section>
 
-      <!-- ================= VIEW 3: ROADMAP & COURSES TIMELINE ================= -->
+      <!-- ================= VIEW 7: ADAPTIVE ROADMAP & TIMELINE ================= -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-800">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
             <div>
               <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
-                Tech Pathway
+                Active Schedule
               </span>
-              <h2 id="pathway-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Role Name</h2>
-              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">Pathway description goes here...</p>
+              <h2 id="pathway-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Adaptive Pathway</h2>
+              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">Dynamic schedule reflecting your live skill profile.</p>
             </div>
 
             <!-- Progress Box -->
@@ -437,51 +385,139 @@
         <!-- Connected Timeline -->
         <div class="relative pl-6 sm:pl-8">
           <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500 via-cyan-500/50 to-slate-800"></div>
-          <div id="steps-container" class="space-y-6 relative">
-            <!-- Dynamic Steps Injected via JS -->
-          </div>
+          <div id="steps-container" class="space-y-6 relative"></div>
         </div>
       </section>
 
     </main>
 
-    <!-- NEW: FLOATING AI BOT ACTION BUTTON (Bottom Right) -->
-    <button onclick="openAIAdvisor()" class="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-tr from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white rounded-full shadow-2xl shadow-indigo-500/40 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group" title="Ask AI Advisor">
+    <!-- FLOATING AI BOT ACTION BUTTON (Bottom Right) -->
+    <button id="fab-ai-btn" class="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-tr from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white rounded-full shadow-2xl shadow-indigo-500/40 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group cursor-pointer" title="Ask AI Advisor">
       <i data-lucide="bot" class="w-6 h-6"></i>
       <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-bold pl-0 group-hover:pl-2">Ask AI Advisor</span>
     </button>
 
-    <!-- NEW: AI ADVISOR MODAL -->
+    <!-- ================= MODALS ================= -->
+
+    <!-- 1. GENERIC GOOGLE LOGIN PORTAL -->
+    <div id="auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-sm w-full p-6 sm:p-8 space-y-6 shadow-2xl relative border border-slate-800 text-center">
+        <!-- Close button -->
+        <button id="close-auth-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white transition cursor-pointer">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Google G Brand Emblem -->
+        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/10 border border-slate-100">
+          <svg class="w-8 h-8" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+        </div>
+
+        <div class="space-y-1.5">
+          <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">Sign In with Google</h3>
+          <p class="text-xs text-slate-400 leading-relaxed max-w-[260px] mx-auto">
+            Sign in with your Google account to sync your adaptive study plan, skill profile, and notes.
+          </p>
+        </div>
+
+        <!-- Google Sign In Button -->
+        <button
+          id="google-signin-btn"
+          class="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm rounded-xl shadow-xl transition flex items-center justify-center gap-3 cursor-pointer active:scale-95 border border-slate-200"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <p class="text-[10px] text-slate-500 leading-relaxed pt-2 border-t border-slate-800/60">
+          Official Google OAuth integration powered by Firebase Authentication.
+        </p>
+      </div>
+    </div>
+
+    <!-- 2. USER PROFILE MODAL -->
+    <div id="profile-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative border border-slate-800 text-left">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider">Candidate Profile</h3>
+          <button id="close-profile-modal" class="p-1 rounded-lg text-slate-400 hover:text-white transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <div>
+            <span class="text-slate-400">Name:</span>
+            <div id="profile-modal-name" class="font-bold text-slate-200">Candidate</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Email:</span>
+            <div id="profile-modal-email" class="font-mono text-slate-300">candidate@pathforge.dev</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Current Target Role:</span>
+            <div id="profile-modal-target" class="font-semibold text-indigo-300">Frontend Developer</div>
+          </div>
+          <div>
+            <span class="text-slate-400">Skill Matrix:</span>
+            <div id="profile-modal-skills" class="font-semibold text-emerald-400">0 Tracked Skills</div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800">
+          <button id="profile-reset-data-btn" class="w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-xl border border-red-500/30 transition cursor-pointer">
+            Reset Learning Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. CAREER QUIZ MODAL -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-700/60">
+        <button id="close-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95 cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <!-- 4. AI ADVISOR MODAL -->
     <div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
       <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl relative border border-indigo-500/30">
-        
-        <!-- Modal Header -->
         <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
           <div class="flex items-center gap-2.5">
             <div class="p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-400">
               <i data-lucide="bot" class="w-5 h-5"></i>
             </div>
             <div>
-              <h3 class="text-base font-bold text-white">Path Forge AI Advisor</h3>
-              <p class="text-[11px] text-slate-400">Powered by Gemini AI</p>
+              <h3 class="text-base font-bold text-white">Path Forge AI Career Advisor</h3>
+              <p class="text-[11px] text-slate-400">Powered by Gemini 1.5 Flash</p>
             </div>
           </div>
-          <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition">
+          <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
 
-        <!-- AI Output Box -->
         <div id="ai-response-box" class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 min-h-[120px] max-h-[250px] overflow-y-auto leading-relaxed">
-          Ask anything! E.g., <em>"What real-world projects should I build to land my first job?"</em>
+          Ask anything! E.g., <em>"What real-world projects will make my resume stand out?"</em>
         </div>
 
-        <!-- AI Input Form -->
         <form id="ai-form" class="flex gap-2">
           <input 
             type="text" 
             id="ai-user-input" 
-            placeholder="Type your career question..." 
+            placeholder="Type your career or curriculum question..." 
             required
             class="flex-1 bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
           />
@@ -493,26 +529,12 @@
             <i data-lucide="send" class="w-3.5 h-3.5"></i> Ask AI
           </button>
         </form>
-
       </div>
     </div>
 
-    <!-- App Detail Modal -->
-    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <button id="close-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-        <div id="modal-content">
-          <!-- Dynamic details -->
-        </div>
-      </div>
-    </div>
-
-    <!-- Credits Modal -->
+    <!-- 5. CREDITS MODAL -->
     <div id="credits-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
       <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
-        
         <div class="flex items-center justify-between border-b border-slate-800/80 pb-3.5">
           <div class="flex items-center gap-2.5">
             <div class="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400">
@@ -520,7 +542,7 @@
             </div>
             <h3 class="text-base font-bold text-white">Credits & Acknowledgments</h3>
           </div>
-          <button id="close-credits-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95">
+          <button id="close-credits-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95 cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
@@ -533,182 +555,22 @@
             </span>
           </div>
 
-          <div class="space-y-2 text-xs">
-            <div class="flex items-center gap-2 text-slate-200">
-              <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
-              <span class="font-bold">Jayant Yadav</span>
-              <span class="text-[11px] text-slate-400 font-mono">(25BAI11172)</span>
-            </div>
-            <div class="flex items-center gap-2 text-slate-200">
-              <i data-lucide="user" class="w-3.5 h-3.5 text-indigo-400"></i>
-              <span class="font-bold">Mann Sharma</span>
-              <span class="text-[11px] text-slate-400 font-mono">(25BAI10379)</span>
-            </div>
-          </div>
-
-          <div class="pt-1">
-            <a href="https://github.com/MannSha01/Path_Forge" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-2 bg-slate-900/90 hover:bg-indigo-600/20 border border-indigo-500/30 hover:border-indigo-500/60 rounded-xl text-indigo-300 hover:text-white text-xs font-medium transition w-full justify-center active:scale-95">
-              <i data-lucide="github" class="w-3.5 h-3.5"></i>
-              <span>View Repository on GitHub</span>
-              <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
-          </div>
-        </div>
-
-        <div class="space-y-2 text-left">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Core Technologies Used</span>
-          <div class="grid grid-cols-1 gap-2 text-xs">
-            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <i data-lucide="palette" class="w-4 h-4 text-cyan-400"></i>
-              <div><strong class="text-slate-200">Tailwind CSS:</strong> UI Styling & Glassmorphism system</div>
-            </div>
-            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <i data-lucide="heart" class="w-4 h-4 text-rose-400 fill-rose-400"></i>
-              <div><strong class="text-slate-200">Lucide Icons:</strong> Vector Iconography Set</div>
-            </div>
-            <div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-900/60 border border-slate-800">
-              <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
-              <div><strong class="text-slate-200">Canvas Confetti:</strong> Milestone Achievement FX</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-2 text-left">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">App Architecture</span>
-          <div class="p-2.5 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center gap-2.5 text-xs">
-            <i data-lucide="cpu" class="w-4 h-4 text-emerald-400"></i>
-            <span class="text-slate-300">Interactive Constellation Canvas FX Background Engine</span>
+          <div class="space-y-1 text-xs">
+            <div class="text-slate-200 font-bold">Mann Sharma • Jayant Yadav • Anmol Shrivastva</div>
+            <div class="text-slate-400 text-[11px]">Apoorva Krishna Tripathi • Divyansh Mishra • Harshvardhan Singh</div>
           </div>
         </div>
 
         <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Path Forge v1.0.0</span>
+          <span>Path Forge v2.0.0</span>
           <span>MIT License</span>
         </div>
-
       </div>
     </div>
 
   </div>
 
-  <!-- Modal Toggle JS Script -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      if (typeof lucide !== 'undefined') {
-        lucide.createIcons();
-      }
-
-      // Credits Modal
-      const creditsBtn = document.getElementById('trigger-credits-btn');
-      const creditsModal = document.getElementById('credits-modal');
-      const closeCreditsBtn = document.getElementById('close-credits-modal');
-
-      if (creditsBtn && creditsModal && closeCreditsBtn) {
-        creditsBtn.addEventListener('click', () => {
-          creditsModal.classList.remove('opacity-0', 'pointer-events-none');
-        });
-
-        closeCreditsBtn.addEventListener('click', () => {
-          creditsModal.classList.add('opacity-0', 'pointer-events-none');
-        });
-
-        creditsModal.addEventListener('click', (e) => {
-          if (e.target === creditsModal) {
-            creditsModal.classList.add('opacity-0', 'pointer-events-none');
-          }
-        });
-      }
-    });
-  </script>
-
-  <!-- Interactive Constellation Canvas Background Script -->
-  <script>
-    (function () {
-      const canvas = document.getElementById('fx-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      let width = (canvas.width = window.innerWidth);
-      let height = (canvas.height = window.innerHeight);
-      let mouse = { x: width / 2, y: height / 2 };
-
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
-
-      const numParticles = 65;
-      const particles = [];
-      for (let i = 0; i < numParticles; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.8,
-          vy: (Math.random() - 0.5) * 0.8,
-          radius: Math.random() * 2 + 1
-        });
-      }
-
-      function drawParticles() {
-        ctx.clearRect(0, 0, width, height);
-        
-        for (let i = 0; i < particles.length; i++) {
-          let p = particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-
-          if (p.x < 0 || p.x > width) p.vx *= -1;
-          if (p.y < 0 || p.y > height) p.vy *= -1;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(56, 189, 248, 0.8)';
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = '#38bdf8';
-          ctx.fill();
-
-          for (let j = i + 1; j < particles.length; j++) {
-            let p2 = particles[j];
-            let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-            if (dist < 130) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(99, 102, 241, ${1 - dist / 130})`;
-              ctx.lineWidth = 0.6;
-              ctx.stroke();
-            }
-          }
-
-          let mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-          if (mDist < 160) {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${0.8 - mDist / 160})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-      }
-
-      function render() {
-        drawParticles();
-        requestAnimationFrame(render);
-      }
-
-      render();
-    })();
-  </script>
-
-  <!-- JavaScript Modules -->
-  <script src="app.js"></script>
-  <script src="quiz.js"></script>
-
+  <!-- Main Application Entry Point -->
+  <script type="module" src="src/app.js"></script>
 </body>
 </html>
