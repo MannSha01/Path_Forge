@@ -30,6 +30,9 @@ export function createRoadmapItem(item, index, isCompleted, onToggleCheck, onLau
   } else if (status === "accelerated") {
     badgeColor = "bg-purple-500/20 text-purple-300 border-purple-500/30";
     statusLabel = "Accelerated ⚡";
+  } else if (status === "adapted" || item.adapted) {
+    badgeColor = "bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ring-1 ring-cyan-500/30";
+    statusLabel = "Adapted for you ✨";
   } else if (status === "current") {
     badgeColor = "bg-cyan-500/20 text-cyan-300 border-cyan-500/30 ring-1 ring-cyan-500/30";
     statusLabel = "Current Focus";

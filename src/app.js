@@ -18,7 +18,7 @@ import { initConstellationCanvas, initCustomCursor } from "./utils/animations.js
 import { initLoginModal, openLoginModal } from "./components/auth/login.js";
 import { initUserMenu } from "./components/auth/userMenu.js";
 import { initProfileModal, openProfileModal } from "./components/profile/profile.js";
-import { initHomeView } from "./components/home/home.js";
+import { initHomeView, updateHomeHeroCTA } from "./components/home/home.js";
 import { initGoalForm } from "./components/goal/goalForm.js";
 import { renderGoalSummary } from "./components/goal/goalSummary.js";
 import { renderDashboard } from "./components/dashboard/dashboard.js";
@@ -93,13 +93,15 @@ async function refreshActiveSchedule() {
   }
 
   const completedMap = LocalStorageService.get("completed_topics", {});
+  const adaptations = currentUser?.userId ? await databaseService.getAdaptations(currentUser.userId) : [];
 
   currentSchedule = generateSchedule({
     topics: candidateTopics,
     skillProfile: currentSkillProfile,
     deadline: currentGoal.deadline,
     dailyMinutes: currentGoal.dailyMinutes || 60,
-    completedMap
+    completedMap,
+    adaptations
   });
 
   if (currentUser?.userId) {
@@ -199,9 +201,20 @@ function startNextLearningSession(topicId = null) {
 
   // Pick first incomplete task from schedule if not specified
   let targetId = topicId;
+  const items = currentSchedule?.items || [];
   if (!targetId) {
-    const nextItem = currentSchedule?.items?.find((i) => i.status === "current" || i.status === "next");
+    const nextItem = items.find((i) => i.status === "current" || i.status === "next" || i.status === "adapted" || i.status === "needs_revision");
     targetId = nextItem ? nextItem.topicId : "tech-fe-1";
+  }
+
+  // Determine next topic ID in sequence
+  let nextTopicId = null;
+  const currentIdx = items.findIndex((i) => (i.topicId || i.id) === targetId);
+  if (currentIdx !== -1) {
+    const remaining = items.slice(currentIdx + 1).find((i) => (i.topicId || i.id) !== targetId);
+    if (remaining) {
+      nextTopicId = remaining.topicId || remaining.id;
+    }
   }
 
   switchView("learning");
@@ -209,7 +222,9 @@ function startNextLearningSession(topicId = null) {
   learningSession.startSession({
     user: currentUser,
     topicId: targetId,
-    skillProfile: currentSkillProfile
+    skillProfile: currentSkillProfile,
+    goal: currentGoal,
+    nextTopicId
   });
 }
 
@@ -283,23 +298,60 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Initialize Learning Session Controller
   learningSession = new LearningSessionController({
     containerId: "#learning-session-container",
-    onSessionComplete: async ({ skillProfile }) => {
+    onSessionComplete: async ({ nextTopicId, skillProfile }) => {
       currentSkillProfile = skillProfile;
       await refreshActiveSchedule();
-      switchView("dashboard");
-      await loadDashboard();
+      if (nextTopicId) {
+        startNextLearningSession(nextTopicId);
+      } else {
+        switchView("dashboard");
+        await loadDashboard();
+      }
     }
   });
+
+  function refreshHomeHero(journey = null) {
+    const activeTopic = journey?.currentTopicId ? getTopicById(journey.currentTopicId) : null;
+    updateHomeHeroCTA({
+      authUser: currentUser,
+      goal: currentGoal,
+      journey,
+      activeTopic,
+      onResumeLearning: () => {
+        startNextLearningSession(journey?.currentTopicId);
+      },
+      onStartLearning: () => {
+        startNextLearningSession();
+      },
+      onSetGoal: () => switchView("goal"),
+      onTakeQuiz: () => openQuizModal(),
+      onViewDashboard: () => {
+        switchView("dashboard");
+        loadDashboard();
+      },
+      onViewRoadmap: () => {
+        switchView("roadmap");
+        loadRoadmapView();
+      }
+    });
+  }
 
   // Auth State Listener
   authService.onAuthStateChanged(async (user) => {
     currentUser = user;
-    if (user) {
-      currentGoal = await databaseService.getGoalByUserId(user.userId);
-      currentSkillProfile = await databaseService.getSkillProfile(user.userId);
+    const uid = user ? (user.uid || user.userId) : null;
+    if (uid) {
+      currentGoal = await databaseService.getGoalByUserId(uid);
+      currentSkillProfile = await databaseService.getSkillProfile(uid);
+      const journey = await databaseService.getJourneyState(uid);
       if (currentGoal) {
         await refreshActiveSchedule();
       }
+      refreshHomeHero(journey);
+    } else {
+      currentGoal = null;
+      currentSkillProfile = {};
+      refreshHomeHero(null);
     }
   });
 
@@ -346,12 +398,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   initLoginModal({
     onLoginSuccess: async (user) => {
       currentUser = user;
-      currentGoal = await databaseService.getGoalByUserId(user.userId);
-      currentSkillProfile = await databaseService.getSkillProfile(user.userId);
+      const uid = user ? (user.uid || user.userId) : null;
+      currentGoal = await databaseService.getGoalByUserId(uid);
+      currentSkillProfile = await databaseService.getSkillProfile(uid);
+      const journey = await databaseService.getJourneyState(uid);
       if (currentGoal) {
         await refreshActiveSchedule();
-        switchView("dashboard");
-        await loadDashboard();
+        if (journey && journey.currentTopicId) {
+          switchView("landing");
+          refreshHomeHero(journey);
+        } else {
+          switchView("dashboard");
+          await loadDashboard();
+        }
       } else {
         switchView("goal");
       }

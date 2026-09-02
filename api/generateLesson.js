@@ -1,19 +1,72 @@
 // ===================================================
 // VERCEL SERVERLESS ENDPOINT: /api/generateLesson
-// Generates structured concept lessons & interactive questions
+// Generates structured topic lesson content adhering strictly to Schema V2
 // ===================================================
+
+import { buildLessonPrompt } from "../src/services/ai/prompts/lessonPrompt.js";
+
+function resolveModel(modelEnv, defaultModel = "gemini-3.6-flash") {
+  if (!modelEnv) return defaultModel;
+  return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
+}
+
+/**
+ * Validates that the lesson conforms to the required structure.
+ * @param {any} data
+ * @returns {boolean}
+ */
+function isValidLesson(data) {
+  return (
+    data &&
+    typeof data === "object" &&
+    typeof data.title === "string" &&
+    typeof data.objective === "string" &&
+    Array.isArray(data.sections) &&
+    data.sections.length > 0 &&
+    Array.isArray(data.keyPoints) &&
+    Array.isArray(data.commonMistakes) &&
+    data.practicalExample &&
+    typeof data.practicalExample.description === "string"
+  );
+}
+
+/**
+ * Strips markdown fences or extra wrapper text to parse clean JSON.
+ * @param {string} raw
+ * @returns {any}
+ */
+function cleanAndParseJSON(raw) {
+  if (!raw) return null;
+  let cleaned = raw.trim();
+  // Remove markdown code blocks ```json ... ```
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "").trim();
+  return JSON.parse(cleaned);
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { topicTitle, concepts, userMastery } = req.body || {};
+  const {
+    topicTitle,
+    topicDescription,
+    prerequisites,
+    targetRole,
+    targetCompany,
+    userMastery,
+    previousPerformance,
+    dailyMinutes,
+    difficulty,
+    jobRequirements,
+    adaptationContext
+  } = req.body || {};
+
   const API_KEY = process.env.GEMINI_API_KEY;
 
   if (!API_KEY) {
     return res.status(503).json({
-      error: "GEMINI_API_KEY is not configured in .env.local / Environment Variables."
+      error: "GEMINI_API_KEY is not configured in environment."
     });
   }
 
@@ -21,62 +74,81 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "topicTitle is required." });
   }
 
-  try {
-    const prompt = `You are the Path Forge Adaptive AI Teacher.
-Generate a structured, interactive lesson for:
-- Topic: ${topicTitle}
-- Core Concepts: ${(concepts || []).join(", ") || topicTitle}
-- User Current Mastery: ${userMastery || 30}%
+  const model = resolveModel(process.env.AI_MODEL, "gemini-3.6-flash");
 
-OUTPUT STRICT RAW JSON ONLY (no markdown fences, no extra text) matching this schema:
-{
-  "title": "${topicTitle}",
-  "objective": "Clear single-sentence learning goal",
-  "explanation": "In-depth, clear technical explanation with practical rationale",
-  "examples": ["2 concrete code or practical walkthrough examples"],
-  "keyPoints": ["3 essential takeaways"],
-  "commonMistakes": ["2 common pitfalls or bugs engineers introduce"],
-  "questions": [
-    {
-      "id": "q1",
-      "skill": "${concepts?.[0] || topicTitle}",
-      "topic": "${topicTitle}",
-      "difficulty": "${userMastery >= 60 ? "medium" : "easy"}",
-      "question": "A scenario-based multiple choice question testing this concept",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "correctIndex": 0,
-      "explanation": "Why Option A is correct and why other options represent anti-patterns",
-      "conceptTested": "The exact principle tested"
-    }
-  ]
-}`;
+  const prompt = buildLessonPrompt({
+    topicTitle,
+    topicDescription,
+    prerequisites,
+    targetRole,
+    targetCompany,
+    userMastery: typeof userMastery === "number" ? userMastery : 30,
+    previousPerformance,
+    dailyMinutes: dailyMinutes || 45,
+    difficulty: difficulty || "medium",
+    jobRequirements,
+    adaptationContext
+  });
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+  const makeGeminiCall = async (textPrompt) => {
+    const resp = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [{ parts: [{ text: textPrompt }] }],
           generationConfig: { temperature: 0.3, responseMimeType: "application/json" }
         })
       }
     );
+    const data = await resp.json();
+    if (!resp.ok) {
+      throw new Error(data.error?.message || `Gemini API Error: ${resp.status}`);
+    }
+    return data.candidates?.[0]?.content?.parts?.[0]?.text;
+  };
 
-    const data = await response.json();
+  try {
+    let rawText = await makeGeminiCall(prompt);
+    let lesson = null;
 
-    if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || "Gemini API Error" });
+    try {
+      lesson = cleanAndParseJSON(rawText);
+    } catch {
+      // Step 1 Repair: Retry parsing with repair prompt
+      const repairPrompt = `The previous JSON response was malformed. Fix syntax and return STRICT RAW JSON ONLY matching this schema:
+{
+  "topic": "${topicTitle}",
+  "title": "Title",
+  "estimatedMinutes": 30,
+  "objective": "Objective",
+  "sections": [{"heading": "H1", "content": "Text", "examples": ["Ex"]}],
+  "keyPoints": ["P1"],
+  "commonMistakes": ["M1"],
+  "practicalExample": {"description": "D", "code": "C", "language": "javascript"},
+  "interviewPoints": ["I1"]
+}
+Raw text to repair:
+${rawText}`;
+      rawText = await makeGeminiCall(repairPrompt);
+      lesson = cleanAndParseJSON(rawText);
     }
 
-    const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!rawText) {
-      return res.status(500).json({ error: "Empty lesson response from AI" });
+    if (!isValidLesson(lesson)) {
+      // Step 2 Repair attempt if fields missing
+      const fixPrompt = `Normalize this lesson into valid JSON matching exactly the required schema with all fields populated:
+${JSON.stringify(lesson || {})}`;
+      rawText = await makeGeminiCall(fixPrompt);
+      lesson = cleanAndParseJSON(rawText);
     }
 
-    const lesson = JSON.parse(rawText);
+    if (!isValidLesson(lesson)) {
+      return res.status(500).json({ error: "Generated lesson failed schema validation after repair attempt." });
+    }
+
     return res.status(200).json({ lesson });
   } catch (error) {
-    return res.status(500).json({ error: error.message || "Failed to generate lesson" });
+    return res.status(500).json({ error: error.message || "Failed to generate adaptive lesson" });
   }
 }

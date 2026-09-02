@@ -3,6 +3,11 @@
 // Evaluates user answers and diagnoses misconceptions
 // ===================================================
 
+function resolveModel(modelEnv, defaultModel = "gemini-3.5-flash-lite") {
+  if (!modelEnv) return defaultModel;
+  return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -16,6 +21,8 @@ export default async function handler(req, res) {
       error: "GEMINI_API_KEY is not configured in .env.local / Environment Variables."
     });
   }
+
+  const model = resolveModel(process.env.AI_FAST_MODEL || process.env.AI_MODEL, "gemini-3.5-flash-lite");
 
   try {
     const prompt = `You are the Path Forge Adaptive Career Evaluator.
@@ -32,7 +39,7 @@ OUTPUT STRICT RAW JSON ONLY matching this schema:
 }`;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

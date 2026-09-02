@@ -1,13 +1,16 @@
 // ===================================================
 // PATH FORGE - LOCAL STORAGE SERVICE
-// Client cache, offline drafts & legacy state migration
+// Client cache, offline drafts & in-memory fallback for SSR / testing
 // ===================================================
 
 const PREFIX = "pathforge_";
+const memoryStore = new Map();
 
 export const LocalStorageService = {
   get(key, fallback = null) {
-    if (typeof localStorage === "undefined") return fallback;
+    if (typeof localStorage === "undefined") {
+      return memoryStore.has(PREFIX + key) ? memoryStore.get(PREFIX + key) : fallback;
+    }
     try {
       const raw = localStorage.getItem(PREFIX + key);
       return raw ? JSON.parse(raw) : fallback;
@@ -18,7 +21,10 @@ export const LocalStorageService = {
   },
 
   set(key, value) {
-    if (typeof localStorage === "undefined") return;
+    if (typeof localStorage === "undefined") {
+      memoryStore.set(PREFIX + key, value);
+      return;
+    }
     try {
       localStorage.setItem(PREFIX + key, JSON.stringify(value));
     } catch (err) {
@@ -27,7 +33,10 @@ export const LocalStorageService = {
   },
 
   remove(key) {
-    if (typeof localStorage === "undefined") return;
+    if (typeof localStorage === "undefined") {
+      memoryStore.delete(PREFIX + key);
+      return;
+    }
     try {
       localStorage.removeItem(PREFIX + key);
     } catch (err) {
@@ -36,6 +45,7 @@ export const LocalStorageService = {
   },
 
   clear() {
+    memoryStore.clear();
     if (typeof localStorage === "undefined") return;
     try {
       Object.keys(localStorage)
@@ -53,12 +63,14 @@ export const LocalStorageService = {
    */
   migrateLegacyProgress(userId) {
     try {
-      const legacyRaw = localStorage.getItem("pathforge_completed");
+      let legacyRaw = null;
+      if (typeof localStorage !== "undefined") {
+        legacyRaw = localStorage.getItem("pathforge_completed");
+      }
       if (!legacyRaw) return null;
 
       const legacyCompleted = JSON.parse(legacyRaw);
       if (legacyCompleted && Object.keys(legacyCompleted).length > 0) {
-        // Associate with user without deleting original until explicitly acknowledged
         this.set(`user_completed_${userId}`, legacyCompleted);
         return legacyCompleted;
       }

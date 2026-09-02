@@ -1,3 +1,8 @@
+function resolveModel(modelEnv, defaultModel = "gemini-3.6-flash") {
+  if (!modelEnv) return defaultModel;
+  return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -7,18 +12,20 @@ export default async function handler(req, res) {
   const API_KEY = process.env.GEMINI_API_KEY;
 
   if (!API_KEY) {
-    return res.status(500).json({ error: 'GEMINI_API_KEY is not set in Vercel Environment Variables.' });
+    return res.status(500).json({ error: 'GEMINI_API_KEY is not set in environment variables.' });
   }
 
   if (!userPrompt) {
     return res.status(400).json({ error: 'User prompt is required.' });
   }
 
+  const model = resolveModel(process.env.AI_MODEL, "gemini-3.6-flash");
+
   try {
     const promptText = `You are the Path Forge AI Career Advisor. Provide clear, encouraging, actionable career advice. Format your output with HTML tags (like <strong>, <ul>, <li>, <p>).\n\nUser Question: ${userPrompt}`;
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

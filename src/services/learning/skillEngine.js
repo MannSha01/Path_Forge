@@ -13,12 +13,14 @@ import { clamp } from "../../utils/validation.js";
  * @returns {object}
  */
 export function createSkillEntry(skillName, category = "general", initialMastery = 20) {
+  const mastery = clamp(initialMastery, 0, 100);
+  const difficulty = mastery >= 80 ? "hard" : mastery >= 50 ? "medium" : "easy";
   return {
     skill: skillName,
     category,
-    mastery: clamp(initialMastery, 0, 100),
+    mastery,
     confidence: clamp(initialMastery - 5, 0, 100),
-    difficulty: "easy",
+    difficulty,
     correctAnswers: 0,
     wrongAnswers: 0,
     consecutiveCorrect: 0,
@@ -87,8 +89,8 @@ export function updateSkillOnAnswer(skillProfile = {}, { skillName, difficulty =
         confidenceDelta = 6;
     }
 
-    // Consecutive streak bonus
-    if (current.consecutiveCorrect >= 3) {
+    // Consecutive streak bonus (calibrated for 3-question assessments)
+    if (current.consecutiveCorrect >= 2) {
       masteryDelta += 3;
       current.accelerated = true;
       current.needsRevision = false;
@@ -170,4 +172,46 @@ export function calculateOverallReadiness(skillProfile = {}, requiredSkills = []
   });
 
   return clamp(Math.round(totalMastery / requiredSkills.length), 0, 100);
+}
+
+/**
+ * Processes all answers of an assessment (3-question topic or 5-6 question cumulative)
+ * sequentially through the bounded skill engine.
+ *
+ * @param {Record<string, object>} skillProfile
+ * @param {Array<{ skill: string, difficulty: string, isCorrect: boolean, concept?: string }>} answers
+ * @param {object} [options={}]
+ * @param {boolean} [options.isCumulative=false]
+ * @returns {{ updatedProfile: Record<string, object>, totalDelta: number, weakSkills: string[], strongSkills: string[] }}
+ */
+export function processAssessmentAnswers(skillProfile = {}, answers = [], options = {}) {
+  let profile = { ...skillProfile };
+  let totalDelta = 0;
+  const weakSkills = new Set();
+  const strongSkills = new Set();
+  const isCumulative = Boolean(options.isCumulative);
+
+  answers.forEach((ans) => {
+    const skillName = ans.skill || "Core Concept";
+    const { updatedProfile, delta, status } = updateSkillOnAnswer(profile, {
+      skillName,
+      difficulty: ans.difficulty || "medium",
+      isCorrect: Boolean(ans.isCorrect)
+    });
+    profile = updatedProfile;
+    totalDelta += delta;
+
+    if (!ans.isCorrect || status === "needs_revision") {
+      weakSkills.add(ans.concept || skillName);
+    } else if (ans.isCorrect && (status === "accelerated" || isCumulative)) {
+      strongSkills.add(ans.concept || skillName);
+    }
+  });
+
+  return {
+    updatedProfile: profile,
+    totalDelta,
+    weakSkills: Array.from(weakSkills),
+    strongSkills: Array.from(strongSkills)
+  };
 }

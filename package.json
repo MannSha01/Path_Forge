@@ -4,8 +4,9 @@
   "description": "Custom-crafted learning pathways tailored to your target role.",
   "type": "module",
   "scripts": {
-    "dev": "npx serve -l 3000",
-    "start": "npx serve -l 3000"
+    "dev": "node --env-file=.env.local server.js",
+    "start": "node --env-file=.env.local server.js",
+    "test": "node --test test/*.test.js"
   },
   "keywords": [
     "career-roadmap",
