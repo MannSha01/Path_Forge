@@ -57,21 +57,79 @@ export const LocalStorageService = {
   },
 
   /**
-   * Migrates legacy unauthenticated progress (from early versions) to the authenticated user store.
+   * Get account-specific completed topics map.
+   * @param {string} userId
+   * @returns {Record<string, boolean>}
+   */
+  getUserCompletedTopics(userId) {
+    if (!userId) return {};
+    return this.get(`user_completed_${userId}`, {});
+  },
+
+  /**
+   * Persist account-specific completed topics map.
+   * @param {string} userId
+   * @param {Record<string, boolean>} completedMap
+   */
+  setUserCompletedTopics(userId, completedMap) {
+    if (!userId) return;
+    this.set(`user_completed_${userId}`, completedMap || {});
+  },
+
+  /**
+   * Clears only active auth session state, keeping persisted user progress intact.
+   */
+  clearUserSession() {
+    this.remove("auth_session");
+  },
+
+  /**
+   * Sets legacy progress (used for migration testing and legacy adapters).
+   * @param {Record<string, boolean>} completedMap
+   */
+  setLegacyProgress(completedMap) {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("pathforge_completed", JSON.stringify(completedMap));
+    } else {
+      memoryStore.set("pathforge_completed", completedMap);
+    }
+  },
+
+  /**
+   * Migrates legacy unauthenticated progress to the authenticated user store.
+   * Safely clears legacy store so it cannot leak to other accounts.
    * @param {string} userId
    * @returns {Record<string, boolean> | null}
    */
   migrateLegacyProgress(userId) {
+    if (!userId) return null;
     try {
-      let legacyRaw = null;
-      if (typeof localStorage !== "undefined") {
-        legacyRaw = localStorage.getItem("pathforge_completed");
+      // If user already has account-specific progress, do not overwrite
+      const existing = this.getUserCompletedTopics(userId);
+      if (existing && Object.keys(existing).length > 0) {
+        return existing;
       }
-      if (!legacyRaw) return null;
 
-      const legacyCompleted = JSON.parse(legacyRaw);
-      if (legacyCompleted && Object.keys(legacyCompleted).length > 0) {
-        this.set(`user_completed_${userId}`, legacyCompleted);
+      let legacyCompleted = null;
+      if (typeof localStorage !== "undefined") {
+        const legacyRaw = localStorage.getItem("pathforge_completed");
+        if (legacyRaw) {
+          legacyCompleted = JSON.parse(legacyRaw);
+        }
+      } else {
+        legacyCompleted = memoryStore.get("pathforge_completed") || memoryStore.get(PREFIX + "completed") || null;
+      }
+      if (!legacyCompleted) return null;
+
+      if (typeof legacyCompleted === "object" && Object.keys(legacyCompleted).length > 0) {
+        this.setUserCompletedTopics(userId, legacyCompleted);
+        // Remove legacy unauthenticated key to prevent leakage into subsequent accounts
+        if (typeof localStorage !== "undefined") {
+          localStorage.removeItem("pathforge_completed");
+        } else {
+          memoryStore.delete("pathforge_completed");
+          memoryStore.delete(PREFIX + "completed");
+        }
         return legacyCompleted;
       }
     } catch (err) {

@@ -1,44 +1,38 @@
 // ===================================================
 // PATH FORGE - AUTHENTICATION SERVICE
 // Firebase Google Authentication
-// Desktop: Popup
-// Mobile/iOS: Redirect
+// Desktop: Popup (signInWithPopup)
+// Mobile/iOS: Redirect (signInWithRedirect + getRedirectResult)
+// Canonical Account Key: Firebase Auth UID
 // ===================================================
-
-import {
-  initializeApp,
-  getApps,
-  getApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-  getAuth,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  GoogleAuthProvider,
-  signOut as fbSignOut,
-  onAuthStateChanged as fbOnAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import { databaseService } from "../database/databaseService.js";
 import { LocalStorageService } from "../storage/localStorageService.js";
 
 // ===================================================
-// FIREBASE CONFIG
+// DYNAMIC FIREBASE SDK LOADER
 // ===================================================
 
-const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyDnUrQ2wdKWqhh_wW7ZlvTxCaSHui8LeF4",
-  authDomain: "path-forge-7845e.firebaseapp.com",
-  projectId: "path-forge-7845e",
-  storageBucket: "path-forge-7845e.firebasestorage.app",
-  messagingSenderId: "580025481377",
-  appId: "1:580025481377:web:5e53953bcdc986bbef18e0"
-};
+async function loadFirebaseSDK() {
+  if (typeof window !== "undefined") {
+    // Browser environment: Load CDN ES modules
+    const appModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+    const authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
+    return { ...appModule, ...authModule };
+  } else {
+    // Node.js environment (Unit tests / SSR)
+    try {
+      const appModule = await import("firebase/app");
+      const authModule = await import("firebase/auth");
+      return { ...appModule, ...authModule };
+    } catch (e) {
+      return null;
+    }
+  }
+}
 
 // ===================================================
-// HELPER
+// HELPER: EXTRACT DISPLAY NAME FROM EMAIL
 // ===================================================
 
 export function extractNameFromEmail(email) {
@@ -66,19 +60,81 @@ export function extractNameFromEmail(email) {
 }
 
 // ===================================================
-// DEVICE DETECTION
+// DEVICE DETECTION: MOBILE & TABLET (iOS/iPad/Android)
 // ===================================================
 
-function isMobileDevice() {
+export function isMobileDevice() {
   if (typeof navigator === "undefined") return false;
 
-  const userAgent = navigator.userAgent || navigator.vendor || "";
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera || "";
 
-  return /android|iphone|ipad|ipod|mobile/i.test(userAgent);
+  // 1. Check mobile user agent strings (iPhone, iPod, Android, BlackBerry, etc.)
+  const isMobileUA = /android|iphone|ipad|ipod|mobile|silk|blackberry|iemobile|kindle/i.test(userAgent);
+
+  // 2. Detect iPadOS 13+ which presents as MacIntel but has touch points
+  const isIPadOS = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+
+  // 3. Touch screen with mobile/tablet viewport width
+  const isSmallTouchDevice =
+    typeof window !== "undefined" &&
+    ("ontouchstart" in window || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)) &&
+    window.innerWidth <= 1024;
+
+  return isMobileUA || isIPadOS || Boolean(isSmallTouchDevice);
 }
 
 // ===================================================
-// AUTH SERVICE
+// USER-FRIENDLY AUTH ERROR FORMATTER
+// ===================================================
+
+export function formatAuthError(err) {
+  if (!err) return "An unknown error occurred during sign-in.";
+  if (typeof err === "string") return err;
+
+  const code = err.code || "";
+  const hostname = typeof window !== "undefined" ? window.location.hostname : "this domain";
+
+  switch (code) {
+    case "auth/unauthorized-domain":
+      return `Google Sign-In is not available on this domain (${hostname}). Please add this domain to Firebase Console → Authentication → Settings → Authorized Domains.`;
+
+    case "auth/operation-not-allowed":
+      return "Google sign-in is not enabled in Firebase Console. Please enable Google under Authentication → Sign-in method.";
+
+    case "auth/popup-blocked":
+      return "Your browser blocked the Google sign-in window. Please allow popups for this site or try again.";
+
+    case "auth/popup-closed-by-user":
+      return "Google sign-in was closed before completing.";
+
+    case "auth/cancelled-popup-request":
+      return "Another sign-in request is already active.";
+
+    case "auth/network-request-failed":
+      return "Unable to connect to Google. Please check your internet connection and try again.";
+
+    case "auth/account-exists-with-different-credential":
+      return "An account already exists with the same email address using a different sign-in method.";
+
+    case "auth/redirect-cancelled-by-user":
+      return "Google sign-in was cancelled.";
+
+    case "auth/invalid-api-key":
+      return "Firebase configuration is invalid. Please check your environment variables.";
+
+    case "auth/configuration-not-found":
+      return "Firebase configuration not found. Check your environment variables.";
+
+    case "auth/user-disabled":
+      return "This user account has been disabled.";
+
+    default:
+      return err.message || "Google Sign-In was cancelled or failed.";
+  }
+}
+
+// ===================================================
+// AUTH SERVICE CLASS
 // ===================================================
 
 class AuthService {
@@ -87,217 +143,184 @@ class AuthService {
     this.listeners = [];
     this.auth = null;
     this.provider = null;
+    this.sdk = null;
+    this.isInitialized = false;
+    this.initPromise = null;
 
-    this._initFirebase();
+    // Start initialization lifecycle immediately
+    this.initPromise = this.init();
   }
 
   // =================================================
-  // FIREBASE INITIALIZATION
+  // FETCH PUBLIC FIREBASE CONFIG
   // =================================================
 
-  _initFirebase() {
+  async _fetchFirebaseConfig() {
+    // 1. Check window globals (in case injected by SSR or hosting environment)
+    if (typeof window !== "undefined" && window.__FIREBASE_CONFIG__) {
+      return window.__FIREBASE_CONFIG__;
+    }
+
+    // 2. Fetch from serverless /api/authConfig
     try {
-      const app =
-        getApps().length === 0
-          ? initializeApp(FIREBASE_CONFIG)
-          : getApp();
+      const response = await fetch("/api/authConfig");
+      if (!response.ok) {
+        throw new Error(`Failed to load Firebase config: HTTP ${response.status}`);
+      }
+      const config = await response.json();
 
-      this.auth = getAuth(app);
+      if (!config.apiKey || !config.authDomain || !config.projectId || !config.appId) {
+        throw new Error("Firebase configuration is incomplete. Check your environment variables.");
+      }
 
-      this.provider = new GoogleAuthProvider();
+      return config;
+    } catch (err) {
+      console.warn("Could not fetch /api/authConfig:", err.message);
+      throw err;
+    }
+  }
 
-      // Always show Google's account selector.
-      // This is useful for recruitment portals where
-      // candidates may have multiple Google accounts.
+  // =================================================
+  // INITIALIZATION LIFECYCLE
+  // =================================================
+
+  async init() {
+    if (this.isInitialized) return this.currentUser;
+
+    try {
+      this.sdk = await loadFirebaseSDK();
+      if (!this.sdk) {
+        throw new Error("Firebase SDK could not be loaded.");
+      }
+
+      const config = await this._fetchFirebaseConfig();
+
+      const app = this.sdk.getApps().length === 0 ? this.sdk.initializeApp(config) : this.sdk.getApp();
+      this.auth = this.sdk.getAuth(app);
+      this.provider = new this.sdk.GoogleAuthProvider();
+
+      // Always show Google's account selector
       this.provider.setCustomParameters({
         prompt: "select_account"
       });
 
       // ---------------------------------------------
-      // FIREBASE AUTH STATE
+      // 1. HANDLE REDIRECT RESULT (Mobile / iOS return flow)
       // ---------------------------------------------
-
-      fbOnAuthStateChanged(this.auth, async (fbUser) => {
-        if (fbUser) {
-          await this._setAuthenticatedUser(fbUser);
-        } else {
-          // Do not immediately destroy the cached session
-          // because Firebase may still be restoring auth state.
-          const cachedSession =
-            LocalStorageService.get("auth_session", null);
-
-          this.currentUser = cachedSession;
+      // This must happen BEFORE deciding final logged-in state.
+      try {
+        const redirectResult = await this.sdk.getRedirectResult(this.auth);
+        if (redirectResult && redirectResult.user) {
+          console.log("[AuthService] Google redirect authentication successful for:", redirectResult.user.email);
+          await this._setAuthenticatedUser(redirectResult.user);
         }
-
-        this._notifyListeners();
-      });
-
-      // ---------------------------------------------
-      // HANDLE REDIRECT RESULT
-      // ---------------------------------------------
-      //
-      // On mobile we use signInWithRedirect().
-      // When Google sends the user back to Path Forge,
-      // Firebase needs getRedirectResult() to process
-      // the completed authentication flow.
-      //
-      this._handleRedirectResult();
-
-    } catch (err) {
-      console.warn(
-        "Firebase initialization error, using local session:",
-        err
-      );
-
-      this.currentUser =
-        LocalStorageService.get("auth_session", null);
-
-      this._notifyListeners();
-    }
-  }
-
-  // =================================================
-  // HANDLE REDIRECT AUTH RESULT
-  // =================================================
-
-  async _handleRedirectResult() {
-    if (!this.auth) return;
-
-    try {
-      const result = await getRedirectResult(this.auth);
-
-      if (!result || !result.user) {
-        return;
+      } catch (redirectErr) {
+        console.error("[AuthService] Google Redirect Authentication Error:", redirectErr);
+        this._handleAuthError(redirectErr);
       }
 
-      console.log(
-        "Google redirect authentication successful."
-      );
+      // ---------------------------------------------
+      // 2. LISTEN FOR FIREBASE AUTH STATE CHANGES
+      // ---------------------------------------------
+      await new Promise((resolve) => {
+        let hasResolved = false;
 
-      // onAuthStateChanged will also fire, but handling
-      // the user here makes the redirect flow explicit.
-      await this._setAuthenticatedUser(result.user);
+        this.sdk.onAuthStateChanged(this.auth, async (fbUser) => {
+          if (fbUser) {
+            await this._setAuthenticatedUser(fbUser);
+          } else {
+            // Only use cached session if Firebase is not yet ready or offline
+            const cachedSession = LocalStorageService.get("auth_session", null);
+            if (!this.currentUser && cachedSession) {
+              this.currentUser = cachedSession;
+            } else if (!fbUser && this.isInitialized) {
+              this.currentUser = null;
+              LocalStorageService.clearUserSession();
+            }
+          }
 
-      this._notifyListeners();
+          this._notifyListeners();
 
+          if (!hasResolved) {
+            hasResolved = true;
+            resolve();
+          }
+        });
+      });
+
+      this.isInitialized = true;
+      return this.currentUser;
     } catch (err) {
-      console.error(
-        "Google Redirect Authentication Error:",
-        err
-      );
-
-      this._handleAuthError(err);
+      console.warn("[AuthService] Firebase initialization warning, using local session:", err.message);
+      this.currentUser = LocalStorageService.get("auth_session", null);
+      this.isInitialized = true;
+      this._notifyListeners();
+      return this.currentUser;
     }
   }
 
   // =================================================
-  // CONVERT FIREBASE USER TO PATH FORGE USER
+  // CENTRALIZED USER RECORD FACTORY
+  // =================================================
+
+  _createUserRecord(fbUser) {
+    if (!fbUser) return null;
+
+    const uid = fbUser.uid;
+    const email = fbUser.email || "";
+    const displayName = fbUser.displayName || extractNameFromEmail(email);
+    const photoURL =
+      fbUser.photoURL ||
+      `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(email || uid)}`;
+
+    return {
+      uid,
+      userId: uid, // Canonical primary key
+      email,
+      displayName,
+      photoURL,
+      createdAt: fbUser.metadata?.creationTime || new Date().toISOString()
+    };
+  }
+
+  // =================================================
+  // SET AUTHENTICATED USER & LOAD ACCOUNT DATA
   // =================================================
 
   async _setAuthenticatedUser(fbUser) {
     if (!fbUser) return null;
 
-    const userRecord = {
-      userId: fbUser.uid,
-      email: fbUser.email,
-      displayName:
-        fbUser.displayName ||
-        extractNameFromEmail(fbUser.email),
-
-      photoURL:
-        fbUser.photoURL ||
-        `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(
-          fbUser.email
-        )}`,
-
-      createdAt:
-        fbUser.metadata?.creationTime ||
-        new Date().toISOString()
-    };
-
+    const userRecord = this._createUserRecord(fbUser);
     this.currentUser = userRecord;
 
-    // Persist session locally.
-    LocalStorageService.set(
-      "auth_session",
-      userRecord
-    );
+    // 1. Persist active auth session locally
+    LocalStorageService.set("auth_session", userRecord);
 
-    // Save/update user in database.
+    // 2. Persist user in database
     try {
       await databaseService.saveUser(userRecord);
     } catch (err) {
-      console.warn(
-        "Could not save user to database:",
-        err
-      );
+      console.warn("[AuthService] Could not save user to database:", err);
     }
 
-    // Migrate any previous local progress.
+    // 3. Migrate legacy unauthenticated progress safely (no leakage to other accounts)
     try {
-      LocalStorageService.migrateLegacyProgress(
-        userRecord.userId
-      );
+      LocalStorageService.migrateLegacyProgress(userRecord.userId);
     } catch (err) {
-      console.warn(
-        "Could not migrate legacy progress:",
-        err
-      );
+      console.warn("[AuthService] Legacy progress migration warning:", err);
     }
 
     return userRecord;
   }
 
   // =================================================
-  // AUTH ERROR HANDLING
+  // AUTH ERROR HANDLING (INTERNAL LOGGING)
   // =================================================
 
   _handleAuthError(err) {
     if (!err) return;
-
-    switch (err.code) {
-      case "auth/unauthorized-domain":
-        console.error(
-          `Unauthorized Firebase domain: ${window.location.hostname}`
-        );
-        break;
-
-      case "auth/operation-not-allowed":
-        console.error(
-          "Google sign-in provider is not enabled in Firebase Console."
-        );
-        break;
-
-      case "auth/popup-blocked":
-        console.error(
-          "Google sign-in popup was blocked by the browser."
-        );
-        break;
-
-      case "auth/popup-closed-by-user":
-        console.error(
-          "Google sign-in popup was closed before completing."
-        );
-        break;
-
-      case "auth/cancelled-popup-request":
-        console.error(
-          "Another Google sign-in request is already active."
-        );
-        break;
-
-      case "auth/network-request-failed":
-        console.error(
-          "Network error while communicating with Firebase."
-        );
-        break;
-
-      default:
-        console.error(
-          "Firebase authentication error:",
-          err
-        );
-    }
+    const friendlyMessage = formatAuthError(err);
+    console.warn(`[AuthService] ${friendlyMessage} (Code: ${err.code || "UNKNOWN"})`);
   }
 
   // =================================================
@@ -307,13 +330,17 @@ class AuthService {
   onAuthStateChanged(callback) {
     this.listeners.push(callback);
 
-    // Immediately provide current state.
-    callback(this.currentUser);
+    // If already initialized, provide current state immediately
+    if (this.isInitialized) {
+      try {
+        callback(this.currentUser);
+      } catch (err) {
+        console.error("Error in initial auth listener execution:", err);
+      }
+    }
 
     return () => {
-      this.listeners = this.listeners.filter(
-        (cb) => cb !== callback
-      );
+      this.listeners = this.listeners.filter((cb) => cb !== callback);
     };
   }
 
@@ -326,172 +353,82 @@ class AuthService {
       try {
         cb(this.currentUser);
       } catch (err) {
-        console.error(
-          "Error in auth listener:",
-          err
-        );
+        console.error("Error in auth listener:", err);
       }
     });
   }
 
   // =================================================
-  // GOOGLE SIGN-IN
+  // GOOGLE SIGN-IN (DESKTOP: POPUP, MOBILE: REDIRECT)
   // =================================================
 
   async signInWithGoogle() {
-    if (!this.auth || !this.provider) {
-      throw new Error(
-        "Firebase Auth is not initialized."
-      );
+    // Ensure initialized before triggering sign-in
+    await (this.initPromise || this.init());
+
+    if (!this.auth || !this.provider || !this.sdk) {
+      throw new Error("Firebase Auth is not initialized. Check your environment variables.");
     }
 
     try {
       // ---------------------------------------------
-      // MOBILE / IOS
+      // MOBILE / IOS (iPhone, iPad, Android)
       // ---------------------------------------------
-      //
-      // Safari/iOS is much more reliable with redirect
-      // authentication than popup authentication.
-      //
-
       if (isMobileDevice()) {
-        console.log(
-          "Mobile device detected. Using Google redirect authentication."
-        );
+        console.log("[AuthService] Mobile / iOS device detected. Executing signInWithRedirect().");
 
-        await signInWithRedirect(
-          this.auth,
-          this.provider
-        );
+        await this.sdk.signInWithRedirect(this.auth, this.provider);
 
-        // The browser will leave this page and return
-        // after authentication.
-        //
-        // There is intentionally no user object here.
-        // _handleRedirectResult() processes the result
-        // when the application loads again.
-
+        // The browser navigates away to Google and returns to Path Forge.
+        // getRedirectResult() in init() will process the authenticated session upon return.
         return null;
       }
 
       // ---------------------------------------------
-      // DESKTOP
+      // DESKTOP (Chrome, Edge, Firefox, Safari Desktop)
       // ---------------------------------------------
+      console.log("[AuthService] Desktop browser detected. Executing signInWithPopup().");
 
-      console.log(
-        "Desktop device detected. Using Google popup authentication."
-      );
-
-      const result = await signInWithPopup(
-        this.auth,
-        this.provider
-      );
-
-      const fbUser = result.user;
-
-      const userRecord =
-        await this._setAuthenticatedUser(fbUser);
+      const result = await this.sdk.signInWithPopup(this.auth, this.provider);
+      const userRecord = await this._setAuthenticatedUser(result.user);
 
       this._notifyListeners();
-
       return userRecord;
-
     } catch (err) {
-      console.error(
-        "Google Sign-In Error:",
-        err
-      );
-
-      // User manually closed the popup.
-      if (
-        err.code ===
-        "auth/popup-closed-by-user"
-      ) {
-        throw new Error(
-          "Sign-in popup was closed before completing."
-        );
-      }
-
-      // Firebase doesn't allow this website.
-      if (
-        err.code ===
-        "auth/unauthorized-domain"
-      ) {
-        throw new Error(
-          `Current domain (${window.location.hostname}) is not authorized in Firebase Console. Add it under Firebase Console → Authentication → Settings → Authorized Domains.`
-        );
-      }
-
-      // Google provider isn't enabled.
-      if (
-        err.code ===
-        "auth/operation-not-allowed"
-      ) {
-        throw new Error(
-          "Google sign-in is not enabled in Firebase Console."
-        );
-      }
-
-      // Popup was blocked.
-      if (
-        err.code ===
-        "auth/popup-blocked"
-      ) {
-        throw new Error(
-          "Google sign-in was blocked by the browser. Please allow popups or try again."
-        );
-      }
-
-      // Network issue.
-      if (
-        err.code ===
-        "auth/network-request-failed"
-      ) {
-        throw new Error(
-          "Network error while connecting to Google. Please check your internet connection and try again."
-        );
-      }
-
-      throw err;
+      console.error("[AuthService] Google Sign-In Error:", err);
+      const friendlyMessage = formatAuthError(err);
+      throw new Error(friendlyMessage);
     }
   }
 
   // =================================================
-  // SIGN OUT
+  // SIGN OUT (ISOLATED SESSION CLEARING)
   // =================================================
 
   async signOut() {
     try {
-      if (this.auth) {
-        await fbSignOut(this.auth);
+      if (this.auth && this.sdk?.signOut) {
+        await this.sdk.signOut(this.auth);
       }
     } catch (err) {
-      console.warn(
-        "Firebase sign out error:",
-        err
-      );
+      console.warn("[AuthService] Firebase sign out error:", err);
     }
 
     this.currentUser = null;
 
-    LocalStorageService.remove(
-      "auth_session"
-    );
+    // Clear active auth session without wiping stored database progress
+    LocalStorageService.clearUserSession();
 
     this._notifyListeners();
   }
 
   // =================================================
-  // GET CURRENT USER
+  // GETTERS
   // =================================================
 
   getCurrentUser() {
     return this.currentUser;
   }
-
-  // =================================================
-  // AUTHENTICATED?
-  // =================================================
 
   isAuthenticated() {
     return Boolean(this.currentUser);
@@ -499,7 +436,7 @@ class AuthService {
 }
 
 // ===================================================
-// SINGLE AUTH SERVICE INSTANCE
+// EXPORT SINGLETON INSTANCE
 // ===================================================
 
 export const authService = new AuthService();

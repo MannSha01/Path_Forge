@@ -92,7 +92,21 @@ async function refreshActiveSchedule() {
     candidateTopics = Object.values(CURRICULUM_TOPICS).slice(0, 8);
   }
 
-  const completedMap = LocalStorageService.get("completed_topics", {});
+  // Fetch authoritative completed topics from backend database
+  let completedMap = {};
+  if (currentUser?.userId) {
+    const backendProgress = await databaseService.getAllTopicProgress(currentUser.userId);
+    Object.values(backendProgress).forEach((tp) => {
+      if (tp.status === "COMPLETED" || tp.completedAt) {
+        completedMap[tp.topicId] = true;
+      }
+    });
+    // Merge with any offline cached topics
+    const cachedMap = LocalStorageService.getUserCompletedTopics(currentUser.userId);
+    completedMap = { ...cachedMap, ...completedMap };
+    LocalStorageService.setUserCompletedTopics(currentUser.userId, completedMap);
+  }
+
   const adaptations = currentUser?.userId ? await databaseService.getAdaptations(currentUser.userId) : [];
 
   currentSchedule = generateSchedule({
@@ -236,7 +250,9 @@ function loadRoadmapView() {
     items = getTopicsForRole(roleId);
   }
 
-  const completedMap = LocalStorageService.get("completed_topics", {});
+  const completedMap = currentUser?.userId
+    ? LocalStorageService.getUserCompletedTopics(currentUser.userId)
+    : {};
 
   renderAdaptiveRoadmap({
     title: currentGoal?.targetPosition || "Full Stack Pathway",
@@ -244,10 +260,17 @@ function loadRoadmapView() {
     items,
     completedMap,
     onToggleCheck: async (item, checked) => {
-      completedMap[item.topicId || item.id] = checked;
-      LocalStorageService.set("completed_topics", completedMap);
-      await refreshActiveSchedule();
-      loadRoadmapView();
+      if (currentUser?.userId) {
+        completedMap[item.topicId || item.id] = checked;
+        LocalStorageService.setUserCompletedTopics(currentUser.userId, completedMap);
+        await databaseService.saveTopicProgress({
+          uid: currentUser.userId,
+          topicId: item.topicId || item.id,
+          status: checked ? "COMPLETED" : "AVAILABLE"
+        });
+        await refreshActiveSchedule();
+        loadRoadmapView();
+      }
     },
     onLaunchLesson: (item) => {
       startNextLearningSession(item.topicId || item.id);
@@ -344,6 +367,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentGoal = await databaseService.getGoalByUserId(uid);
       currentSkillProfile = await databaseService.getSkillProfile(uid);
       const journey = await databaseService.getJourneyState(uid);
+      const topicProgressMap = await databaseService.getAllTopicProgress(uid);
+      const completedMap = {};
+      Object.values(topicProgressMap).forEach((tp) => {
+        if (tp.status === "COMPLETED" || tp.completedAt) {
+          completedMap[tp.topicId] = true;
+        }
+      });
+      LocalStorageService.setUserCompletedTopics(uid, completedMap);
+
       if (currentGoal) {
         await refreshActiveSchedule();
       }
@@ -402,6 +434,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentGoal = await databaseService.getGoalByUserId(uid);
       currentSkillProfile = await databaseService.getSkillProfile(uid);
       const journey = await databaseService.getJourneyState(uid);
+      const topicProgressMap = await databaseService.getAllTopicProgress(uid);
+      const completedMap = {};
+      Object.values(topicProgressMap).forEach((tp) => {
+        if (tp.status === "COMPLETED" || tp.completedAt) {
+          completedMap[tp.topicId] = true;
+        }
+      });
+      LocalStorageService.setUserCompletedTopics(uid, completedMap);
+
       if (currentGoal) {
         await refreshActiveSchedule();
         if (journey && journey.currentTopicId) {
@@ -418,17 +459,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   initUserMenu({
-    onSignOut: () => switchView("landing"),
+    onSignOut: () => {
+      currentUser = null;
+      currentGoal = null;
+      currentSkillProfile = {};
+      currentSchedule = null;
+      switchView("landing");
+      refreshHomeHero(null);
+    },
     onOpenProfile: () => openProfileModal(currentUser, currentGoal, Object.keys(currentSkillProfile).length)
   });
 
   initProfileModal({
     onResetData: async () => {
-      LocalStorageService.clear();
+      if (currentUser?.userId) {
+        LocalStorageService.setUserCompletedTopics(currentUser.userId, {});
+      }
       currentGoal = null;
       currentSkillProfile = {};
       currentSchedule = null;
       switchView("landing");
+      refreshHomeHero(null);
     }
   });
 
