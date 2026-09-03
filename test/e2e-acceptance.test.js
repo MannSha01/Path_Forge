@@ -106,7 +106,7 @@ describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
       targetCompany: goal.targetCompany,
       userMastery: skillProfile["JavaScript"].mastery
     });
-    await databaseService.saveLesson({
+    const topic2Prepared = await databaseService.saveLesson({
       userId: testUser.userId,
       topicId: topic2.id,
       content: topic2PreGenerated,
@@ -189,6 +189,7 @@ describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
     });
 
     await databaseService.saveLesson({
+      lessonId: topic2Prepared.lessonId,
       userId: testUser.userId,
       topicId: topic2.id,
       content: adaptedTopic2Lesson,
@@ -198,13 +199,14 @@ describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
     // Mark Topic 1 as completed
     await databaseService.updateLessonStatus(lesson1Record.lessonId, "COMPLETED");
     const completedMap = { [topic1.id]: true };
-    LocalStorageService.set("completed_topics", completedMap);
+    LocalStorageService.setUserCompletedTopics(testUser.userId, completedMap);
 
     // ----------------------------------------------------
     // STEP 4: Complete Topic 2 with strong score (5/5)
     // ----------------------------------------------------
     // Start Topic 2
     const topic2Record = await databaseService.saveLesson({
+      lessonId: topic2Prepared.lessonId,
       userId: testUser.userId,
       topicId: topic2.id,
       content: adaptedTopic2Lesson,
@@ -274,7 +276,7 @@ describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
     // Complete Topic 2
     await databaseService.updateLessonStatus(topic2Record.lessonId, "COMPLETED");
     completedMap[topic2.id] = true;
-    LocalStorageService.set("completed_topics", completedMap);
+    LocalStorageService.setUserCompletedTopics(testUser.userId, completedMap);
 
     // Record Topic 3 acceleration adaptation
     await databaseService.saveAdaptation({
@@ -314,7 +316,7 @@ describe("END-TO-END ACCEPTANCE TEST (Requirement 31)", () => {
     const reloadedLesson1 = await databaseService.getLessonByUserAndTopic(testUser.userId, topic1.id);
     const reloadedLesson2 = await databaseService.getLessonByUserAndTopic(testUser.userId, topic2.id);
     const reloadedAssessments = await databaseService.getAssessmentsByUserAndTopic(testUser.userId);
-    const reloadedCompleted = LocalStorageService.get("completed_topics", {});
+    const reloadedCompleted = LocalStorageService.getUserCompletedTopics(testUser.userId);
 
     assert.ok(reloadedGoal, "Goal remains intact after reload");
     assert.ok(reloadedSkills["HTML5 & CSS3"], "Mastery profile remains intact");

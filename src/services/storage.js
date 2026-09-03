@@ -12,11 +12,13 @@ const KEYS = {
 
 /**
  * Retrieve the map of completed step IDs.
+ * @param {string} [userId]
  * @returns {Record<string, boolean>}
  */
-export function getProgress() {
+export function getProgress(userId = null) {
   try {
-    const raw = localStorage.getItem(KEYS.COMPLETED);
+    const key = userId ? `pathforge_user_completed_${userId}` : KEYS.COMPLETED;
+    const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : {};
   } catch (err) {
     console.warn("Error reading progress from localStorage:", err);
@@ -27,21 +29,25 @@ export function getProgress() {
 /**
  * Persist the map of completed step IDs.
  * @param {Record<string, boolean>} completedMap
+ * @param {string} [userId]
  */
-export function saveProgress(completedMap) {
+export function saveProgress(completedMap, userId = null) {
   try {
-    localStorage.setItem(KEYS.COMPLETED, JSON.stringify(completedMap || {}));
+    const key = userId ? `pathforge_user_completed_${userId}` : KEYS.COMPLETED;
+    localStorage.setItem(key, JSON.stringify(completedMap || {}));
   } catch (err) {
     console.warn("Error saving progress to localStorage:", err);
   }
 }
 
 /**
- * Reset all completed steps across all pathways.
+ * Reset completed steps.
+ * @param {string} [userId]
  */
-export function resetProgress() {
+export function resetProgress(userId = null) {
   try {
-    localStorage.removeItem(KEYS.COMPLETED);
+    const key = userId ? `pathforge_user_completed_${userId}` : KEYS.COMPLETED;
+    localStorage.removeItem(key);
   } catch (err) {
     console.warn("Error resetting progress in localStorage:", err);
   }

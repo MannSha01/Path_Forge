@@ -626,9 +626,9 @@ export class LearningSessionController {
           topicScore: percentage
         });
 
-        const completedMap = LocalStorageService.get("completed_topics", {});
+        const completedMap = LocalStorageService.getUserCompletedTopics(this.uid);
         completedMap[this.topicId] = true;
-        LocalStorageService.set("completed_topics", completedMap);
+        LocalStorageService.setUserCompletedTopics(this.uid, completedMap);
 
         // Auto-save permanent study notes
         try {
@@ -646,7 +646,7 @@ export class LearningSessionController {
       this.currentStatus = "COMPLETED";
 
       // Check if this topic triggers a 4-topic cumulative milestone (Requirement 34)
-      const completedIds = Object.keys(LocalStorageService.get("completed_topics", {}));
+      const completedIds = Object.keys(LocalStorageService.getUserCompletedTopics(this.uid));
       const isMilestoneForCumulative = completedIds.length > 0 && completedIds.length % 4 === 0;
 
       // 6. Render Results Screen
