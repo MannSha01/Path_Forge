@@ -4,7 +4,7 @@
 // ===================================================
 
 import { PATHWAYS_DATA } from "./data/pathways.js";
-import { getTopicsForRole, CURRICULUM_TOPICS } from "./data/curriculum.js";
+import { getTopicsForRole, CURRICULUM_TOPICS, getTopicById } from "./data/curriculum.js";
 import { authService } from "./services/auth/authService.js";
 import { databaseService } from "./services/database/databaseService.js";
 import { aiService } from "./services/ai/aiService.js";
@@ -28,6 +28,7 @@ import { renderNotesList } from "./components/notes/notesViewer.js";
 import { initQuiz, openQuizModal } from "./components/quiz/quiz.js";
 import { initAiAdvisor, openAIAdvisor } from "./components/aiAdvisor.js";
 import { createPathwayCard } from "./components/pathwayCard.js";
+import { renderLivePracticeView } from "./components/practice/livePractice.js"; // <-- LIVE CODING INTEGRATION
 
 // --- GLOBAL APPLICATION STATE ---
 let currentUser = null;
@@ -49,7 +50,8 @@ export function switchView(viewName) {
     learning: $("#view-learning"),
     notes: $("#view-notes"),
     roles: $("#view-roles"),
-    roadmap: $("#view-roadmap")
+    roadmap: $("#view-roadmap"),
+    practice: $("#view-practice") // <-- LIVE PRACTICE VIEW REGISTERED
   };
 
   Object.entries(views).forEach(([name, el]) => {
@@ -71,7 +73,7 @@ export function switchView(viewName) {
   } else {
     show(backBtn);
     if (backText) {
-      backText.textContent = viewName === "learning" ? "Dashboard" : "Home";
+      backText.textContent = (viewName === "learning" || viewName === "practice") ? "Dashboard" : "Home";
     }
   }
 
@@ -203,7 +205,8 @@ async function loadDashboard() {
     skillProfile: currentSkillProfile,
     schedule: currentSchedule,
     todayMinutesSpent,
-    onContinueLearning: () => startNextLearningSession()
+    onContinueLearning: () => startNextLearningSession(),
+    onStartPractice: (topicId) => loadPracticeView(topicId) // <-- Trigger live practice from dashboard
   });
 }
 
@@ -242,6 +245,35 @@ function startNextLearningSession(topicId = null) {
   });
 }
 
+// --- LIVE PRACTICE & SANDBOX CONTROLLER ---
+
+export function loadPracticeView(topicId = null) {
+  if (!currentUser) {
+    openLoginModal();
+    return;
+  }
+
+  switchView("practice");
+
+  renderLivePracticeView({
+    containerId: "#view-practice",
+    user: currentUser,
+    topicId: topicId || "tech-fe-1",
+    onComplete: async (completedTopicId) => {
+      if (currentUser?.userId) {
+        await databaseService.saveTopicProgress({
+          uid: currentUser.userId,
+          topicId: completedTopicId,
+          status: "COMPLETED"
+        });
+        await refreshActiveSchedule();
+      }
+      switchView("dashboard");
+      await loadDashboard();
+    }
+  });
+}
+
 function loadRoadmapView() {
   const roleId = currentGoal?.targetRoleId || "frontend";
   let items = currentSchedule?.items;
@@ -274,6 +306,9 @@ function loadRoadmapView() {
     },
     onLaunchLesson: (item) => {
       startNextLearningSession(item.topicId || item.id);
+    },
+    onLaunchPractice: (item) => {
+      loadPracticeView(item.topicId || item.id);
     }
   });
 }
@@ -402,6 +437,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     switchView("roadmap");
     loadRoadmapView();
   });
+  on($("#nav-practice-btn"), "click", () => { // <-- Live Practice Navigation Button
+    if (!currentUser) {
+      openLoginModal();
+    } else {
+      loadPracticeView();
+    }
+  });
   on($("#nav-notes-btn"), "click", () => {
     if (!currentUser) {
       openLoginModal();
@@ -418,7 +460,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Back Button
   on($("#nav-back-btn"), "click", () => {
-    if (activeView === "learning") {
+    if (activeView === "learning" || activeView === "practice") {
       switchView("dashboard");
       loadDashboard();
     } else {
