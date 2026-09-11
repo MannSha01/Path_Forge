@@ -45,6 +45,30 @@ function buildCurriculumGraph() {
 export const { topics: CURRICULUM_TOPICS, roleTopicMap: ROLE_TOPICS } = buildCurriculumGraph();
 
 /**
+ * Registers or updates a dynamic CMS topic in the runtime curriculum registry.
+ * @param {object} topic
+ */
+export function registerDynamicTopic(topic) {
+  if (!topic || !topic.id) return;
+  CURRICULUM_TOPICS[topic.id] = {
+    id: topic.id,
+    roleId: topic.roleId || "custom",
+    category: topic.category || "Custom",
+    title: topic.title,
+    summary: topic.description || topic.summary || "",
+    durationWeeks: topic.durationWeeks || 1,
+    estimatedMinutes: topic.estimatedMinutes || 45,
+    concepts: topic.concepts || [topic.title],
+    prerequisites: topic.prerequisites || [],
+    syllabus: topic.syllabus || [],
+    resources: topic.resources || [],
+    project: topic.project || "",
+    difficulty: topic.difficulty || "medium",
+    modules: topic.modules || []
+  };
+}
+
+/**
  * Returns all topics required for a given role ID.
  * @param {string} roleId
  * @returns {Array<object>}

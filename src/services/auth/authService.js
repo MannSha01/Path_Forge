@@ -1,9 +1,10 @@
 // ===================================================
 // PATH FORGE - AUTHENTICATION SERVICE
 // Firebase Google Authentication
-// Desktop: Popup (signInWithPopup)
+// Desktop: Popup (signInWithPopup) with redirect fallback
 // Mobile/iOS: Redirect (signInWithRedirect + getRedirectResult)
 // Canonical Account Key: Firebase Auth UID
+// Firebase is the SOLE authentication source of truth.
 // ===================================================
 
 import { databaseService } from "../database/databaseService.js";
@@ -11,21 +12,22 @@ import { LocalStorageService } from "../storage/localStorageService.js";
 
 // ===================================================
 // DYNAMIC FIREBASE SDK LOADER
+// Loads from CDN in browser, npm in Node (tests/SSR)
 // ===================================================
 
 async function loadFirebaseSDK() {
   if (typeof window !== "undefined") {
-    // Browser environment: Load CDN ES modules
+    // Browser: Load from Google CDN
     const appModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
     const authModule = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
     return { ...appModule, ...authModule };
   } else {
-    // Node.js environment (Unit tests / SSR)
+    // Node.js (tests / SSR)
     try {
       const appModule = await import("firebase/app");
       const authModule = await import("firebase/auth");
       return { ...appModule, ...authModule };
-    } catch (e) {
+    } catch {
       return null;
     }
   }
@@ -68,10 +70,10 @@ export function isMobileDevice() {
 
   const userAgent = navigator.userAgent || navigator.vendor || window.opera || "";
 
-  // 1. Check mobile user agent strings (iPhone, iPod, Android, BlackBerry, etc.)
+  // 1. Check mobile user agent strings
   const isMobileUA = /android|iphone|ipad|ipod|mobile|silk|blackberry|iemobile|kindle/i.test(userAgent);
 
-  // 2. Detect iPadOS 13+ which presents as MacIntel but has touch points
+  // 2. iPadOS 13+ presents as MacIntel with touch points
   const isIPadOS = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
 
   // 3. Touch screen with mobile/tablet viewport width
@@ -102,34 +104,47 @@ export function formatAuthError(err) {
       return "Google sign-in is not enabled in Firebase Console. Please enable Google under Authentication → Sign-in method.";
 
     case "auth/popup-blocked":
-      return "Your browser blocked the Google sign-in window. Please allow popups for this site or try again.";
+      return "Your browser blocked the Google sign-in window. Trying secure redirect instead…";
 
     case "auth/popup-closed-by-user":
-      return "Google sign-in was closed before completing.";
+      return "Google sign-in was closed before completing. Please try again.";
 
     case "auth/cancelled-popup-request":
-      return "Another sign-in request is already active.";
+      return "A sign-in request is already active. Please wait for it to complete.";
 
     case "auth/network-request-failed":
-      return "Unable to connect to Google. Please check your internet connection and try again.";
+      return "Unable to reach Google. Please check your internet connection and try again.";
 
     case "auth/account-exists-with-different-credential":
-      return "An account already exists with the same email address using a different sign-in method.";
+      return "An account already exists with the same email address but a different sign-in method. Please sign in with the original method.";
+
+    case "auth/credential-already-in-use":
+      return "This Google account is already linked to a different PathForge account.";
 
     case "auth/redirect-cancelled-by-user":
-      return "Google sign-in was cancelled.";
+      return "Google sign-in was cancelled. Please try again.";
 
     case "auth/invalid-api-key":
       return "Firebase configuration is invalid. Please check your environment variables.";
 
     case "auth/configuration-not-found":
-      return "Firebase configuration not found. Check your environment variables.";
+      return "Firebase configuration not found. Check your environment variables and Firebase Console settings.";
+
+    case "auth/invalid-credential":
+      return "Google credential validation failed. Please verify that Google Sign-In is enabled in Firebase Console (Authentication → Sign-in method → Google) and try again.";
 
     case "auth/user-disabled":
-      return "This user account has been disabled.";
+      return "This user account has been disabled. Please contact the administrator.";
+
+    case "auth/too-many-requests":
+      return "Too many sign-in attempts. Please wait a moment before trying again.";
+
+    case "auth/internal-error":
+      return "An internal Firebase error occurred. Please try again later.";
 
     default:
-      return err.message || "Google Sign-In was cancelled or failed.";
+      // Never expose raw Firebase error messages or stack traces to users
+      return "Google Sign-In failed. Please try again.";
   }
 }
 
@@ -139,106 +154,158 @@ export function formatAuthError(err) {
 
 class AuthService {
   constructor() {
-    this.currentUser = null;
-    this.listeners = [];
+    // Firebase state
     this.auth = null;
     this.provider = null;
     this.sdk = null;
+    this._firebaseApp = null;
+
+    // Auth state — Firebase is the ONLY source of truth
+    this.currentUser = null;     // null = no user OR still loading
+    this.isLoading = true;       // true until Firebase resolves first time
+
+    // Internal flags
     this.isInitialized = false;
     this.initPromise = null;
+    this._redirectProcessed = false;  // prevent double _setAuthenticatedUser on redirect
+    this._isAuthenticating = false;   // prevent double login button clicks
 
-    // Start initialization lifecycle immediately
-    this.initPromise = this.init();
+    // Listeners array: called with (user, isLoading)
+    this.listeners = [];
+
+    // Start initialization immediately
+    this.initPromise = this._init();
   }
 
   // =================================================
-  // FETCH PUBLIC FIREBASE CONFIG
+  // FETCH PUBLIC FIREBASE CONFIG FROM SERVER
+  // Config is served by /api/authConfig which reads env vars server-side.
+  // This keeps credentials OUT of client-side source code.
   // =================================================
 
   async _fetchFirebaseConfig() {
-    // 1. Check window globals (in case injected by SSR or hosting environment)
+    // Allow pre-injected config (SSR or hosting environments)
     if (typeof window !== "undefined" && window.__FIREBASE_CONFIG__) {
       return window.__FIREBASE_CONFIG__;
     }
 
-    // 2. Fetch from serverless /api/authConfig
-    try {
-      const response = await fetch("/api/authConfig");
-      if (!response.ok) {
-        throw new Error(`Failed to load Firebase config: HTTP ${response.status}`);
-      }
-      const config = await response.json();
-
-      if (!config.apiKey || !config.authDomain || !config.projectId || !config.appId) {
-        throw new Error("Firebase configuration is incomplete. Check your environment variables.");
-      }
-
-      return config;
-    } catch (err) {
-      console.warn("Could not fetch /api/authConfig:", err.message);
-      throw err;
+    const response = await fetch("/api/authConfig");
+    if (!response.ok) {
+      throw new Error(`Failed to load Firebase configuration: HTTP ${response.status}`);
     }
+
+    const config = await response.json();
+
+    if (!config.apiKey || !config.authDomain || !config.projectId || !config.appId) {
+      throw new Error(
+        "Firebase configuration is incomplete. Ensure FIREBASE_API_KEY, FIREBASE_AUTH_DOMAIN, FIREBASE_PROJECT_ID, and FIREBASE_APP_ID are set in your environment."
+      );
+    }
+
+    return config;
   }
 
   // =================================================
   // INITIALIZATION LIFECYCLE
+  // Order:
+  //   1. Load Firebase SDK
+  //   2. Fetch config from /api/authConfig
+  //   3. Initialize Firebase App (once)
+  //   4. Initialize Auth
+  //   5. Set persistence (browserLocalPersistence with session fallback)
+  //   6. Process pending redirect result (BEFORE auth state listener)
+  //   7. Set up onAuthStateChanged listener
   // =================================================
 
-  async init() {
+  async _init() {
     if (this.isInitialized) return this.currentUser;
 
     try {
+      // Step 1: Load SDK
       this.sdk = await loadFirebaseSDK();
       if (!this.sdk) {
-        throw new Error("Firebase SDK could not be loaded.");
+        throw new Error("Firebase SDK could not be loaded. Check your network connection.");
       }
 
+      // Step 2: Fetch public Firebase config from server
       const config = await this._fetchFirebaseConfig();
 
-      const app = this.sdk.getApps().length === 0 ? this.sdk.initializeApp(config) : this.sdk.getApp();
-      this.auth = this.sdk.getAuth(app);
-      this.provider = new this.sdk.GoogleAuthProvider();
+      // Step 3: Initialize Firebase App exactly once
+      this._firebaseApp =
+        this.sdk.getApps().length === 0
+          ? this.sdk.initializeApp(config)
+          : this.sdk.getApp();
 
-      // Always show Google's account selector
-      this.provider.setCustomParameters({
-        prompt: "select_account"
-      });
+      // Step 4: Get Auth instance
+      this.auth = this.sdk.getAuth(this._firebaseApp);
 
-      // ---------------------------------------------
-      // 1. HANDLE REDIRECT RESULT (Mobile / iOS return flow)
-      // ---------------------------------------------
-      // This must happen BEFORE deciding final logged-in state.
+      // Step 5: Set persistence — CRITICAL for iOS Safari and cross-session login
+      // browserLocalPersistence: survives page refresh and browser restart
+      // browserSessionPersistence: fallback for browsers that block local storage
       try {
-        const redirectResult = await this.sdk.getRedirectResult(this.auth);
-        if (redirectResult && redirectResult.user) {
-          console.log("[AuthService] Google redirect authentication successful for:", redirectResult.user.email);
-          await this._setAuthenticatedUser(redirectResult.user);
+        await this.sdk.setPersistence(this.auth, this.sdk.browserLocalPersistence);
+      } catch (persistenceErr) {
+        console.warn(
+          "[AuthService] browserLocalPersistence not available, falling back to sessionPersistence:",
+          persistenceErr.message
+        );
+        try {
+          await this.sdk.setPersistence(this.auth, this.sdk.browserSessionPersistence);
+        } catch (sessionPersistenceErr) {
+          // In-memory persistence is Firebase's final fallback — log but continue
+          console.warn(
+            "[AuthService] Session persistence also unavailable, using in-memory:",
+            sessionPersistenceErr.message
+          );
         }
-      } catch (redirectErr) {
-        console.error("[AuthService] Google Redirect Authentication Error:", redirectErr);
-        this._handleAuthError(redirectErr);
       }
 
-      // ---------------------------------------------
-      // 2. LISTEN FOR FIREBASE AUTH STATE CHANGES
-      // ---------------------------------------------
+      // Step 6: Configure Google Auth Provider (single reusable instance)
+      this.provider = new this.sdk.GoogleAuthProvider();
+      this.provider.addScope("email");
+      this.provider.addScope("profile");
+      this.provider.setCustomParameters({
+        prompt: "select_account"  // Always show account chooser
+      });
+
+      // Step 7: Notify DatabaseService that Firebase is ready
+      // This fixes the race condition where Firestore initializes before the Firebase app exists
+      try {
+        await databaseService.initFirestoreAfterAuth(this._firebaseApp);
+      } catch (dbErr) {
+        console.warn("[AuthService] DatabaseService Firestore init warning:", dbErr.message);
+      }
+
+      // Step 8: Process any pending redirect result FIRST
+      // This handles the return journey from signInWithRedirect (iOS/mobile)
+      // Must happen before onAuthStateChanged is set up to avoid double processing
+      await this._processRedirectResult();
+
+      // Step 9: Set up auth state listener
+      // This is the SINGLE source of truth for authentication state.
+      // We do NOT use localStorage to determine if a user is logged in.
       await new Promise((resolve) => {
         let hasResolved = false;
 
         this.sdk.onAuthStateChanged(this.auth, async (fbUser) => {
           if (fbUser) {
-            await this._setAuthenticatedUser(fbUser);
-          } else {
-            // Only use cached session if Firebase is not yet ready or offline
-            const cachedSession = LocalStorageService.get("auth_session", null);
-            if (!this.currentUser && cachedSession) {
-              this.currentUser = cachedSession;
-            } else if (!fbUser && this.isInitialized) {
-              this.currentUser = null;
-              LocalStorageService.clearUserSession();
+            // Firebase confirms a user is authenticated
+            if (!this._redirectProcessed) {
+              // Not a redirect return — normal auth state change (page load with existing session, popup login)
+              await this._setAuthenticatedUser(fbUser);
+            } else {
+              // Redirect was already processed — update currentUser reference but avoid duplicate Firestore writes
+              const userRecord = this._createUserRecord(fbUser);
+              this.currentUser = userRecord;
             }
+          } else {
+            // Firebase explicitly says: no authenticated user
+            // IMPORTANT: Do NOT restore from localStorage here.
+            // An `auth_session` cache is only for display hints, not authentication.
+            this.currentUser = null;
           }
 
+          this.isLoading = false;
           this._notifyListeners();
 
           if (!hasResolved) {
@@ -251,16 +318,55 @@ class AuthService {
       this.isInitialized = true;
       return this.currentUser;
     } catch (err) {
-      console.warn("[AuthService] Firebase initialization warning, using local session:", err.message);
-      this.currentUser = LocalStorageService.get("auth_session", null);
+      console.error("[AuthService] Firebase initialization failed:", err.message);
+      // Firebase is unavailable — treat as unauthenticated, not a cached session
+      this.currentUser = null;
+      this.isLoading = false;
       this.isInitialized = true;
       this._notifyListeners();
-      return this.currentUser;
+      return null;
+    }
+  }
+
+  // =================================================
+  // PROCESS REDIRECT RESULT (iOS/Mobile Return Flow)
+  // Called once at startup, before onAuthStateChanged.
+  // Handles the user returning from Google's sign-in page.
+  // =================================================
+
+  async _processRedirectResult() {
+    try {
+      const redirectResult = await this.sdk.getRedirectResult(this.auth);
+
+      if (redirectResult && redirectResult.user) {
+        console.log(
+          "[AuthService] Google redirect login successful:",
+          redirectResult.user.email
+        );
+        // Mark as processed so onAuthStateChanged doesn't duplicate the work
+        this._redirectProcessed = true;
+        await this._setAuthenticatedUser(redirectResult.user);
+      }
+      // null result = no pending redirect, perfectly normal
+    } catch (redirectErr) {
+      console.error("[AuthService] Redirect result processing error:", redirectErr.code, redirectErr.message);
+
+      // Do not show UI errors here — the user will see the login screen
+      // Log specific codes for debugging but never expose to UI
+      const code = redirectErr.code || "";
+      if (
+        code === "auth/account-exists-with-different-credential" ||
+        code === "auth/credential-already-in-use"
+      ) {
+        // Store the error temporarily so login.js can surface it to the user
+        this._pendingRedirectError = formatAuthError(redirectErr);
+      }
     }
   }
 
   // =================================================
   // CENTRALIZED USER RECORD FACTORY
+  // Always derived from Firebase Auth user object.
   // =================================================
 
   _createUserRecord(fbUser) {
@@ -275,7 +381,7 @@ class AuthService {
 
     return {
       uid,
-      userId: uid, // Canonical primary key
+      userId: uid,   // Canonical primary key — always Firebase UID
       email,
       displayName,
       photoURL,
@@ -284,7 +390,7 @@ class AuthService {
   }
 
   // =================================================
-  // SET AUTHENTICATED USER & LOAD ACCOUNT DATA
+  // SET AUTHENTICATED USER & PERSIST PROFILE
   // =================================================
 
   async _setAuthenticatedUser(fbUser) {
@@ -293,116 +399,161 @@ class AuthService {
     const userRecord = this._createUserRecord(fbUser);
     this.currentUser = userRecord;
 
-    // 1. Persist active auth session locally
-    LocalStorageService.set("auth_session", userRecord);
-
-    // 2. Persist user in database
+    // Persist user profile to Firestore (merge semantics — preserves existing data)
     try {
       await databaseService.saveUser(userRecord);
     } catch (err) {
-      console.warn("[AuthService] Could not save user to database:", err);
+      console.warn("[AuthService] Could not save user profile to Firestore:", err.message);
+      // Non-fatal: user is still authenticated, Firestore will sync when available
     }
 
-    // 3. Migrate legacy unauthenticated progress safely (no leakage to other accounts)
+    // Migrate any anonymous/legacy progress to this UID's namespace
     try {
       LocalStorageService.migrateLegacyProgress(userRecord.userId);
     } catch (err) {
-      console.warn("[AuthService] Legacy progress migration warning:", err);
+      console.warn("[AuthService] Legacy progress migration warning:", err.message);
     }
 
     return userRecord;
   }
 
   // =================================================
-  // AUTH ERROR HANDLING (INTERNAL LOGGING)
-  // =================================================
-
-  _handleAuthError(err) {
-    if (!err) return;
-    const friendlyMessage = formatAuthError(err);
-    console.warn(`[AuthService] ${friendlyMessage} (Code: ${err.code || "UNKNOWN"})`);
-  }
-
-  // =================================================
-  // SUBSCRIBE TO AUTH STATE
+  // SUBSCRIBE TO AUTH STATE CHANGES
+  // Callback signature: (user, isLoading) => void
+  // - user: null when loading OR unauthenticated
+  // - isLoading: true while Firebase is still resolving auth state
+  //
+  // IMPORTANT: Do NOT treat user===null as "logged out"
+  // until isLoading===false.
   // =================================================
 
   onAuthStateChanged(callback) {
     this.listeners.push(callback);
 
-    // If already initialized, provide current state immediately
+    // If Firebase has already resolved, call immediately with current state
     if (this.isInitialized) {
       try {
-        callback(this.currentUser);
+        callback(this.currentUser, this.isLoading);
       } catch (err) {
-        console.error("Error in initial auth listener execution:", err);
+        console.error("[AuthService] Error in auth state listener:", err);
       }
     }
+    // If still initializing, the callback will be called when init() completes
 
+    // Return unsubscribe function
     return () => {
       this.listeners = this.listeners.filter((cb) => cb !== callback);
     };
   }
 
   // =================================================
-  // NOTIFY LISTENERS
+  // NOTIFY ALL LISTENERS
   // =================================================
 
   _notifyListeners() {
     this.listeners.forEach((cb) => {
       try {
-        cb(this.currentUser);
+        cb(this.currentUser, this.isLoading);
       } catch (err) {
-        console.error("Error in auth listener:", err);
+        console.error("[AuthService] Error in auth state listener:", err);
       }
     });
   }
 
   // =================================================
-  // GOOGLE SIGN-IN (DESKTOP: POPUP, MOBILE: REDIRECT)
+  // GOOGLE SIGN-IN
+  // Strategy:
+  //   Mobile/iOS → signInWithRedirect (avoids popup issues)
+  //   Desktop    → signInWithPopup, with automatic redirect fallback
+  //                if popup is blocked or fails
+  //
+  // Double-click guard: _isAuthenticating flag
+  // Page reload: NEVER called — Firebase listener updates state
   // =================================================
 
   async signInWithGoogle() {
-    // Ensure initialized before triggering sign-in
-    await (this.initPromise || this.init());
+    // Ensure Firebase is initialized before proceeding
+    await (this.initPromise || this._init());
 
     if (!this.auth || !this.provider || !this.sdk) {
-      throw new Error("Firebase Auth is not initialized. Check your environment variables.");
+      throw new Error("Firebase Auth is not initialized. Please check your environment variables and Firebase Console configuration.");
     }
 
+    // Prevent multiple simultaneous sign-in requests
+    if (this._isAuthenticating) {
+      console.warn("[AuthService] Sign-in already in progress. Ignoring duplicate request.");
+      return null;
+    }
+
+    this._isAuthenticating = true;
+
     try {
-      // ---------------------------------------------
-      // MOBILE / IOS (iPhone, iPad, Android)
-      // ---------------------------------------------
+      // -----------------------------------------------
+      // MOBILE / iOS (iPhone, iPad, Android)
+      // Must use redirect — popups are unreliable on iOS Safari.
+      // The page navigates away to Google; on return, _processRedirectResult()
+      // handles the authenticated session in the next init() call.
+      // -----------------------------------------------
       if (isMobileDevice()) {
-        console.log("[AuthService] Mobile / iOS device detected. Executing signInWithRedirect().");
-
+        console.log("[AuthService] Mobile/iOS detected — using signInWithRedirect.");
+        // signInWithRedirect navigates away — _isAuthenticating will reset on page return
         await this.sdk.signInWithRedirect(this.auth, this.provider);
-
-        // The browser navigates away to Google and returns to Path Forge.
-        // getRedirectResult() in init() will process the authenticated session upon return.
+        // Execution does not continue past this point on mobile — browser navigates away
         return null;
       }
 
-      // ---------------------------------------------
-      // DESKTOP (Chrome, Edge, Firefox, Safari Desktop)
-      // ---------------------------------------------
-      console.log("[AuthService] Desktop browser detected. Executing signInWithPopup().");
+      // -----------------------------------------------
+      // DESKTOP — Try popup first, fall back to redirect
+      // -----------------------------------------------
+      console.log("[AuthService] Desktop browser — attempting signInWithPopup.");
 
-      const result = await this.sdk.signInWithPopup(this.auth, this.provider);
-      const userRecord = await this._setAuthenticatedUser(result.user);
+      try {
+        const result = await this.sdk.signInWithPopup(this.auth, this.provider);
+        // Popup succeeded — Firebase onAuthStateChanged will fire automatically
+        // We also call _setAuthenticatedUser here so the desktop flow can immediately
+        // return the user record for navigation (onAuthStateChanged will be a no-op duplicate)
+        const userRecord = await this._setAuthenticatedUser(result.user);
+        this._notifyListeners();
+        return userRecord;
+      } catch (popupErr) {
+        const code = popupErr.code || "";
 
-      this._notifyListeners();
-      return userRecord;
+        if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") {
+          // Popup blocked or closed — fall back to redirect silently
+          console.warn(
+            `[AuthService] Popup ${code === "auth/popup-blocked" ? "blocked" : "closed"} — falling back to redirect.`
+          );
+          await this.sdk.signInWithRedirect(this.auth, this.provider);
+          return null; // Browser navigates away
+        }
+
+        if (code === "auth/cancelled-popup-request") {
+          // Another popup request was already pending — not an error, just log it
+          console.warn("[AuthService] Cancelled duplicate popup request.");
+          return null;
+        }
+
+        // All other popup errors — format and re-throw for UI to display
+        throw new Error(formatAuthError(popupErr));
+      }
     } catch (err) {
-      console.error("[AuthService] Google Sign-In Error:", err);
-      const friendlyMessage = formatAuthError(err);
-      throw new Error(friendlyMessage);
+      // Re-throw formatted errors (already formatted above for known codes)
+      if (err.message && !err.code) {
+        throw err; // Already formatted
+      }
+      throw new Error(formatAuthError(err));
+    } finally {
+      // Always reset the authenticating flag
+      // (For redirect flows this runs before navigation, which is fine)
+      this._isAuthenticating = false;
     }
   }
 
   // =================================================
-  // SIGN OUT (ISOLATED SESSION CLEARING)
+  // SIGN OUT
+  // Uses Firebase signOut — clears Firebase session.
+  // Clears in-memory state and display cache.
+  // Does NOT delete Firestore data.
   // =================================================
 
   async signOut() {
@@ -411,12 +562,13 @@ class AuthService {
         await this.sdk.signOut(this.auth);
       }
     } catch (err) {
-      console.warn("[AuthService] Firebase sign out error:", err);
+      console.warn("[AuthService] Firebase sign-out error:", err.message);
     }
 
+    // Clear in-memory state — Firebase onAuthStateChanged will also fire with null
     this.currentUser = null;
 
-    // Clear active auth session without wiping stored database progress
+    // Clear display cache only (not Firestore data, not user progress)
     LocalStorageService.clearUserSession();
 
     this._notifyListeners();
@@ -426,17 +578,41 @@ class AuthService {
   // GETTERS
   // =================================================
 
+  /**
+   * Returns the current Firebase-authenticated user, or null.
+   * Use onAuthStateChanged for reactive updates — do not poll this.
+   */
   getCurrentUser() {
     return this.currentUser;
+  }
+
+  /**
+   * Returns the initialized Firebase App instance.
+   * Used by DatabaseService to get the Firestore instance.
+   */
+  getFirebaseApp() {
+    return this._firebaseApp;
   }
 
   isAuthenticated() {
     return Boolean(this.currentUser);
   }
+
+  /**
+   * Returns any error that occurred during a redirect login flow.
+   * Call once on app start to surface redirect errors to the user.
+   */
+  getPendingRedirectError() {
+    const err = this._pendingRedirectError || null;
+    this._pendingRedirectError = null;
+    return err;
+  }
 }
 
 // ===================================================
 // EXPORT SINGLETON INSTANCE
+// All modules import this same instance.
+// Firebase is initialized exactly once.
 // ===================================================
 
 export const authService = new AuthService();

@@ -389,6 +389,11 @@
         </div>
       </section>
 
+      <!-- ================= VIEW 8: ADMIN CONTENT MANAGEMENT PORTAL ================= -->
+      <section id="view-admin" class="hidden space-y-4 transition-all duration-300 w-full">
+        <div id="admin-portal-container"></div>
+      </section>
+
     </main>
 
     <!-- FLOATING AI BOT ACTION BUTTON (Bottom Right) -->
@@ -396,6 +401,13 @@
       <i data-lucide="bot" class="w-6 h-6"></i>
       <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-bold pl-0 group-hover:pl-2">Ask AI Advisor</span>
     </button>
+
+    <!-- Subtle Discreet Admin Access Link (Bottom-Right) -->
+    <div class="fixed bottom-1.5 right-3 z-30 opacity-30 hover:opacity-90 transition-opacity duration-300 pointer-events-auto">
+      <button id="admin-login-link" class="text-[10px] text-slate-500 hover:text-indigo-400 font-mono tracking-wider cursor-pointer select-none bg-transparent border-0 p-1">
+        Admin Login
+      </button>
+    </div>
 
     <!-- ================= MODALS ================= -->
 
@@ -426,6 +438,7 @@
 
         <!-- Google Sign In Button -->
         <button
+          type="button"
           id="google-signin-btn"
           class="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm rounded-xl shadow-xl transition flex items-center justify-center gap-3 cursor-pointer active:scale-95 border border-slate-200"
         >

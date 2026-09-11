@@ -77,7 +77,14 @@ export const LocalStorageService = {
   },
 
   /**
-   * Clears only active auth session state, keeping persisted user progress intact.
+   * Clears the UI display hint cache (auth_session).
+   *
+   * IMPORTANT: This key is NOT used for authentication decisions.
+   * Firebase Auth (onAuthStateChanged) is the sole source of truth for
+   * whether a user is authenticated. This cache only holds display data
+   * (name, email, photoURL) for UI hints while Firebase resolves.
+   *
+   * Never restore auth_session as a substitute for Firebase authentication.
    */
   clearUserSession() {
     this.remove("auth_session");

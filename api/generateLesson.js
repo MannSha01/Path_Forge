@@ -5,7 +5,7 @@
 
 import { buildLessonPrompt } from "../src/services/ai/prompts/lessonPrompt.js";
 
-function resolveModel(modelEnv, defaultModel = "gemini-3.6-flash") {
+function resolveModel(modelEnv, defaultModel = "gemini-1.5-flash") {
   if (!modelEnv) return defaultModel;
   return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
 }
@@ -74,7 +74,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "topicTitle is required." });
   }
 
-  const model = resolveModel(process.env.AI_MODEL, "gemini-3.6-flash");
+  const model = resolveModel(process.env.AI_MODEL, "gemini-1.5-flash");
 
   const prompt = buildLessonPrompt({
     topicTitle,
