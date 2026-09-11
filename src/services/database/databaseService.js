@@ -3,6 +3,12 @@
 // Backend Database (Firebase Firestore) as Authoritative Source of Truth
 // with LocalStorage as Cache and Offline Fallback
 // Canonical Account Key: Firebase Auth UID
+//
+// INITIALIZATION ORDER:
+//   1. DatabaseService is constructed (Firestore NOT yet ready)
+//   2. AuthService initializes Firebase App
+//   3. AuthService calls databaseService.initFirestoreAfterAuth(app)
+//   4. Firestore is now configured and all remote ops work
 // ===================================================
 
 import { LocalStorageService } from "../storage/localStorageService.js";
@@ -26,7 +32,11 @@ const COLLECTIONS = {
   QUESTION_HISTORY: "question_history",
   ADAPTATIONS: "adaptations",
   LEARNING_SESSIONS: "learning_sessions",
-  NOTES: "notes"
+  NOTES: "notes",
+  CMS_TOPICS: "cms_topics",
+  CMS_MODULES: "cms_modules",
+  CMS_MEDIA: "cms_media",
+  ADMIN_USERS: "admin_users"
 };
 
 // Local storage prefix for cached collections
@@ -46,7 +56,11 @@ const LOCAL_COLLECTIONS = {
   QUESTION_HISTORY: "db_question_history",
   ADAPTATIONS: "db_adaptations",
   LEARNING_SESSIONS: "db_learning_sessions",
-  NOTES: "db_notes"
+  NOTES: "db_notes",
+  CMS_TOPICS: "db_cms_topics",
+  CMS_MODULES: "db_cms_modules",
+  CMS_MEDIA: "db_cms_media",
+  ADMIN_USERS: "db_admin_users"
 };
 
 class DatabaseService {
@@ -54,40 +68,40 @@ class DatabaseService {
     this.isRemoteConfigured = false;
     this.firestore = null;
     this.firestoreSDK = null;
-    this._initFirestore();
+    // NOTE: We do NOT call _initFirestore() here.
+    // Firebase App may not exist yet (AuthService hasn't called initializeApp).
+    // initFirestoreAfterAuth(app) is called by AuthService after Firebase is ready.
   }
 
   // =================================================
-  // FIRESTORE INITIALIZATION (BROWSER CDN & NODE COMPATIBLE)
+  // FIRESTORE INITIALIZATION — called by AuthService after Firebase app is ready
+  // This solves the race condition where DatabaseService is constructed
+  // before AuthService has called initializeApp().
   // =================================================
 
-  async _initFirestore() {
+  async initFirestoreAfterAuth(firebaseApp) {
+    if (this.isRemoteConfigured) return; // Already initialized
+
     try {
       if (typeof window !== "undefined") {
-        const appMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
         const firestoreMod = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
-        const apps = appMod.getApps();
-        if (apps.length > 0) {
-          this.firestore = firestoreMod.getFirestore(apps[0]);
+        this.firestore = firestoreMod.getFirestore(firebaseApp);
+        this.firestoreSDK = firestoreMod;
+        this.isRemoteConfigured = true;
+        console.log("[DatabaseService] Firestore initialized successfully.");
+      } else {
+        // Node.js (tests / SSR)
+        try {
+          const firestoreMod = await import("firebase/firestore");
+          this.firestore = firestoreMod.getFirestore(firebaseApp);
           this.firestoreSDK = firestoreMod;
           this.isRemoteConfigured = true;
-        }
-      } else {
-        try {
-          const appMod = await import("firebase/app");
-          const firestoreMod = await import("firebase/firestore");
-          const apps = appMod.getApps();
-          if (apps.length > 0) {
-            this.firestore = firestoreMod.getFirestore(apps[0]);
-            this.firestoreSDK = firestoreMod;
-            this.isRemoteConfigured = true;
-          }
         } catch {
           this.isRemoteConfigured = false;
         }
       }
     } catch (err) {
-      // Graceful dual-tier fallback to local storage
+      console.warn("[DatabaseService] Firestore initialization failed, falling back to local storage:", err.message);
       this.isRemoteConfigured = false;
     }
   }
@@ -947,6 +961,351 @@ class DatabaseService {
     return Object.values(notes)
       .filter((n) => n.uid === uid || n.userId === uid)
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+
+  // =================================================
+  // ADMIN CMS: TOPICS
+  // =================================================
+
+  async getAdminTopics() {
+    // 1. Try authoritative backend database
+    if (this.firestore && this.firestoreSDK) {
+      try {
+        const { collection, getDocs } = this.firestoreSDK;
+        const snap = await getDocs(collection(this.firestore, COLLECTIONS.CMS_TOPICS));
+        if (snap && !snap.empty) {
+          const remoteList = [];
+          snap.forEach((d) => remoteList.push(d.data()));
+          const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+          remoteList.forEach((t) => {
+            store[t.id || t.topicId] = t;
+          });
+          this._saveCollection(LOCAL_COLLECTIONS.CMS_TOPICS, store);
+          return remoteList.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        }
+      } catch (err) {
+        console.warn("[DatabaseService] Remote read for CMS topics failed:", err.message);
+      }
+    }
+
+    // 2. Fall back to local cache
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+    return Object.values(store).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+
+  async getTopic(topicId) {
+    if (!topicId) return null;
+    const remote = await this._fetchRemoteDoc(COLLECTIONS.CMS_TOPICS, topicId);
+    if (remote) {
+      const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+      store[topicId] = remote;
+      this._saveCollection(LOCAL_COLLECTIONS.CMS_TOPICS, store);
+      return remote;
+    }
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+    return store[topicId] || null;
+  }
+
+  async saveTopic(topic) {
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+    const id = topic.id || topic.topicId || this._generateId("topic");
+    const existing = store[id] || {};
+    const now = new Date().toISOString();
+
+    const allTopics = Object.values(store);
+    const maxOrder = allTopics.length > 0 ? Math.max(...allTopics.map((t) => t.order ?? 0)) : 0;
+
+    const record = {
+      ...existing,
+      ...topic,
+      id,
+      topicId: id,
+      title: topic.title || existing.title || "Untitled Topic",
+      description: topic.description || existing.description || "",
+      icon: topic.icon || existing.icon || "book-open",
+      category: topic.category || existing.category || "General",
+      status: topic.status || existing.status || "draft",
+      order: typeof topic.order === "number" ? topic.order : (existing.order ?? maxOrder + 1),
+      createdAt: existing.createdAt || topic.createdAt || now,
+      updatedAt: now
+    };
+
+    store[id] = record;
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_TOPICS, store);
+    await this._syncRemoteDoc(COLLECTIONS.CMS_TOPICS, id, record);
+    return record;
+  }
+
+  async deleteTopic(topicId) {
+    if (!topicId) return false;
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+    delete store[topicId];
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_TOPICS, store);
+
+    // Cascade delete associated modules
+    const moduleStore = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    Object.keys(moduleStore).forEach((mId) => {
+      if (moduleStore[mId].topicId === topicId) {
+        delete moduleStore[mId];
+      }
+    });
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, moduleStore);
+
+    if (this.firestore && this.firestoreSDK) {
+      try {
+        const { doc, deleteDoc } = this.firestoreSDK;
+        await deleteDoc(doc(this.firestore, COLLECTIONS.CMS_TOPICS, topicId));
+      } catch (err) {
+        console.warn(`[DatabaseService] Remote delete for topic ${topicId} failed:`, err.message);
+      }
+    }
+    return true;
+  }
+
+  async reorderTopics(orderedIds) {
+    if (!Array.isArray(orderedIds)) return;
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_TOPICS);
+    orderedIds.forEach((id, idx) => {
+      if (store[id]) {
+        store[id].order = idx;
+        store[id].updatedAt = new Date().toISOString();
+        this._syncRemoteDoc(COLLECTIONS.CMS_TOPICS, id, store[id]);
+      }
+    });
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_TOPICS, store);
+  }
+
+  // =================================================
+  // ADMIN CMS: MODULES
+  // =================================================
+
+  async getAdminModules(topicId = null) {
+    if (this.firestore && this.firestoreSDK) {
+      try {
+        const { collection, getDocs, query, where } = this.firestoreSDK;
+        const q = topicId
+          ? query(collection(this.firestore, COLLECTIONS.CMS_MODULES), where("topicId", "==", topicId))
+          : collection(this.firestore, COLLECTIONS.CMS_MODULES);
+        const snap = await getDocs(q);
+        if (snap && !snap.empty) {
+          const remoteList = [];
+          snap.forEach((d) => remoteList.push(d.data()));
+          const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+          remoteList.forEach((m) => {
+            store[m.id || m.moduleId] = m;
+          });
+          this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+          return remoteList.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        }
+      } catch (err) {
+        console.warn("[DatabaseService] Remote read for CMS modules failed:", err.message);
+      }
+    }
+
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    let list = Object.values(store);
+    if (topicId) {
+      list = list.filter((m) => m.topicId === topicId);
+    }
+    return list.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+
+  async getModule(moduleId) {
+    if (!moduleId) return null;
+    const remote = await this._fetchRemoteDoc(COLLECTIONS.CMS_MODULES, moduleId);
+    if (remote) {
+      const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+      store[moduleId] = remote;
+      this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+      return remote;
+    }
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    return store[moduleId] || null;
+  }
+
+  async saveModule(module) {
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    const id = module.id || module.moduleId || this._generateId("mod");
+    const existing = store[id] || {};
+    const now = new Date().toISOString();
+
+    const topicModules = Object.values(store).filter((m) => m.topicId === (module.topicId || existing.topicId));
+    const maxOrder = topicModules.length > 0 ? Math.max(...topicModules.map((m) => m.order ?? 0)) : 0;
+
+    const record = {
+      ...existing,
+      ...module,
+      id,
+      moduleId: id,
+      topicId: module.topicId || existing.topicId || "default_topic",
+      title: module.title || existing.title || "Untitled Module",
+      description: module.description || existing.description || "",
+      estimatedMinutes: Number(module.estimatedMinutes || existing.estimatedMinutes || 20),
+      difficulty: module.difficulty || existing.difficulty || "Beginner",
+      status: module.status || existing.status || "draft",
+      draftBlocks: Array.isArray(module.draftBlocks) ? module.draftBlocks : (existing.draftBlocks || []),
+      publishedBlocks: Array.isArray(module.publishedBlocks) ? module.publishedBlocks : (existing.publishedBlocks || []),
+      order: typeof module.order === "number" ? module.order : (existing.order ?? maxOrder + 1),
+      publishedVersion: module.publishedVersion || existing.publishedVersion || 1,
+      createdAt: existing.createdAt || module.createdAt || now,
+      updatedAt: now
+    };
+
+    store[id] = record;
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+    await this._syncRemoteDoc(COLLECTIONS.CMS_MODULES, id, record);
+    return record;
+  }
+
+  async publishModule(moduleId, isPublished = true) {
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    const existing = store[moduleId];
+    if (!existing) return null;
+
+    const now = new Date().toISOString();
+    const updated = {
+      ...existing,
+      status: isPublished ? "published" : "draft",
+      publishedAt: isPublished ? now : existing.publishedAt,
+      publishedBlocks: isPublished ? JSON.parse(JSON.stringify(existing.draftBlocks || [])) : existing.publishedBlocks,
+      publishedVersion: isPublished ? (existing.publishedVersion || 1) + 1 : existing.publishedVersion,
+      updatedAt: now
+    };
+
+    store[moduleId] = updated;
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+    await this._syncRemoteDoc(COLLECTIONS.CMS_MODULES, moduleId, updated);
+    return updated;
+  }
+
+  async duplicateModule(moduleId) {
+    const original = await this.getModule(moduleId);
+    if (!original) return null;
+
+    const newId = this._generateId("mod");
+    const now = new Date().toISOString();
+
+    // Deep clone draftBlocks with fresh IDs
+    const clonedBlocks = (original.draftBlocks || []).map((b) => ({
+      ...b,
+      id: this._generateId("blk")
+    }));
+
+    const duplicated = {
+      ...original,
+      id: newId,
+      moduleId: newId,
+      title: `${original.title} (Copy)`,
+      status: "draft",
+      draftBlocks: clonedBlocks,
+      publishedBlocks: [],
+      publishedVersion: 1,
+      order: (original.order ?? 0) + 1,
+      createdAt: now,
+      updatedAt: now
+    };
+
+    return await this.saveModule(duplicated);
+  }
+
+  async deleteModule(moduleId) {
+    if (!moduleId) return false;
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    delete store[moduleId];
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+
+    if (this.firestore && this.firestoreSDK) {
+      try {
+        const { doc, deleteDoc } = this.firestoreSDK;
+        await deleteDoc(doc(this.firestore, COLLECTIONS.CMS_MODULES, moduleId));
+      } catch (err) {
+        console.warn(`[DatabaseService] Remote delete for module ${moduleId} failed:`, err.message);
+      }
+    }
+    return true;
+  }
+
+  async reorderModules(topicId, orderedIds) {
+    if (!Array.isArray(orderedIds)) return;
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MODULES);
+    orderedIds.forEach((id, idx) => {
+      if (store[id]) {
+        store[id].order = idx;
+        store[id].updatedAt = new Date().toISOString();
+        this._syncRemoteDoc(COLLECTIONS.CMS_MODULES, id, store[id]);
+      }
+    });
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MODULES, store);
+  }
+
+  // =================================================
+  // ADMIN CMS: MEDIA LIBRARY
+  // =================================================
+
+  async getMediaLibrary() {
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MEDIA);
+    return Object.values(store).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }
+
+  async saveMedia(asset) {
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MEDIA);
+    const id = asset.id || this._generateId("media");
+    const record = {
+      ...asset,
+      id,
+      createdAt: asset.createdAt || new Date().toISOString()
+    };
+    store[id] = record;
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MEDIA, store);
+    await this._syncRemoteDoc(COLLECTIONS.CMS_MEDIA, id, record);
+    return record;
+  }
+
+  async deleteMedia(mediaId) {
+    if (!mediaId) return false;
+    const store = this._getCollection(LOCAL_COLLECTIONS.CMS_MEDIA);
+    delete store[mediaId];
+    this._saveCollection(LOCAL_COLLECTIONS.CMS_MEDIA, store);
+
+    if (this.firestore && this.firestoreSDK) {
+      try {
+        const { doc, deleteDoc } = this.firestoreSDK;
+        await deleteDoc(doc(this.firestore, COLLECTIONS.CMS_MEDIA, mediaId));
+      } catch (err) {
+        console.warn(`[DatabaseService] Remote delete for media ${mediaId} failed:`, err.message);
+      }
+    }
+    return true;
+  }
+
+  // =================================================
+  // STUDENT RUNTIME: GET PUBLISHED CURRICULUM
+  // =================================================
+
+  async getPublishedCurriculumTopics() {
+    const topics = await this.getAdminTopics();
+    const publishedTopics = topics.filter((t) => t.status === "published");
+
+    const allModules = await this.getAdminModules();
+    const publishedModules = allModules.filter((m) => m.status === "published");
+
+    return publishedTopics.map((topic) => {
+      const topicModules = publishedModules
+        .filter((m) => m.topicId === topic.id)
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+      return {
+        id: topic.id,
+        title: topic.title,
+        description: topic.description,
+        icon: topic.icon,
+        category: topic.category,
+        modules: topicModules,
+        estimatedMinutes: topicModules.reduce((acc, m) => acc + (m.estimatedMinutes || 20), 0) || 45,
+        syllabus: topicModules.map((m) => m.title),
+        concepts: topicModules.map((m) => m.title)
+      };
+    });
   }
 }
 

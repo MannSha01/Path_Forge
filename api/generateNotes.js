@@ -3,7 +3,7 @@
 // Compiles structured lesson notes, definitions & interview prep
 // ===================================================
 
-function resolveModel(modelEnv, defaultModel = "gemini-3.5-flash-lite") {
+function resolveModel(modelEnv, defaultModel = "gemini-1.5-flash") {
   if (!modelEnv) return defaultModel;
   return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
 }
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const model = resolveModel(process.env.AI_FAST_MODEL || process.env.AI_MODEL, "gemini-3.5-flash-lite");
+  const model = resolveModel(process.env.AI_FAST_MODEL || process.env.AI_MODEL, "gemini-1.5-flash");
 
   try {
     const prompt = `You are the Path Forge AI Study Notes Synthesizer.

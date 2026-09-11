@@ -1,7 +1,4 @@
-// ===================================================
-// PATH FORGE - LESSON VIEWER COMPONENT (SCHEMA V2)
-// In-depth concept explanation, structured sections, code examples & interview points
-// ===================================================
+import { ContentRenderer } from "../content/contentRenderer.js";
 
 /**
  * Escapes HTML characters for safe code rendering.
@@ -24,6 +21,8 @@ function escapeHTML(str) {
  * @returns {string}
  */
 export function renderLessonContent(lesson) {
+  const blocks = lesson.blocks || lesson.publishedBlocks || lesson.draftBlocks || null;
+
   const sections = lesson.sections || [
     {
       heading: "Concept Overview",
@@ -38,46 +37,9 @@ export function renderLessonContent(lesson) {
     language: "javascript"
   } : null);
 
-  return `
-    <div class="space-y-6 text-left">
-      <!-- Header Banner -->
-      <div class="space-y-3 border-b border-slate-800 pb-5">
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <div class="flex items-center gap-2">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
-              ${lesson.topic || "Core Topic"}
-            </span>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
-              <i data-lucide="clock" class="w-3 h-3"></i>
-              <span>${lesson.estimatedMinutes || 30} Min Study</span>
-            </span>
-          </div>
-          <span class="text-xs text-slate-400 font-medium">Topic Learning Mode</span>
-        </div>
-
-        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">${lesson.title}</h2>
-        <div class="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-xs sm:text-sm text-indigo-200 font-medium flex items-start gap-2.5">
-          <i data-lucide="target" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
-          <div>
-            <span class="font-bold text-cyan-300">Core Objective:</span> ${lesson.objective || "Master core mechanisms and architectural patterns."}
-          </div>
-        </div>
-
-        <!-- Subtle Background Status Indicators -->
-        <div class="flex items-center flex-wrap gap-2.5 pt-1 text-[11px]">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Lesson ready
-          </span>
-          <span id="lesson-assessment-indicator" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 text-slate-300 border border-slate-700/60 font-medium transition-all">
-            <span id="lesson-assessment-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            <span id="lesson-assessment-text">Generating assessment...</span>
-          </span>
-          <span id="lesson-next-topic-indicator" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
-            <i data-lucide="sparkles" class="w-3 h-3 text-indigo-400"></i> Next topic prepared
-          </span>
-        </div>
-      </div>
-
+  const renderedBody = Array.isArray(blocks) && blocks.length > 0
+    ? ContentRenderer.render(blocks)
+    : `
       <!-- Structured Sections -->
       <div class="space-y-5">
         ${sections
@@ -139,6 +101,50 @@ export function renderLessonContent(lesson) {
       `
           : ""
       }
+    `;
+
+  return `
+    <div class="space-y-6 text-left">
+      <!-- Header Banner -->
+      <div class="space-y-3 border-b border-slate-800 pb-5">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+              ${lesson.topic || "Core Topic"}
+            </span>
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+              <i data-lucide="clock" class="w-3 h-3"></i>
+              <span>${lesson.estimatedMinutes || 30} Min Study</span>
+            </span>
+          </div>
+          <span class="text-xs text-slate-400 font-medium">Topic Learning Mode</span>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">${lesson.title}</h2>
+        <div class="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-xs sm:text-sm text-indigo-200 font-medium flex items-start gap-2.5">
+          <i data-lucide="target" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
+          <div>
+            <span class="font-bold text-cyan-300">Core Objective:</span> ${lesson.objective || "Master core mechanisms and architectural patterns."}
+          </div>
+        </div>
+
+        <!-- Subtle Background Status Indicators -->
+        <div class="flex items-center flex-wrap gap-2.5 pt-1 text-[11px]">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Lesson ready
+          </span>
+          <span id="lesson-assessment-indicator" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 text-slate-300 border border-slate-700/60 font-medium transition-all">
+            <span id="lesson-assessment-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span id="lesson-assessment-text">Generating assessment...</span>
+          </span>
+          <span id="lesson-next-topic-indicator" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
+            <i data-lucide="sparkles" class="w-3 h-3 text-indigo-400"></i> Next topic prepared
+          </span>
+        </div>
+      </div>
+
+      <!-- Main Lesson Body (Blocks / Sections) -->
+      ${renderedBody}
 
       <!-- Two-Column Key Principles & Common Traps -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">

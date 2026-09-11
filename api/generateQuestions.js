@@ -5,7 +5,7 @@
 
 import { buildQuestionPrompt } from "../src/services/ai/prompts/questionPrompt.js";
 
-function resolveModel(modelEnv, defaultModel = "gemini-3.6-flash") {
+function resolveModel(modelEnv, defaultModel = "gemini-1.5-flash") {
   if (!modelEnv) return defaultModel;
   return modelEnv.startsWith("gemini-") ? modelEnv : `gemini-${modelEnv}`;
 }
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "topicTitle or coveredTopics is required." });
   }
 
-  const model = resolveModel(process.env.AI_MODEL, "gemini-3.6-flash");
+  const model = resolveModel(process.env.AI_MODEL, "gemini-1.5-flash");
   const expectedCount = assessmentType === "cumulative" ? Math.max(5, Math.min(6, questionCount || 5)) : 3;
 
   const prompt = buildQuestionPrompt({

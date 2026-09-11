@@ -7,6 +7,7 @@ import { defaultGeminiProvider } from "./providers/geminiProvider.js";
 import { getTopicById } from "../../data/curriculum.js";
 import { evaluateInitialSkills } from "../learning/assessmentEngine.js";
 import { getDifficultyDistribution } from "./prompts/questionPrompt.js";
+import { databaseService } from "../database/databaseService.js";
 
 class AIService {
   constructor(provider = defaultGeminiProvider) {
@@ -20,7 +21,19 @@ class AIService {
    */
   async analyzeGoal(goalData) {
     try {
-      const response = await this.provider.callEndpoint("/api/analyzeGoal", goalData);
+      let adminTopics = [];
+      try {
+        adminTopics = await databaseService.getPublishedCurriculumTopics();
+      } catch (e) {
+        // Fallback to empty if offline
+      }
+
+      const payload = {
+        ...goalData,
+        adminTopics
+      };
+
+      const response = await this.provider.callEndpoint("/api/analyzeGoal", payload);
       if (response && response.analysis) {
         return response.analysis;
       }
@@ -102,6 +115,42 @@ class AIService {
       difficulty: topic?.difficulty || (userMastery >= 75 ? "hard" : userMastery >= 45 ? "medium" : "easy"),
       jobRequirements: context.jobRequirements || ""
     };
+
+    // Priority 1: Check for published Admin CMS module notes to teach directly from admin content
+    try {
+      const adminModules = await databaseService.getAdminModules(topicId);
+      const activeMod = adminModules.find((m) => m.status === "published") || adminModules[0];
+      if (activeMod && (activeMod.publishedBlocks?.length > 0 || activeMod.draftBlocks?.length > 0)) {
+        const blocks = activeMod.publishedBlocks?.length > 0 ? activeMod.publishedBlocks : activeMod.draftBlocks;
+        const sections = blocks.map((b) => {
+          const heading = b.data?.heading || b.data?.title || (b.type ? b.type.toUpperCase() : "Section");
+          const content = b.data?.content || b.data?.text || b.data?.code || (typeof b.data === "string" ? b.data : JSON.stringify(b.data || {}));
+          const examples = Array.isArray(b.data?.examples) ? b.data.examples : (b.data?.code ? [b.data.code] : []);
+          return { heading, content, examples };
+        });
+
+        return {
+          topic: fallbackTitle,
+          title: activeMod.title || `Mastering ${fallbackTitle}`,
+          estimatedMinutes: activeMod.estimatedMinutes || 30,
+          objective: activeMod.description || `Study admin notes for ${fallbackTitle}.`,
+          sections: sections.length > 0 ? sections : [{ heading: "Overview", content: activeMod.description || "Admin notes content", examples: [] }],
+          keyPoints: [activeMod.title, "Admin Portal Notes", "Core Concept"],
+          commonMistakes: ["Skipping core notes principles", "Neglecting edge case constraints"],
+          practicalExample: {
+            description: `Admin Module Practical Notes for ${activeMod.title}`,
+            code: blocks.find((b) => b.type === "code")?.data?.code || `// ${activeMod.title} Notes Demonstration\nconsole.log("Teaching from Admin Notes");`,
+            language: "javascript"
+          },
+          interviewPoints: [
+            `Explain the architectural concepts outlined in ${activeMod.title}.`,
+            `How does ${activeMod.title} apply in production environments?`
+          ]
+        };
+      }
+    } catch (cmsErr) {
+      console.warn("Could not load published admin module for lesson:", cmsErr.message);
+    }
 
     try {
       const response = await this.provider.callEndpoint("/api/generateLesson", payload);

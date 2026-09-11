@@ -4,7 +4,7 @@
 // ===================================================
 
 import { PATHWAYS_DATA } from "./data/pathways.js";
-import { getTopicsForRole, CURRICULUM_TOPICS } from "./data/curriculum.js";
+import { getTopicsForRole, CURRICULUM_TOPICS, registerDynamicTopic } from "./data/curriculum.js";
 import { authService } from "./services/auth/authService.js";
 import { databaseService } from "./services/database/databaseService.js";
 import { aiService } from "./services/ai/aiService.js";
@@ -28,6 +28,8 @@ import { renderNotesList } from "./components/notes/notesViewer.js";
 import { initQuiz, openQuizModal } from "./components/quiz/quiz.js";
 import { initAiAdvisor, openAIAdvisor } from "./components/aiAdvisor.js";
 import { createPathwayCard } from "./components/pathwayCard.js";
+import { AdminPortal } from "./components/admin/adminPortal.js";
+import { AdminAuthModal } from "./components/admin/adminAuthModal.js";
 
 // --- GLOBAL APPLICATION STATE ---
 let currentUser = null;
@@ -36,6 +38,7 @@ let currentSkillProfile = {};
 let currentSchedule = null;
 let activeView = "landing";
 let learningSession = null;
+let adminPortal = null;
 
 // --- VIEW STATE MACHINE ---
 
@@ -49,7 +52,8 @@ export function switchView(viewName) {
     learning: $("#view-learning"),
     notes: $("#view-notes"),
     roles: $("#view-roles"),
-    roadmap: $("#view-roadmap")
+    roadmap: $("#view-roadmap"),
+    admin: $("#view-admin")
   };
 
   Object.entries(views).forEach(([name, el]) => {
@@ -66,7 +70,7 @@ export function switchView(viewName) {
   const backBtn = $("#nav-back-btn");
   const backText = $("#back-btn-text");
 
-  if (viewName === "landing") {
+  if (viewName === "landing" || viewName === "admin") {
     hide(backBtn);
   } else {
     show(backBtn);
@@ -90,6 +94,17 @@ async function refreshActiveSchedule() {
   // Fallback to all curriculum topics if role is custom
   if (candidateTopics.length === 0) {
     candidateTopics = Object.values(CURRICULUM_TOPICS).slice(0, 8);
+  }
+
+  // Dynamically merge all published topics from the Admin CMS
+  try {
+    const publishedCmsTopics = await databaseService.getPublishedCurriculumTopics();
+    if (publishedCmsTopics && publishedCmsTopics.length > 0) {
+      publishedCmsTopics.forEach((t) => registerDynamicTopic(t));
+      candidateTopics = [...publishedCmsTopics, ...candidateTopics];
+    }
+  } catch (err) {
+    console.warn("[App] Error loading published CMS topics:", err);
   }
 
   // Fetch authoritative completed topics from backend database
@@ -360,9 +375,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Auth State Listener
-  authService.onAuthStateChanged(async (user) => {
-    currentUser = user;
+  // Handles 3 states:
+  //   isLoading=true           → Firebase resolving — do nothing yet
+  //   user!=null, loading=false → Authenticated — load user data
+  //   user==null, loading=false → Unauthenticated — show landing
+  let _lastAuthUid = undefined; // undefined = not yet seen any auth state
+  authService.onAuthStateChanged(async (user, isLoading) => {
+    if (isLoading) {
+      // Firebase is still determining auth state — do not act yet.
+      // This prevents redirect flickering and stale-user Firestore queries.
+      return;
+    }
+
     const uid = user ? (user.uid || user.userId) : null;
+
+    // Only reload data if the UID has actually changed
+    // (Prevents duplicate Firestore queries from multiple onAuthStateChanged fires)
+    if (uid === _lastAuthUid) return;
+    _lastAuthUid = uid;
+
+    currentUser = user;
+
     if (uid) {
       currentGoal = await databaseService.getGoalByUserId(uid);
       currentSkillProfile = await databaseService.getSkillProfile(uid);
@@ -426,11 +459,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Initialize Modals & Features
+  // Initialize Login Modal
+  // onLoginSuccess is called after a DESKTOP POPUP login completes.
+  // For mobile/redirect flows, onAuthStateChanged handles the result.
+  // We deduplicate by checking if _lastAuthUid already matches.
   initLoginModal({
     onLoginSuccess: async (user) => {
-      currentUser = user;
+      if (!user) return; // Redirect flow — onAuthStateChanged will handle it
       const uid = user ? (user.uid || user.userId) : null;
+      if (!uid) return;
+
+      // Only navigate if onAuthStateChanged hasn't already handled this UID
+      // (avoids duplicate Firestore loads on desktop popup)
+      if (_lastAuthUid === uid) {
+        // Data already loaded by onAuthStateChanged — just navigate
+        if (currentGoal) {
+          const journey = await databaseService.getJourneyState(uid);
+          if (journey && journey.currentTopicId) {
+            switchView("landing");
+            refreshHomeHero(journey);
+          } else {
+            switchView("dashboard");
+            await loadDashboard();
+          }
+        } else {
+          switchView("goal");
+        }
+        return;
+      }
+
+      // Data not yet loaded — load it now
+      currentUser = user;
       currentGoal = await databaseService.getGoalByUserId(uid);
       currentSkillProfile = await databaseService.getSkillProfile(uid);
       const journey = await databaseService.getJourneyState(uid);
@@ -442,6 +501,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
       LocalStorageService.setUserCompletedTopics(uid, completedMap);
+      _lastAuthUid = uid;
 
       if (currentGoal) {
         await refreshActiveSchedule();
@@ -522,6 +582,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Start on Landing View
-  switchView("landing");
+  // --- ADMIN PORTAL INITIALIZATION & ROUTING ---
+  async function launchAdminPortal() {
+    const session = AdminAuthModal.getActiveAdminSession();
+    const isValid = await AdminAuthModal.verifySession(session);
+
+    if (isValid) {
+      switchView("admin");
+      if (!adminPortal) {
+        adminPortal = new AdminPortal({
+          containerId: "#admin-portal-container",
+          onExitToStudent: () => {
+            switchView("landing");
+            window.location.hash = "";
+          }
+        });
+      }
+      await adminPortal.init();
+    } else {
+      new AdminAuthModal({
+        onAuthSuccess: async () => {
+          await launchAdminPortal();
+        }
+      }).open();
+    }
+  }
+
+  // Admin access link (subtle bottom-right link)
+  const adminLink = $("#admin-login-link");
+  if (adminLink) {
+    on(adminLink, "click", (e) => {
+      e.preventDefault();
+      launchAdminPortal();
+    });
+  }
+
+  // Hash route listener (#admin)
+  window.addEventListener("hashchange", () => {
+    if (window.location.hash === "#admin") {
+      launchAdminPortal();
+    }
+  });
+
+  // Start View
+  if (window.location.hash === "#admin" || window.location.pathname === "/admin") {
+    launchAdminPortal();
+  } else {
+    switchView("landing");
+  }
 });

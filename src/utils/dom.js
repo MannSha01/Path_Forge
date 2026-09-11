@@ -63,3 +63,18 @@ export function refreshLucide() {
     window.lucide.createIcons();
   }
 }
+
+/**
+ * Escape a string for safe insertion into HTML.
+ * @param {string} str
+ * @returns {string}
+ */
+export function escapeHTML(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
