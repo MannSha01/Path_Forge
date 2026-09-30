@@ -71,21 +71,21 @@ export function renderAdaptiveRoadmap({
     const isCurrent = item.status === "current" && !isCompleted;
     const isAdapted = item.status === "adapted" || item.adapted || item.status === "needs_revision";
 
-    let stationRing = "border-sky-300 bg-sky-50 text-sky-700";
-    let accentBorder = "border-l-4 border-l-sky-400";
-    let badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200">Scheduled Ahead</span>`;
-    let cardTint = "bg-white";
+    let stationRing = "border-teal-300 bg-teal-50 text-teal-700";
+    let accentBorder = "border-l-4 border-l-teal-500";
+    let badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-50 text-teal-800 border border-teal-200">Scheduled Ahead</span>`;
+    let cardTint = "bg-teal-50/20";
 
     if (isCompleted) {
       stationRing = "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-500/20";
       accentBorder = "border-l-4 border-l-emerald-500";
-      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Completed</span>`;
-      cardTint = "bg-emerald-50/20";
+      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Completed</span>`;
+      cardTint = "bg-emerald-50/30";
     } else if (isCurrent) {
-      stationRing = "border-indigo-600 bg-indigo-600 text-white ring-4 ring-indigo-100 shadow-md shadow-indigo-600/30";
-      accentBorder = "border-l-4 border-l-indigo-600";
-      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200 animate-pulse font-extrabold">You Are Here</span>`;
-      cardTint = "bg-indigo-50/40 ring-1 ring-indigo-500/10";
+      stationRing = "border-teal-600 bg-teal-600 text-white ring-4 ring-teal-100 shadow-md shadow-teal-600/30";
+      accentBorder = "border-l-4 border-l-teal-600";
+      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-900 border border-teal-300 animate-pulse font-extrabold">You Are Here</span>`;
+      cardTint = "bg-teal-50/70 ring-1 ring-teal-500/20";
     } else if (isAdapted) {
       stationRing = "border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-500/20";
       accentBorder = "border-l-4 border-l-amber-500";
@@ -106,7 +106,7 @@ export function renderAdaptiveRoadmap({
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <h4 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-teal-600 transition">
                 ${item.title}
               </h4>
               ${badgeHtml}
@@ -118,14 +118,14 @@ export function renderAdaptiveRoadmap({
 
           <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
             <label class="flex items-center gap-1.5 cursor-pointer text-xs text-slate-500 hover:text-slate-700 select-none mr-2">
-              <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 accent-indigo-600 cursor-pointer" ${isCompleted ? "checked" : ""} />
+              <input type="checkbox" class="w-4 h-4 rounded text-teal-600 accent-teal-600 cursor-pointer" ${isCompleted ? "checked" : ""} />
               <span class="text-[11px] font-medium hidden sm:inline">Done</span>
             </label>
             <button
               class="launch-lesson-btn px-3.5 py-1.5 ${
                 isCurrent
-                  ? "bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xs"
-                  : "bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 font-semibold"
+                  ? "bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-xs"
+                  : "bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 font-semibold"
               } text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer active:scale-95"
             >
               <i data-lucide="${isCurrent ? "play" : "book-open"}" class="w-3.5 h-3.5"></i>

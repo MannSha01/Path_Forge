@@ -91,54 +91,10 @@ export function initConstellationCanvas(canvasId = "fx-canvas") {
 }
 
 /**
- * Initializes the glowing custom cursor dot & follower ring.
+ * Custom cursor disabled per user preference.
  */
 export function initCustomCursor() {
-  if (document.getElementById("custom-cursor-dot")) return;
-
-  const dot = document.createElement("div");
-  dot.id = "custom-cursor-dot";
-  const ring = document.createElement("div");
-  ring.id = "custom-cursor-ring";
-
-  document.body.appendChild(dot);
-  document.body.appendChild(ring);
-
-  let mouseX = -100;
-  let mouseY = -100;
-  let ringX = -100;
-  let ringY = -100;
-
-  window.addEventListener("mousemove", (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    dot.style.left = `${mouseX}px`;
-    dot.style.top = `${mouseY}px`;
-  });
-
-  function animateRing() {
-    ringX += (mouseX - ringX) * 0.2;
-    ringY += (mouseY - ringY) * 0.2;
-    ring.style.left = `${ringX}px`;
-    ring.style.top = `${ringY}px`;
-    requestAnimationFrame(animateRing);
-  }
-  animateRing();
-
-  window.addEventListener("mouseover", (e) => {
-    const target = e.target;
-    if (
-      target &&
-      typeof target.closest === "function" &&
-      target.closest("button, a, input, label, select, [role='button'], .quiz-opt-btn, .step-checkbox")
-    ) {
-      ring.classList.add("cursor-hover");
-      dot.classList.add("cursor-hover");
-    } else {
-      ring.classList.remove("cursor-hover");
-      dot.classList.remove("cursor-hover");
-    }
-  });
+  // Custom cursor removed — using standard native cursor
 }
 
 /**

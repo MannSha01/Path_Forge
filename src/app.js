@@ -12,7 +12,6 @@ import { generateSchedule } from "./services/scheduler/scheduler.js";
 import { progressService } from "./services/learning/progressService.js";
 import { LocalStorageService } from "./services/storage/localStorageService.js";
 import { $, $$, show, hide, refreshLucide, on } from "./utils/dom.js";
-import { initConstellationCanvas, initCustomCursor } from "./utils/animations.js";
 
 // Components
 import { initLoginModal, openLoginModal } from "./components/auth/login.js";
@@ -332,9 +331,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Expose legacy globals for external buttons
   window.openAIAdvisor = openAIAdvisor;
   window.selectCategory = (cat) => showCategoryRoles(cat);
-
-  // Initialize visual systems
-  initCustomCursor();
 
   // Initialize Progressive Web App & Offline capabilities
   initPWA();
