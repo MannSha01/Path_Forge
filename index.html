@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +16,7 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#4f46e5" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Path Forge" />
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
   <link rel="apple-touch-icon" href="icons/icon.svg" />
@@ -26,12 +26,12 @@
   <link rel="stylesheet" href="src/styles/components.css" />
   <link rel="stylesheet" href="src/styles/animations.css" />
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans antialiased bg-tech-grid selection:bg-indigo-100 selection:text-indigo-900 flex relative overflow-x-hidden">
 
-  <!-- Dynamic Interactive Constellation Background Canvas -->
-  <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+  <!-- Dynamic Interactive Background Canvas -->
+  <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-20"></canvas>
 
-  <!-- Splash Screen Animation Overlay -->
+  <!-- Splash Screen Animation Overlay (Nordic Clean) -->
   <div class="splash-screen" id="splash">
     <div class="brand-container">
       <div class="logo-icon">
@@ -53,89 +53,133 @@
     </div>
   </div>
 
-  <!-- Ambient Glow Backdrops -->
-  <div class="fixed top-0 left-1/4 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none animate-glow"></div>
-  <div class="fixed bottom-0 right-1/4 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[150px] pointer-events-none animate-glow" style="animation-delay: 4s;"></div>
-
-  <div class="relative z-10 flex flex-col min-h-screen">
-    
-    <!-- Top Bar Navigation -->
-    <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-2xl sticky top-0 z-40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-        
-        <!-- Logo -->
-        <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group select-none shrink-0">
-          <div class="p-2 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 rounded-xl shadow-lg shadow-indigo-500/20 ring-1 ring-white/20 group-hover:scale-105 transition duration-300">
-            <i data-lucide="zap" class="w-5 h-5 text-white"></i>
-          </div>
-          <div>
-            <h1 class="text-base sm:text-lg font-black tracking-wider bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent leading-none">
-              PATH FORGE
-            </h1>
-            <p class="text-[9px] sm:text-[10px] text-slate-400 font-semibold tracking-wider mt-0.5 uppercase">Adaptive Career Platform</p>
-          </div>
+  <!-- ================= COLLAPSIBLE LEFT SIDEBAR ================= -->
+  <aside id="sidebar-nav" class="nordic-sidebar w-64 shrink-0 h-screen sticky top-0 flex flex-col justify-between p-4 z-40 hidden md:flex select-none">
+    <!-- Brand & Header -->
+    <div class="space-y-6">
+      <div id="logo-btn" class="flex items-center gap-3 cursor-pointer group px-2 py-1">
+        <div class="p-2 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-500 rounded-xl shadow-md shadow-indigo-600/20 text-white group-hover:scale-105 transition duration-300">
+          <i data-lucide="zap" class="w-5 h-5"></i>
         </div>
+        <div class="sidebar-text truncate">
+          <h1 class="text-base font-black tracking-wider text-slate-900 leading-none">PATH FORGE</h1>
+          <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">Adaptive Career OS</p>
+        </div>
+      </div>
 
-        <!-- Navigation Links -->
-        <nav class="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800/80 text-xs">
-          <button id="nav-goal-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="target" class="w-3.5 h-3.5 text-indigo-400"></i> Set Goal
-          </button>
-          <button id="nav-dashboard-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 text-cyan-400"></i> Dashboard
-          </button>
-          <button id="nav-roadmap-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="git-branch" class="w-3.5 h-3.5 text-emerald-400"></i> Roadmap
-          </button>
-          <button id="nav-notes-btn" class="px-3 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 font-semibold transition flex items-center gap-1.5 cursor-pointer">
-            <i data-lucide="book-marked" class="w-3.5 h-3.5 text-amber-400"></i> Notes
-          </button>
-        </nav>
+      <!-- Navigation Menu -->
+      <nav class="space-y-1 text-xs font-semibold">
+        <button id="nav-dashboard-btn" class="nordic-sidebar-item w-full px-3 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer">
+          <i data-lucide="layout-dashboard" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+          <span class="sidebar-text">Dashboard</span>
+        </button>
 
-        <!-- Right Side Controls & Auth -->
-        <div class="flex items-center gap-2 sm:gap-2.5">
-          <!-- Back Button (conditional) -->
-          <button id="nav-back-btn" class="hidden px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold rounded-xl border border-slate-800 transition items-center gap-1.5 active:scale-95 cursor-pointer">
+        <button id="nav-roadmap-btn" class="nordic-sidebar-item w-full px-3 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer">
+          <i data-lucide="git-branch" class="w-4 h-4 text-sky-600 shrink-0"></i>
+          <span class="sidebar-text">Subway Roadmap</span>
+        </button>
+
+        <button id="nav-flashcards-btn" class="nordic-sidebar-item w-full px-3 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer">
+          <i data-lucide="layers" class="w-4 h-4 text-amber-600 shrink-0"></i>
+          <span class="sidebar-text">Flashcards (SM-2)</span>
+        </button>
+
+        <button id="nav-goal-btn" class="nordic-sidebar-item w-full px-3 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer">
+          <i data-lucide="target" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+          <span class="sidebar-text">Goal & ATS Polish</span>
+        </button>
+
+        <button id="nav-notes-btn" class="nordic-sidebar-item w-full px-3 py-2.5 rounded-xl flex items-center gap-3 cursor-pointer">
+          <i data-lucide="book-marked" class="w-4 h-4 text-purple-600 shrink-0"></i>
+          <span class="sidebar-text">Study Notes & PDF</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Bottom Sidebar Section -->
+    <div class="space-y-3 pt-4 border-t border-slate-200">
+      <!-- Streak Badge -->
+      <div class="sidebar-text px-3 py-2 rounded-xl bg-amber-50 border border-amber-200/80 flex items-center justify-between text-xs text-amber-900 font-bold">
+        <span class="flex items-center gap-1.5">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-amber-600 fill-amber-500"></i> Daily Streak
+        </span>
+        <span class="font-mono text-amber-700 font-black">5 Days</span>
+      </div>
+
+      <!-- Collapse Rail Toggle -->
+      <div class="flex items-center justify-between px-2">
+        <span class="sidebar-text text-[10px] text-slate-400 font-bold uppercase">Nordic Slate UI</span>
+        <button id="sidebar-toggle-btn" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition cursor-pointer" title="Toggle Sidebar">
+          <i data-lucide="panel-left-close" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <div class="flex-grow flex flex-col min-w-0 min-h-screen relative z-10 transition-all duration-300" id="main-content-wrap">
+    
+    <!-- Top Control Bar -->
+    <header class="border-b border-slate-200/90 bg-white/80 backdrop-blur-md sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+        
+        <!-- Left: Mobile Menu & Breadcrumb -->
+        <div class="flex items-center gap-2.5">
+          <button id="sidebar-mobile-toggle" class="md:hidden p-2 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+            <i data-lucide="menu" class="w-4 h-4"></i>
+          </button>
+          
+          <button id="nav-back-btn" class="hidden px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition items-center gap-1.5 active:scale-95 cursor-pointer">
             <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> <span id="back-btn-text">Back</span>
           </button>
+        </div>
 
+        <!-- Center: Command Palette Trigger Bar -->
+        <button id="cmd-palette-trigger" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 border border-slate-200 text-xs text-slate-400 hover:text-slate-600 transition w-56 sm:w-80 cursor-pointer group">
+          <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 group-hover:text-indigo-600"></i>
+          <span class="flex-grow text-left truncate text-slate-500 font-medium">Search topics, actions...</span>
+          <kbd class="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] text-slate-500 font-mono shadow-xs">⌘K</kbd>
+        </button>
+
+        <!-- Right Side Controls & Auth -->
+        <div class="flex items-center gap-2">
           <!-- Ask AI Advisor Button -->
-          <button id="nav-ai-btn" class="px-3 py-1.5 bg-gradient-to-r from-indigo-600/30 to-cyan-600/30 hover:from-indigo-600/50 hover:to-cyan-600/50 text-indigo-300 font-bold text-xs rounded-xl border border-indigo-500/40 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
-            <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-400"></i> <span class="hidden sm:inline">Ask </span>AI
+          <button id="nav-ai-btn" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-xl border border-indigo-200 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
+            <i data-lucide="bot" class="w-3.5 h-3.5 text-indigo-600"></i> <span class="hidden sm:inline">Ask </span>AI
           </button>
 
           <!-- Career Quiz Trigger -->
-          <button id="trigger-quiz-btn" class="hidden sm:flex px-3 py-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 font-bold text-xs rounded-xl border border-slate-800 transition cursor-pointer items-center gap-1.5 active:scale-95">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> <span>Quiz</span>
+          <button id="trigger-quiz-btn" class="hidden sm:flex px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-200 transition cursor-pointer items-center gap-1.5 active:scale-95">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i> <span>Quiz</span>
           </button>
 
           <!-- PWA Install Button (revealed when installable) -->
-          <button id="pwa-install-btn" class="hidden px-2.5 sm:px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs rounded-xl shadow-md shadow-emerald-600/20 transition items-center gap-1.5 active:scale-95 cursor-pointer" title="Install Path Forge App">
+          <button id="pwa-install-btn" class="hidden px-2.5 sm:px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-xs transition items-center gap-1.5 active:scale-95 cursor-pointer" title="Install Path Forge App">
             <i data-lucide="download" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Install App</span>
           </button>
 
           <!-- Login Button (when unauthenticated) -->
-          <button id="header-login-btn" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-md shadow-indigo-600/30 transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
+          <button id="header-login-btn" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-1.5 active:scale-95 cursor-pointer">
             <i data-lucide="log-in" class="w-3.5 h-3.5"></i> <span>Sign In</span>
           </button>
 
           <!-- User Menu Container (when authenticated) -->
           <div id="user-menu-container" class="hidden flex items-center gap-2">
-            <div id="user-profile-trigger" class="flex items-center gap-2.5 bg-slate-900/80 border border-slate-800 hover:border-indigo-500/50 px-3 py-1.5 rounded-xl cursor-pointer transition">
-              <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=PathForge" alt="User Avatar" class="w-6 h-6 rounded-full border border-indigo-400/40 shrink-0" />
+            <div id="user-profile-trigger" class="flex items-center gap-2 bg-slate-100 border border-slate-200 hover:border-indigo-400 px-3 py-1.5 rounded-xl cursor-pointer transition">
+              <img id="user-avatar-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=PathForge" alt="User Avatar" class="w-6 h-6 rounded-full border border-indigo-200 shrink-0" />
               <div class="flex flex-col text-left leading-tight hidden sm:flex">
-                <span id="user-name-display" class="text-xs font-bold text-slate-100 max-w-[150px] truncate">Candidate</span>
-                <span id="user-email-display" class="text-[10px] text-indigo-400 font-mono max-w-[150px] truncate">candidate@domain.com</span>
+                <span id="user-name-display" class="text-xs font-bold text-slate-900 max-w-[140px] truncate">Candidate</span>
+                <span id="user-email-display" class="text-[10px] text-indigo-600 font-mono max-w-[140px] truncate">candidate@domain.com</span>
               </div>
             </div>
-            <button id="user-signout-btn" class="p-2 bg-slate-900 hover:bg-red-500/20 text-slate-400 hover:text-red-400 border border-slate-800 rounded-xl transition cursor-pointer" title="Sign Out">
+            <button id="user-signout-btn" class="p-2 bg-slate-100 hover:bg-red-50 text-slate-500 hover:text-red-600 border border-slate-200 rounded-xl transition cursor-pointer" title="Sign Out">
               <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
             </button>
           </div>
 
           <!-- Credits Button -->
-          <button id="trigger-credits-btn" class="p-1.5 bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-white text-xs rounded-xl border border-slate-800 transition cursor-pointer" title="Credits">
-            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-400 fill-rose-400/20"></i>
+          <button id="trigger-credits-btn" class="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 text-xs rounded-xl border border-slate-200 transition cursor-pointer" title="Credits">
+            <i data-lucide="heart" class="w-3.5 h-3.5 text-rose-500 fill-rose-500/20"></i>
           </button>
         </div>
       </div>
@@ -147,25 +191,25 @@
       <!-- ================= VIEW 1: LANDING & HERO ================= -->
       <section id="view-landing" class="space-y-12 text-center transition-all duration-300">
         <div class="max-w-3xl mx-auto space-y-5">
-          <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold tracking-wide">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-400"></i> AI-Powered Adaptive Career Preparation
+          <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold tracking-wide">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-indigo-600"></i> AI-Powered Adaptive Career Preparation
           </span>
-          <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+          <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight">
             Stop Guessing. <br class="hidden sm:inline" />
-            <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">Forge Your Job Readiness</span>
+            <span class="text-indigo-600">Forge Your Job Readiness</span>
           </h2>
-          <p class="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Path Forge continuously analyzes your resume, diagnoses skill gaps against target roles, and generates a living, adaptive daily curriculum that reschedules in real time based on your test performance.
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto font-normal">
+            Path Forge continuously analyzes your resume, diagnoses skill gaps against target roles, and generates an adaptive daily curriculum that reschedules in real time based on your test performance.
           </p>
 
           <!-- Primary Hero CTAs -->
           <div id="hero-cta-container" class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-3">
-            <button id="hero-set-goal-btn" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold text-sm rounded-2xl shadow-xl shadow-indigo-600/30 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer">
+            <button id="hero-set-goal-btn" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-indigo-600/20 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2.5 cursor-pointer">
               <i data-lucide="target" class="w-4 h-4"></i>
               <span>SET YOUR GOAL</span>
             </button>
-            <button id="hero-take-quiz-btn" class="w-full sm:w-auto px-6 py-3.5 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white font-bold text-sm rounded-2xl border border-slate-800 hover:border-indigo-500/50 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95">
-              <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
+            <button id="hero-take-quiz-btn" class="w-full sm:w-auto px-6 py-3.5 bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-bold text-sm rounded-2xl border border-slate-200 shadow-xs transition flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+              <i data-lucide="sparkles" class="w-4 h-4 text-indigo-600"></i>
               <span>Take 1-Min Career Quiz</span>
             </button>
           </div>
@@ -173,38 +217,36 @@
 
         <!-- Domain Exploration Cards -->
         <div class="space-y-4 pt-4">
-          <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Or Explore Standard Baseline Roles</div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Explore Standard Baseline Roles</div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <!-- Tech Option -->
-            <button id="btn-select-tech" data-category="tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-indigo-500/20 cursor-pointer">
-              <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-indigo-600/15 rounded-full blur-3xl group-hover:bg-indigo-600/30 transition-all duration-500"></div>
+            <button id="btn-select-tech" data-category="tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-slate-200 cursor-pointer bg-white">
               <div class="relative z-10 space-y-3">
-                <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-indigo-500/20 transition duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center group-hover:scale-110 transition duration-300">
                   <i data-lucide="code-2" class="w-7 h-7"></i>
                 </div>
-                <h3 class="text-2xl font-black text-white group-hover:text-indigo-300 transition">Tech & Engineering</h3>
-                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+                <h3 class="text-2xl font-black text-slate-900 group-hover:text-indigo-600 transition">Tech & Engineering</h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                   Frontend, Backend, Fullstack, AI/ML, Data Analytics, Cloud & Cybersecurity tracks.
                 </p>
               </div>
-              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-400 group-hover:text-indigo-300 pt-4">
+              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-indigo-600 pt-4">
                 Explore Tech Tracks <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
               </div>
             </button>
 
             <!-- Non-Tech Option -->
-            <button id="btn-select-non-tech" data-category="non-tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-cyan-500/20 cursor-pointer">
-              <div class="absolute -right-12 -bottom-12 w-44 h-44 bg-cyan-600/15 rounded-full blur-3xl group-hover:bg-cyan-600/30 transition-all duration-500"></div>
+            <button id="btn-select-non-tech" data-category="non-tech" class="glass-card glass-card-hover group p-8 rounded-3xl text-left transition-all duration-300 relative overflow-hidden flex flex-col justify-between h-72 border border-slate-200 cursor-pointer bg-white">
               <div class="relative z-10 space-y-3">
-                <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 flex items-center justify-center group-hover:scale-110 group-hover:bg-cyan-500/20 transition duration-300">
+                <div class="w-14 h-14 rounded-2xl bg-sky-50 border border-sky-200 text-sky-600 flex items-center justify-center group-hover:scale-110 transition duration-300">
                   <i data-lucide="briefcase" class="w-7 h-7"></i>
                 </div>
-                <h3 class="text-2xl font-black text-white group-hover:text-cyan-300 transition">Non-Tech & Business</h3>
-                <p class="text-xs sm:text-sm text-slate-400 leading-relaxed font-medium">
+                <h3 class="text-2xl font-black text-slate-900 group-hover:text-sky-600 transition">Non-Tech & Business</h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                   Product Management, UI/UX Design, Digital Marketing, Business Analysis & Scrum tracks.
                 </p>
               </div>
-              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-cyan-400 group-hover:text-cyan-300 pt-4">
+              <div class="relative z-10 flex items-center gap-2 text-xs font-bold text-sky-600 pt-4">
                 Explore Non-Tech Tracks <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1.5 transition"></i>
               </div>
             </button>
@@ -215,27 +257,27 @@
       <!-- ================= VIEW 2: GOAL SETUP & GAP SUMMARY ================= -->
       <section id="view-goal" class="hidden space-y-8 transition-all duration-300 max-w-4xl mx-auto w-full">
         <!-- Goal Form Container -->
-        <div id="goal-form-wrapper" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-slate-800 text-left">
-          <div class="border-b border-slate-800 pb-4">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+        <div id="goal-form-wrapper" class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 border border-slate-200 text-left bg-white">
+          <div class="border-b border-slate-100 pb-4">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 uppercase tracking-wider">
               Step 1: Set Target Career Goal
             </span>
-            <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">Target Role & Skill Diagnosis</h2>
-            <p class="text-xs sm:text-sm text-slate-400 mt-1">Provide your target job details and resume for personalized AI gap analysis.</p>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-2">Target Role & Skill Diagnosis</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">Provide your target job details and resume for personalized AI gap analysis.</p>
           </div>
 
           <form id="goal-setup-form" class="space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Target Position -->
               <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Position *</label>
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Position *</label>
                 <input
                   type="text"
                   id="goal-position"
                   list="role-suggestions"
                   placeholder="e.g. Frontend Developer, Product Manager"
                   required
-                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition"
+                  class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none transition"
                 />
                 <datalist id="role-suggestions">
                   <option value="Frontend Developer" />
@@ -253,44 +295,44 @@
 
               <!-- Target Company -->
               <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Company</label>
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Company</label>
                 <input
                   type="text"
                   id="goal-company"
                   placeholder="e.g. Google, Stripe, or leave blank for industry standard"
-                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition"
+                  class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 placeholder-slate-400 outline-none transition"
                 />
               </div>
             </div>
 
             <!-- Job Description -->
             <div class="space-y-1.5">
-              <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Job Description (Optional)</label>
+              <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Job Description (Optional)</label>
               <textarea
                 id="goal-job-description"
                 rows="3"
                 placeholder="Paste key responsibilities or qualifications from job post..."
-                class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+                class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 outline-none transition resize-none"
               ></textarea>
             </div>
 
             <!-- Timeline & Daily Study Minutes -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Target Deadline *</label>
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Target Deadline *</label>
                 <input
                   type="date"
                   id="goal-deadline"
                   required
-                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white outline-none transition"
+                  class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 outline-none transition"
                 />
               </div>
 
               <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Daily Study Time *</label>
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Daily Study Time *</label>
                 <select
                   id="goal-daily-minutes"
-                  class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white outline-none transition"
+                  class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-slate-900 outline-none transition"
                 >
                   <option value="30">30 Minutes / day</option>
                   <option value="60" selected>1 Hour / day</option>
@@ -304,8 +346,8 @@
             <!-- Resume Upload / Paste -->
             <div class="space-y-2">
               <div class="flex items-center justify-between">
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider">Your Resume / Background (Optional)</label>
-                <label class="text-[11px] text-indigo-400 hover:text-indigo-300 cursor-pointer font-semibold flex items-center gap-1">
+                <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Your Resume / Background (Optional)</label>
+                <label class="text-[11px] text-indigo-600 hover:text-indigo-800 cursor-pointer font-semibold flex items-center gap-1">
                   <i data-lucide="upload" class="w-3 h-3"></i> Upload TXT/MD
                   <input type="file" id="goal-resume-file" accept=".txt,.md,.json" class="hidden" />
                 </label>
@@ -314,37 +356,36 @@
                 id="goal-resume-text"
                 rows="4"
                 placeholder="Paste your resume text or describe your current skills and past projects..."
-                class="w-full bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
+                class="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-slate-900 placeholder-slate-400 outline-none transition resize-none"
               ></textarea>
             </div>
 
-            <!-- Submit Button -->
             <button
               type="submit"
-              id="goal-submit-btn"
-              class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-extrabold text-xs rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              id="btn-analyze-goal"
+              class="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs sm:text-sm rounded-2xl shadow-lg shadow-indigo-600/20 transition cursor-pointer flex items-center justify-center gap-2 active:scale-95"
             >
-              <i data-lucide="zap" class="w-4 h-4 text-white"></i>
-              <span>Generate Adaptive Study Plan</span>
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>ANALYZE GOAL & GENERATE ADAPTIVE PLAN</span>
             </button>
           </form>
         </div>
 
-        <!-- Goal Summary / Gap Matrix (Populated by goalSummary.js) -->
+        <!-- Gap Summary Container (populated after AI analysis) -->
         <div id="goal-summary-container"></div>
       </section>
 
-      <!-- ================= VIEW 3: PERSONALIZED DASHBOARD ================= -->
-      <section id="view-dashboard" class="hidden space-y-8 transition-all duration-300 w-full">
+      <!-- ================= VIEW 3: LIVE PERSONALIZED DASHBOARD ================= -->
+      <section id="view-dashboard" class="hidden transition-all duration-300 w-full">
         <div id="dashboard-content"></div>
       </section>
 
-      <!-- ================= VIEW 4: ACTIVE LEARNING SESSION ================= -->
-      <section id="view-learning" class="hidden space-y-6 transition-all duration-300 w-full">
+      <!-- ================= VIEW 4: INTERACTIVE LEARNING SESSION STUDIO ================= -->
+      <section id="view-learning" class="hidden transition-all duration-300 w-full">
         <div id="learning-session-container"></div>
       </section>
 
-      <!-- ================= VIEW 5: STUDY NOTES ================= -->
+      <!-- ================= VIEW 5: STUDY NOTES & INTERVIEW PREP ================= -->
       <section id="view-notes" class="hidden space-y-6 transition-all duration-300 w-full">
         <div id="notes-list-view">
           <div id="notes-list-container"></div>
@@ -357,48 +398,48 @@
       <!-- ================= VIEW 6: ROLE SELECTION GRID ================= -->
       <section id="view-roles" class="hidden space-y-8 transition-all duration-300">
         <div class="text-center max-w-xl mx-auto space-y-3">
-          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-semibold">
+          <span id="role-category-badge" class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold">
             Standard Tracks
           </span>
-          <h2 id="role-category-title" class="text-3xl font-black text-white">Select Your Specific Role</h2>
-          <p class="text-slate-400 text-xs sm:text-sm">Explore standard curriculums or customize via Set Goal.</p>
+          <h2 id="role-category-title" class="text-3xl font-black text-slate-900">Select Your Specific Role</h2>
+          <p class="text-slate-500 text-xs sm:text-sm">Explore standard curriculums or customize via Set Goal.</p>
         </div>
         <div id="roles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pt-2"></div>
       </section>
 
       <!-- ================= VIEW 7: ADAPTIVE ROADMAP & TIMELINE ================= -->
       <section id="view-roadmap" class="hidden space-y-8 transition-all duration-300">
-        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-800">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-slate-200 bg-white">
           <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 relative z-10">
             <div>
-              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <span id="roadmap-domain-tag" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-2">
                 Active Schedule
               </span>
-              <h2 id="pathway-title" class="text-2xl sm:text-4xl font-black text-white tracking-tight">Adaptive Pathway</h2>
-              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl leading-relaxed">Dynamic schedule reflecting your live skill profile.</p>
+              <h2 id="pathway-title" class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight">Subway Adaptive Roadmap</h2>
+              <p id="pathway-desc" class="text-xs sm:text-sm text-slate-500 mt-2 max-w-xl leading-relaxed">Dynamic schedule reflecting your live skill profile.</p>
             </div>
 
             <!-- Progress Box -->
-            <div class="flex items-center gap-5 bg-slate-950/80 border border-slate-800/80 px-6 py-4 rounded-2xl self-stretch sm:self-auto justify-between shadow-inner">
+            <div class="flex items-center gap-5 bg-slate-50 border border-slate-200 px-6 py-4 rounded-2xl self-stretch sm:self-auto justify-between shadow-xs">
               <div>
-                <span id="progress-percent" class="text-3xl sm:text-4xl font-black bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">0%</span>
-                <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-0.5">Completed</p>
+                <span id="progress-percent" class="text-3xl sm:text-4xl font-black text-indigo-600">0%</span>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-0.5">Completed</p>
               </div>
-              <div id="trophy-container" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-600 transition-all duration-500">
+              <div id="trophy-container" class="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 transition-all duration-500">
                 <i data-lucide="trophy" class="w-6 h-6"></i>
               </div>
             </div>
           </div>
 
           <!-- Progress Bar -->
-          <div class="w-full bg-slate-950/90 rounded-full h-3 mt-6 p-0.5 border border-slate-800/80 overflow-hidden">
-            <div id="progress-bar" class="bg-gradient-to-r from-indigo-500 via-cyan-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_16px_rgba(99,102,241,0.6)]"></div>
+          <div class="w-full bg-slate-100 rounded-full h-3 mt-6 p-0.5 border border-slate-200 overflow-hidden">
+            <div id="progress-bar" class="bg-indigo-600 h-full rounded-full transition-all duration-500 w-0"></div>
           </div>
         </div>
 
-        <!-- Connected Timeline -->
+        <!-- Connected Timeline / Subway Rail -->
         <div class="relative pl-6 sm:pl-8">
-          <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-0.5 bg-gradient-to-b from-indigo-500 via-cyan-500/50 to-slate-800"></div>
+          <div class="absolute left-3 sm:left-4 top-4 bottom-4 w-1 bg-slate-200 rounded-full"></div>
           <div id="steps-container" class="space-y-6 relative"></div>
         </div>
       </section>
@@ -411,30 +452,30 @@
     </main>
 
     <!-- FLOATING AI BOT ACTION BUTTON (Bottom Right) -->
-    <button id="fab-ai-btn" class="fixed bottom-6 right-6 z-40 p-4 bg-gradient-to-tr from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white rounded-full shadow-2xl shadow-indigo-500/40 border border-white/20 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group cursor-pointer" title="Ask AI Advisor">
+    <button id="fab-ai-btn" class="fixed bottom-6 right-6 z-40 p-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-xl shadow-indigo-600/30 border border-indigo-500/20 transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group cursor-pointer" title="Ask AI Advisor">
       <i data-lucide="bot" class="w-6 h-6"></i>
       <span class="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-xs transition-all duration-500 ease-in-out text-xs font-bold pl-0 group-hover:pl-2">Ask AI Advisor</span>
     </button>
 
     <!-- Subtle Discreet Admin Access Link (Bottom-Right) -->
-    <div class="fixed bottom-1.5 right-3 z-30 opacity-30 hover:opacity-90 transition-opacity duration-300 pointer-events-auto">
-      <button id="admin-login-link" class="text-[10px] text-slate-500 hover:text-indigo-400 font-mono tracking-wider cursor-pointer select-none bg-transparent border-0 p-1">
-        Admin Login
+    <div class="fixed bottom-1.5 right-3 z-30 opacity-40 hover:opacity-100 transition-opacity duration-300 pointer-events-auto">
+      <button id="admin-login-link" class="text-[10px] text-slate-400 hover:text-indigo-600 font-mono tracking-wider cursor-pointer select-none bg-transparent border-0 p-1">
+        Admin Portal
       </button>
     </div>
 
     <!-- ================= MODALS ================= -->
 
     <!-- 1. GENERIC GOOGLE LOGIN PORTAL -->
-    <div id="auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="glass-card rounded-3xl max-w-sm w-full p-6 sm:p-8 space-y-6 shadow-2xl relative border border-slate-800 text-center">
+    <div id="auth-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-sm w-full p-6 sm:p-8 space-y-6 shadow-2xl relative border border-slate-200 text-center bg-white">
         <!-- Close button -->
-        <button id="close-auth-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white transition cursor-pointer">
+        <button id="close-auth-modal" class="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 transition cursor-pointer">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
 
         <!-- Google G Brand Emblem -->
-        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/10 border border-slate-100">
+        <div class="w-16 h-16 rounded-2xl bg-white flex items-center justify-center mx-auto shadow-md border border-slate-200">
           <svg class="w-8 h-8" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -444,8 +485,8 @@
         </div>
 
         <div class="space-y-1.5">
-          <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">Sign In with Google</h3>
-          <p class="text-xs text-slate-400 leading-relaxed max-w-[260px] mx-auto">
+          <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Sign In with Google</h3>
+          <p class="text-xs text-slate-500 leading-relaxed max-w-[260px] mx-auto font-normal">
             Sign in with your Google account to sync your adaptive study plan, skill profile, and notes.
           </p>
         </div>
@@ -454,7 +495,7 @@
         <button
           type="button"
           id="google-signin-btn"
-          class="w-full py-3.5 bg-white hover:bg-slate-100 text-slate-900 font-extrabold text-xs sm:text-sm rounded-xl shadow-xl transition flex items-center justify-center gap-3 cursor-pointer active:scale-95 border border-slate-200"
+          class="w-full py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-xs sm:text-sm rounded-xl shadow-xs transition flex items-center justify-center gap-3 cursor-pointer active:scale-95 border border-slate-200"
         >
           <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -465,18 +506,18 @@
           <span>Continue with Google</span>
         </button>
 
-        <p class="text-[10px] text-slate-500 leading-relaxed pt-2 border-t border-slate-800/60">
+        <p class="text-[10px] text-slate-400 leading-relaxed pt-2 border-t border-slate-100">
           Official Google OAuth integration powered by Firebase Authentication.
         </p>
       </div>
     </div>
 
     <!-- 2. USER PROFILE MODAL -->
-    <div id="profile-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="glass-card rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative border border-slate-800 text-left">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h3 class="text-sm font-bold text-white uppercase tracking-wider">Candidate Profile</h3>
-          <button id="close-profile-modal" class="p-1 rounded-lg text-slate-400 hover:text-white transition">
+    <div id="profile-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative border border-slate-200 text-left bg-white">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider">Candidate Profile</h3>
+          <button id="close-profile-modal" class="p-1 rounded-lg text-slate-400 hover:text-slate-700 transition cursor-pointer">
             <i data-lucide="x" class="w-4 h-4"></i>
           </button>
         </div>
@@ -484,24 +525,24 @@
         <div class="space-y-3 text-xs">
           <div>
             <span class="text-slate-400">Name:</span>
-            <div id="profile-modal-name" class="font-bold text-slate-200">Candidate</div>
+            <div id="profile-modal-name" class="font-bold text-slate-800">Candidate</div>
           </div>
           <div>
             <span class="text-slate-400">Email:</span>
-            <div id="profile-modal-email" class="font-mono text-slate-300">candidate@pathforge.dev</div>
+            <div id="profile-modal-email" class="font-mono text-slate-600">candidate@pathforge.dev</div>
           </div>
           <div>
             <span class="text-slate-400">Current Target Role:</span>
-            <div id="profile-modal-target" class="font-semibold text-indigo-300">Frontend Developer</div>
+            <div id="profile-modal-target" class="font-semibold text-indigo-600">Frontend Developer</div>
           </div>
           <div>
             <span class="text-slate-400">Skill Matrix:</span>
-            <div id="profile-modal-skills" class="font-semibold text-emerald-400">0 Tracked Skills</div>
+            <div id="profile-modal-skills" class="font-semibold text-emerald-600">0 Tracked Skills</div>
           </div>
         </div>
 
-        <div class="pt-3 border-t border-slate-800">
-          <button id="profile-reset-data-btn" class="w-full py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold rounded-xl border border-red-500/30 transition cursor-pointer">
+        <div class="pt-3 border-t border-slate-100">
+          <button id="profile-reset-data-btn" class="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-xl border border-red-200 transition cursor-pointer">
             Reset Learning Data
           </button>
         </div>
@@ -509,95 +550,60 @@
     </div>
 
     <!-- 3. CAREER QUIZ MODAL -->
-    <div id="detail-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <button id="close-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95 cursor-pointer">
+    <div id="detail-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div id="modal-box" class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-200 bg-white">
+        <button id="close-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition active:scale-95 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
         <div id="modal-content"></div>
       </div>
     </div>
 
-    <!-- 4. AI ADVISOR MODAL -->
-    <div id="ai-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="glass-card rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl relative border border-indigo-500/30">
-        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-indigo-400">
-              <i data-lucide="bot" class="w-5 h-5"></i>
-            </div>
-            <div>
-              <h3 class="text-base font-bold text-white">Path Forge AI Career Advisor</h3>
-              <p class="text-[11px] text-slate-400">Powered by Gemini 1.5 Flash</p>
-            </div>
-          </div>
-          <button id="close-ai-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition cursor-pointer">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
+    <!-- 4. CREDITS MODAL -->
+    <div id="credits-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl relative border border-slate-200 text-center bg-white">
+        <button id="close-credits-modal" class="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition active:scale-95 cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+        <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center mx-auto text-rose-500">
+          <i data-lucide="heart" class="w-6 h-6 fill-rose-500/20"></i>
         </div>
-
-        <div id="ai-response-box" class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs text-slate-300 min-h-[120px] max-h-[250px] overflow-y-auto leading-relaxed">
-          Ask anything! E.g., <em>"What real-world projects will make my resume stand out?"</em>
+        <div class="space-y-1">
+          <h3 class="text-xl font-black text-slate-900">Path Forge Engineering Team</h3>
+          <p class="text-xs text-slate-500">Crafted with precision for next-generation tech careers.</p>
         </div>
-
-        <form id="ai-form" class="flex gap-2">
-          <input 
-            type="text" 
-            id="ai-user-input" 
-            placeholder="Type your career or curriculum question..." 
-            required
-            class="flex-1 bg-slate-900 border border-slate-800 focus:border-indigo-500 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 outline-none transition"
-          />
-          <button 
-            type="submit" 
-            id="ai-submit-btn" 
-            class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl transition flex items-center gap-1.5 active:scale-95 whitespace-nowrap cursor-pointer"
-          >
-            <i data-lucide="send" class="w-3.5 h-3.5"></i> Ask AI
-          </button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 5. CREDITS MODAL -->
-    <div id="credits-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="glass-card rounded-3xl max-w-md w-full p-6 sm:p-7 space-y-5 shadow-2xl relative border border-slate-700/60">
-        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3.5">
-          <div class="flex items-center gap-2.5">
-            <div class="p-2 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400">
-              <i data-lucide="info" class="w-4 h-4"></i>
-            </div>
-            <h3 class="text-base font-bold text-white">Credits & Acknowledgments</h3>
+        <div class="space-y-2 pt-2 text-xs text-slate-700 font-medium border-t border-slate-100">
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Mann Sharma</span>
+            <span class="font-mono text-slate-400">25BAI10379</span>
           </div>
-          <button id="close-credits-modal" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/80 transition active:scale-95 cursor-pointer">
-            <i data-lucide="x" class="w-4 h-4"></i>
-          </button>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 text-left space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-400">Developer Team</span>
-            <span class="inline-flex items-center gap-1 text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-semibold">
-              <i data-lucide="heart" class="w-3 h-3 text-rose-400 fill-rose-400"></i> Open Source
-            </span>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Jayant Yadav</span>
+            <span class="font-mono text-slate-400">25BAI11172</span>
           </div>
-
-          <div class="space-y-1 text-xs">
-            <div class="text-slate-200 font-bold">Mann Sharma • Jayant Yadav • Anmol Shrivastva</div>
-            <div class="text-slate-400 text-[11px]">Apoorva Krishna Tripathi • Divyansh Mishra • Harshvardhan Singh</div>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Anmol Shrivastva</span>
+            <span class="font-mono text-slate-400">25BAI10263</span>
           </div>
-        </div>
-
-        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-          <span>Path Forge v2.0.0</span>
-          <span>MIT License</span>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Apoorva Krishna Tripathi</span>
+            <span class="font-mono text-slate-400">25BAI11098</span>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Divyansh Mishra</span>
+            <span class="font-mono text-slate-400">25BAI11302</span>
+          </div>
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+            <span>Harshvardhan Singh</span>
+            <span class="font-mono text-slate-400">25BAI11615</span>
+          </div>
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- Main Application Entry Point -->
+  <!-- Master Application Script -->
   <script type="module" src="src/app.js"></script>
 </body>
 </html>

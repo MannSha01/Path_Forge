@@ -16,7 +16,7 @@ function escapeHTML(str) {
 }
 
 /**
- * Generates HTML for the concept learning view according to Schema V2.
+ * Generates HTML for the concept learning view according to Nordic Slate styling.
  * @param {object} lesson
  * @returns {string}
  */
@@ -45,12 +45,12 @@ export function renderLessonContent(lesson) {
         ${sections
           .map(
             (sec, idx) => `
-          <div class="p-5 sm:p-6 rounded-2xl bg-slate-950/70 border border-slate-800/80 space-y-3">
-            <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 text-xs font-mono font-bold flex items-center justify-center border border-indigo-500/30">${idx + 1}</span>
+          <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
+            <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2.5">
+              <span class="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-700 text-xs font-mono font-bold flex items-center justify-center border border-indigo-200">${idx + 1}</span>
               <span>${sec.heading}</span>
             </h3>
-            <div class="leading-relaxed text-xs sm:text-sm text-slate-300 whitespace-pre-line font-normal">
+            <div class="leading-relaxed text-xs sm:text-sm text-slate-600 whitespace-pre-line font-normal">
               ${sec.content}
             </div>
 
@@ -59,11 +59,11 @@ export function renderLessonContent(lesson) {
                 ? `
               <div class="pt-2 space-y-2">
                 <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Illustrative Examples:</div>
-                <div class="space-y-1.5 pl-2 border-l-2 border-indigo-500/40">
+                <div class="space-y-1.5 pl-2.5 border-l-2 border-indigo-400">
                   ${sec.examples
                     .map(
                       (ex) => `
-                    <div class="text-xs text-indigo-200 font-mono bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
+                    <div class="text-xs text-indigo-900 font-mono bg-indigo-50/60 p-2.5 rounded-lg border border-indigo-100">
                       ${ex}
                     </div>
                   `
@@ -84,19 +84,19 @@ export function renderLessonContent(lesson) {
       ${
         practicalEx
           ? `
-        <div class="p-5 sm:p-6 rounded-2xl bg-slate-950/80 border border-cyan-500/30 space-y-3 relative overflow-hidden">
+        <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3 relative overflow-hidden">
           <div class="flex items-center justify-between flex-wrap gap-2">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-2">
-              <i data-lucide="code-2" class="w-4 h-4 text-cyan-400"></i> Production Implementation Example
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+              <i data-lucide="code-2" class="w-4 h-4 text-indigo-600"></i> Production Implementation Example
             </h4>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-400 border border-cyan-500/30 uppercase">
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 uppercase font-semibold">
               ${practicalEx.language || "code"}
             </span>
           </div>
 
-          <p class="text-xs text-slate-300">${practicalEx.description}</p>
+          <p class="text-xs text-slate-600">${practicalEx.description}</p>
 
-          <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-cyan-100 overflow-x-auto leading-relaxed"><code>${escapeHTML(practicalEx.code)}</code></pre>
+          <pre class="p-4 rounded-xl bg-slate-900 border border-slate-800 font-mono text-xs text-slate-100 overflow-x-auto leading-relaxed shadow-inner"><code>${escapeHTML(practicalEx.code)}</code></pre>
         </div>
       `
           : ""
@@ -104,60 +104,35 @@ export function renderLessonContent(lesson) {
     `;
 
   return `
-    <div class="space-y-6 text-left">
-      <!-- Header Banner -->
-      <div class="space-y-3 border-b border-slate-800 pb-5">
-        <div class="flex items-center justify-between flex-wrap gap-2">
-          <div class="flex items-center gap-2">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
-              ${lesson.topic || "Core Topic"}
-            </span>
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
-              <i data-lucide="clock" class="w-3 h-3"></i>
-              <span>${lesson.estimatedMinutes || 30} Min Study</span>
-            </span>
-          </div>
-          <span class="text-xs text-slate-400 font-medium">Topic Learning Mode</span>
+    <div class="space-y-6">
+      <!-- Objective Banner -->
+      <div class="p-6 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 text-indigo-950 space-y-1.5">
+        <div class="flex items-center gap-2 text-indigo-700 font-bold text-xs uppercase tracking-wider">
+          <i data-lucide="target" class="w-4 h-4"></i>
+          <span>Topic Objective</span>
         </div>
-
-        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">${lesson.title}</h2>
-        <div class="p-3.5 rounded-xl bg-indigo-950/30 border border-indigo-500/20 text-xs sm:text-sm text-indigo-200 font-medium flex items-start gap-2.5">
-          <i data-lucide="target" class="w-4 h-4 text-cyan-400 shrink-0 mt-0.5"></i>
-          <div>
-            <span class="font-bold text-cyan-300">Core Objective:</span> ${lesson.objective || "Master core mechanisms and architectural patterns."}
-          </div>
-        </div>
-
-        <!-- Subtle Background Status Indicators -->
-        <div class="flex items-center flex-wrap gap-2.5 pt-1 text-[11px]">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-            <i data-lucide="check" class="w-3 h-3 text-emerald-400"></i> Lesson ready
-          </span>
-          <span id="lesson-assessment-indicator" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/80 text-slate-300 border border-slate-700/60 font-medium transition-all">
-            <span id="lesson-assessment-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            <span id="lesson-assessment-text">Generating assessment...</span>
-          </span>
-          <span id="lesson-next-topic-indicator" class="hidden inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-medium">
-            <i data-lucide="sparkles" class="w-3 h-3 text-indigo-400"></i> Next topic prepared
-          </span>
-        </div>
+        <p class="text-xs sm:text-sm text-indigo-900/90 leading-relaxed font-medium">
+          ${lesson.objective || "Master core principles and production trade-offs for this topic."}
+        </p>
       </div>
 
-      <!-- Main Lesson Body (Blocks / Sections) -->
+      <!-- Main Lesson Body -->
       ${renderedBody}
 
-      <!-- Two-Column Key Principles & Common Traps -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
-        <div class="p-5 rounded-2xl bg-slate-950/60 border border-emerald-500/20 space-y-3">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Key Principles
+      <!-- Key Architectural Principles -->
+      ${
+        lesson.keyPoints && lesson.keyPoints.length
+          ? `
+        <div class="p-6 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i> Key Architectural Principles
           </h4>
-          <ul class="space-y-2 text-xs text-slate-300">
-            ${(lesson.keyPoints || [])
+          <ul class="space-y-2 text-xs text-emerald-950 font-medium">
+            ${lesson.keyPoints
               .map(
                 (kp) => `
               <li class="flex items-start gap-2">
-                <span class="text-emerald-400 font-bold shrink-0">•</span>
+                <span class="text-emerald-600 font-bold mt-0.5">•</span>
                 <span>${kp}</span>
               </li>
             `
@@ -165,17 +140,24 @@ export function renderLessonContent(lesson) {
               .join("")}
           </ul>
         </div>
+      `
+          : ""
+      }
 
-        <div class="p-5 rounded-2xl bg-slate-950/60 border border-rose-500/20 space-y-3">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-2">
-            <i data-lucide="alert-triangle" class="w-4 h-4"></i> Common Traps to Avoid
+      <!-- Common Pitfalls & Anti-Patterns -->
+      ${
+        lesson.commonMistakes && lesson.commonMistakes.length
+          ? `
+        <div class="p-6 rounded-2xl bg-rose-50/60 border border-rose-200/80 space-y-3">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-rose-800 flex items-center gap-2">
+            <i data-lucide="alert-triangle" class="w-4 h-4 text-rose-600"></i> Common Traps & Pitfalls to Avoid
           </h4>
-          <ul class="space-y-2 text-xs text-slate-300">
-            ${(lesson.commonMistakes || [])
+          <ul class="space-y-2 text-xs text-rose-950 font-medium">
+            ${lesson.commonMistakes
               .map(
                 (cm) => `
               <li class="flex items-start gap-2">
-                <span class="text-rose-400 font-bold shrink-0">•</span>
+                <span class="text-rose-600 font-bold mt-0.5">•</span>
                 <span>${cm}</span>
               </li>
             `
@@ -183,48 +165,9 @@ export function renderLessonContent(lesson) {
               .join("")}
           </ul>
         </div>
-      </div>
-
-      <!-- Technical Interview Discussion Points -->
-      ${
-        lesson.interviewPoints && lesson.interviewPoints.length
-          ? `
-        <div class="p-5 rounded-2xl bg-slate-950/60 border border-indigo-500/20 space-y-3">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300 flex items-center gap-2">
-            <i data-lucide="briefcase" class="w-4 h-4 text-indigo-400"></i> Technical Interview Discussion Points
-          </h4>
-          <div class="grid grid-cols-1 gap-2.5">
-            ${lesson.interviewPoints
-              .map(
-                (ip) => `
-              <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800 text-xs text-slate-300 flex items-start gap-2">
-                <i data-lucide="help-circle" class="w-4 h-4 text-indigo-400 shrink-0 mt-0.5"></i>
-                <span>${ip}</span>
-              </div>
-            `
-              )
-              .join("")}
-          </div>
-        </div>
       `
           : ""
       }
-
-      <!-- Completion Action Bar -->
-      <div class="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div class="text-xs text-slate-400 text-center sm:text-left">
-          <span class="font-bold text-slate-200">Ready to test your comprehension?</span>
-          <p class="text-[11px] text-slate-500 mt-0.5">Completing this topic will launch a 3-question adaptive assessment.</p>
-        </div>
-
-        <button
-          id="complete-topic-btn"
-          class="w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition cursor-pointer active:scale-95"
-        >
-          <span>Complete Topic</span>
-          <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </button>
-      </div>
     </div>
   `;
 }

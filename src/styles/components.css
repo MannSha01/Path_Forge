@@ -1,27 +1,56 @@
 /* ===================================================
-   PATH FORGE - COMPONENT STYLES
+   PATH FORGE - NORDIC SLATE COMPONENT STYLES
+   Crisp elevated cards, clean sidebar, and subway roadmap tokens
    =================================================== */
 
-/* Modern Glassmorphic Cards */
+/* Nordic Elevated Cards (Replaces dark glass-card) */
 .glass-card {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card-hover {
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card-hover:hover {
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 0 35px -5px rgba(99, 102, 241, 0.25), inset 0 0 20px rgba(99, 102, 241, 0.05);
-  transform: translateY(-4px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03);
+  transform: translateY(-2px);
 }
 
-/* Splash Screen Component */
+/* Sidebar Styling */
+.nordic-sidebar {
+  background-color: #f1f5f9;
+  border-right: 1px solid #e2e8f0;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.w-18 {
+  width: 4.5rem !important;
+}
+
+.nordic-sidebar-item {
+  color: #475569;
+  transition: all 0.15s ease-in-out;
+}
+
+.nordic-sidebar-item:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.nordic-sidebar-item.active {
+  background-color: #eef2ff;
+  color: #4338ca;
+  font-weight: 700;
+  border: 1px solid #c7d2fe;
+}
+
+/* Splash Screen (Nordic Clean) */
 .splash-screen {
   position: fixed;
   inset: 0;
@@ -30,7 +59,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #030712;
+  background-color: #f8fafc;
 }
 
 .brand-container {
@@ -38,23 +67,23 @@
   align-items: center;
   gap: 16px;
   opacity: 0;
-  transform: scale(0.9) translateY(10px);
+  transform: scale(0.95) translateY(8px);
 }
 
 .logo-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #38bdf8 0%, #4f46e5 100%);
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 20px -4px rgba(79, 70, 229, 0.35);
 }
 
 .logo-icon svg {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   fill: #ffffff;
 }
 
@@ -64,85 +93,89 @@
 }
 
 .brand-title {
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 900;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: linear-gradient(to right, #ffffff, #93c5fd);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.04em;
+  color: #0f172a;
 }
 
 .brand-subtitle {
   font-size: 0.85rem;
-  color: #94a3b8;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .init-container {
-  margin-top: 48px;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   opacity: 0;
 }
 
 .init-text {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: #64748b;
   letter-spacing: 0.08em;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
 .progress-bar-bg {
   width: 200px;
   height: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background-color: #e2e8f0;
   border-radius: 9999px;
   overflow: hidden;
-  position: relative;
 }
 
 .progress-bar-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  height: 100%;
+  background: linear-gradient(90deg, #4f46e5, #06b6d4);
   border-radius: 9999px;
+  transition: width 0.2s ease-out;
 }
 
-/* Welcome Screen Component */
-.welcome-screen {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #030712;
-  opacity: 0;
-  pointer-events: none;
+/* Command Palette Backdrop */
+.cmd-palette-backdrop {
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
-.welcome-box {
-  text-align: center;
-  transform: translateY(20px) scale(0.95);
+/* Subway Map Custom SVG Classes */
+.subway-rail {
+  stroke: #cbd5e1;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }
 
-.welcome-glow-icon {
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 24px auto;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
+.subway-rail-active {
+  stroke: #0284c7;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  stroke-dasharray: 8 6;
+  animation: subwayPulse 20s linear infinite;
+}
+
+.subway-station {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.subway-station:hover {
+  transform: scale(1.15);
+}
+
+@keyframes subwayPulse {
+  to {
+    stroke-dashoffset: -200;
+  }
 }

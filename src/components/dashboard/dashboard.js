@@ -54,22 +54,21 @@ export function renderDashboard({
   container.innerHTML = `
     <div class="space-y-6 max-w-6xl mx-auto">
       <!-- Welcome Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
         <div>
-          <h2 class="text-xl sm:text-2xl font-black text-white flex items-center gap-2 flex-wrap">
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2 flex-wrap">
             <span>Welcome back,</span>
-            <span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">${user?.displayName || "Candidate"}</span>
+            <span class="text-indigo-600">${user?.displayName || "Candidate"}</span>
             <span>👋</span>
           </h2>
-          <div class="flex items-center gap-2 text-xs text-slate-400 mt-1 flex-wrap">
-            <span class="inline-flex items-center gap-1.5 font-mono text-indigo-300 bg-indigo-950/40 px-2.5 py-0.5 rounded-md border border-indigo-500/20">
-              <i data-lucide="mail" class="w-3 h-3 text-indigo-400"></i>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mt-1 flex-wrap">
+            <span class="inline-flex items-center gap-1.5 font-mono text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-200/80">
+              <i data-lucide="mail" class="w-3 h-3 text-indigo-500"></i>
               <span>${user?.email || "candidate@pathforge.dev"}</span>
             </span>
-            <span class="text-slate-600 hidden sm:inline">•</span>
-            <span class="text-slate-400">Live Adaptive Preparation Plan</span>
+            <span class="text-slate-400 hidden sm:inline">•</span>
+            <span class="text-slate-500">Live Adaptive Preparation Plan</span>
           </div>
-        </div>
       </div>
 
       <!-- Readiness Banner -->

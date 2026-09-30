@@ -31,6 +31,9 @@ import { createPathwayCard } from "./components/pathwayCard.js";
 import { AdminPortal } from "./components/admin/adminPortal.js";
 import { AdminAuthModal } from "./components/admin/adminAuthModal.js";
 import { initPWA } from "./services/pwa/pwaService.js";
+import { CommandPalette } from "./components/search/commandPalette.js";
+import { FlashcardModal } from "./components/flashcards/flashcardModal.js";
+import { calendarService } from "./services/calendar/calendarService.js";
 
 // --- GLOBAL APPLICATION STATE ---
 let currentUser = null;
@@ -424,7 +427,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Top Nav Items
+  // Top Nav & Sidebar Nav Items
   on($("#logo-btn"), "click", () => switchView("landing"));
   on($("#nav-goal-btn"), "click", () => switchView("goal"));
   on($("#nav-dashboard-btn"), "click", () => {
@@ -439,6 +442,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     switchView("roadmap");
     loadRoadmapView();
   });
+  on($("#nav-flashcards-btn"), "click", () => {
+    new FlashcardModal({ userId: currentUser?.userId || "default" }).open();
+  });
   on($("#nav-notes-btn"), "click", () => {
     if (!currentUser) {
       openLoginModal();
@@ -449,6 +455,133 @@ document.addEventListener("DOMContentLoaded", async () => {
       renderNotesList(currentUser.userId);
     }
   });
+
+  // Collapsible Left Sidebar Rail Toggle
+  const sidebarNav = $("#sidebar-nav");
+  const sidebarToggleBtn = $("#sidebar-toggle-btn");
+  let isSidebarCollapsed = false;
+
+  if (sidebarToggleBtn && sidebarNav) {
+    on(sidebarToggleBtn, "click", () => {
+      isSidebarCollapsed = !isSidebarCollapsed;
+      const textElements = $$(".sidebar-text");
+      if (isSidebarCollapsed) {
+        sidebarNav.classList.remove("w-64");
+        sidebarNav.classList.add("w-18");
+        textElements.forEach((el) => el.classList.add("hidden"));
+        sidebarToggleBtn.innerHTML = '<i data-lucide="panel-left-open" class="w-4 h-4"></i>';
+      } else {
+        sidebarNav.classList.remove("w-18");
+        sidebarNav.classList.add("w-64");
+        textElements.forEach((el) => el.classList.remove("hidden"));
+        sidebarToggleBtn.innerHTML = '<i data-lucide="panel-left-close" class="w-4 h-4"></i>';
+      }
+      refreshLucide();
+    });
+  }
+
+  // Mobile Drawer Toggle
+  const mobileToggleBtn = $("#sidebar-mobile-toggle");
+  if (mobileToggleBtn && sidebarNav) {
+    on(mobileToggleBtn, "click", () => {
+      sidebarNav.classList.toggle("hidden");
+      sidebarNav.classList.toggle("fixed");
+      sidebarNav.classList.toggle("inset-y-0");
+      sidebarNav.classList.toggle("left-0");
+      sidebarNav.classList.toggle("z-50");
+      sidebarNav.classList.toggle("bg-white");
+      sidebarNav.classList.toggle("shadow-2xl");
+    });
+  }
+
+  // Global Command Palette (Cmd + K / Ctrl + K)
+  const commandPalette = new CommandPalette({
+    onAction: (actionId) => {
+      switch (actionId) {
+        case "dashboard":
+          if (!currentUser) {
+            openLoginModal();
+          } else {
+            switchView("dashboard");
+            loadDashboard();
+          }
+          break;
+        case "roadmap":
+          switchView("roadmap");
+          loadRoadmapView();
+          break;
+        case "flashcards":
+          new FlashcardModal({ userId: currentUser?.userId || "default" }).open();
+          break;
+        case "continue-lesson":
+          if (!currentUser) {
+            openLoginModal();
+          } else {
+            switchView("dashboard");
+            loadDashboard();
+          }
+          break;
+        case "google-cal":
+          if (currentSchedule?.days?.[0]?.topics?.[0]) {
+            const top = currentSchedule.days[0].topics[0];
+            const url = calendarService.generateGoogleCalendarUrl({
+              title: `Path Forge: ${top.title || "Study Session"}`,
+              description: `Adaptive career study session.\nTarget Role: ${currentGoal?.targetPosition || "Engineer"}\nDaily: ${currentGoal?.dailyMinutes || 60}m`,
+              startTime: new Date(),
+              durationMinutes: currentGoal?.dailyMinutes || 60
+            });
+            window.open(url, "_blank");
+          } else {
+            alert("Please set a career goal first to generate your schedule!");
+          }
+          break;
+        case "export-ics":
+          if (currentSchedule?.days?.length) {
+            calendarService.downloadIcsCalendar(currentSchedule, {
+              targetRole: currentGoal?.targetPosition || "Engineering Track",
+              targetCompany: currentGoal?.targetCompany || "Tech Industry"
+            });
+          } else {
+            alert("Please set a career goal first to export your schedule!");
+          }
+          break;
+        case "ats-polish":
+          switchView("goal");
+          setTimeout(() => {
+            const resumeInput = $("#goal-resume");
+            if (resumeInput) {
+              resumeInput.focus();
+              resumeInput.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+          }, 300);
+          break;
+        case "set-goal":
+          switchView("goal");
+          break;
+        case "notes":
+          if (!currentUser) {
+            openLoginModal();
+          } else {
+            switchView("notes");
+            $("#notes-detail-view")?.classList.add("hidden");
+            $("#notes-list-view")?.classList.remove("hidden");
+            renderNotesList(currentUser.userId);
+          }
+          break;
+        case "ask-ai":
+          openAIAdvisor();
+          break;
+        default:
+          break;
+      }
+    }
+  });
+
+  // Top Bar Search Trigger for Command Palette
+  const cmdPaletteTrigger = $("#cmd-palette-trigger");
+  if (cmdPaletteTrigger) {
+    on(cmdPaletteTrigger, "click", () => commandPalette.open());
+  }
 
   // Header login button
   on($("#header-login-btn"), "click", () => openLoginModal());

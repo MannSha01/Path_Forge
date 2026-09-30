@@ -1,16 +1,15 @@
 // ===================================================
-// PATH FORGE - ADAPTIVE ROADMAP CONTROLLER
-// Live schedule timeline visualization & progress meter
+// PATH FORGE - ADAPTIVE ROADMAP CONTROLLER (NORDIC SLATE)
+// Subway transit skill tree with real-time adaptation paths
 // ===================================================
 
 import { $, refreshLucide } from "../../utils/dom.js";
 import { triggerConfetti } from "../../utils/animations.js";
-import { createRoadmapItem } from "./roadmapItem.js";
 
 let hasCelebrated = false;
 
 /**
- * Renders the adaptive roadmap view.
+ * Renders the adaptive subway transit roadmap view.
  * @param {object} params
  * @param {string} params.title - Role or goal title
  * @param {string} params.categoryName - Category tag
@@ -37,7 +36,7 @@ export function renderAdaptiveRoadmap({
 
   if (roadmapDomainTag) roadmapDomainTag.textContent = categoryName;
   if (pathwayTitle) pathwayTitle.textContent = title;
-  if (pathwayDesc) pathwayDesc.textContent = "Personalized adaptive study timeline tailored to your target position.";
+  if (pathwayDesc) pathwayDesc.textContent = "Interactive transit roadmap tailored to your target position.";
 
   if (!stepsContainer) return;
   stepsContainer.innerHTML = "";
@@ -51,7 +50,7 @@ export function renderAdaptiveRoadmap({
   if (percentage === 100) {
     if (trophyContainer) {
       trophyContainer.className =
-        "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex items-center justify-center animate-bounce shadow-[0_0_20px_rgba(245,158,11,0.4)]";
+        "w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 text-amber-600 flex items-center justify-center animate-bounce shadow-md";
     }
     if (!hasCelebrated) {
       triggerConfetti();
@@ -60,15 +59,105 @@ export function renderAdaptiveRoadmap({
   } else {
     if (trophyContainer) {
       trophyContainer.className =
-        "w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 text-slate-600 flex items-center justify-center";
+        "w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center";
     }
     hasCelebrated = false;
   }
 
+  // Render Subway Stations
   items.forEach((item, index) => {
-    const isCompleted = Boolean(completedMap[item.topicId || item.id]);
-    const node = createRoadmapItem(item, index, isCompleted, onToggleCheck, onLaunchLesson);
-    stepsContainer.appendChild(node);
+    const itemId = item.topicId || item.id || `topic_${index}`;
+    const isCompleted = Boolean(completedMap[itemId]);
+    const isCurrent = item.status === "current" && !isCompleted;
+    const isAdapted = item.status === "adapted" || item.adapted || item.status === "needs_revision";
+
+    let stationRing = "border-slate-300 bg-white text-slate-500";
+    let accentBorder = "border-l-4 border-l-slate-300";
+    let badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">Scheduled</span>`;
+
+    if (isCompleted) {
+      stationRing = "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-500/20";
+      accentBorder = "border-l-4 border-l-emerald-500";
+      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Completed</span>`;
+    } else if (isCurrent) {
+      stationRing = "border-indigo-600 bg-indigo-600 text-white ring-4 ring-indigo-100 shadow-md shadow-indigo-600/30";
+      accentBorder = "border-l-4 border-l-indigo-600";
+      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 animate-pulse font-extrabold">You Are Here</span>`;
+    } else if (isAdapted) {
+      stationRing = "border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-500/20";
+      accentBorder = "border-l-4 border-l-amber-500";
+      badgeHtml = `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">Reinforcement Loop ✨</span>`;
+    }
+
+    const cardEl = document.createElement("div");
+    cardEl.className = "relative flex items-start gap-4 sm:gap-6 group";
+    cardEl.innerHTML = `
+      <!-- Station Node Marker -->
+      <div class="relative z-10 w-8 h-8 rounded-full border-2 ${stationRing} flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-transform duration-200 group-hover:scale-110">
+        ${isCompleted ? `<i data-lucide="check" class="w-4 h-4"></i>` : index + 1}
+      </div>
+
+      <!-- Station Detail Card -->
+      <div class="flex-grow glass-card p-4 sm:p-5 rounded-2xl ${accentBorder} space-y-2 hover:border-slate-300 transition-all">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">
+                ${item.title}
+              </h4>
+              ${badgeHtml}
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">
+              ${item.skill || item.category || "Core Concept"} • ${item.durationMinutes || 45} mins
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+            <label class="flex items-center gap-1.5 cursor-pointer text-xs text-slate-500 hover:text-slate-700 select-none mr-2">
+              <input type="checkbox" class="w-4 h-4 rounded text-indigo-600 accent-indigo-600 cursor-pointer" ${isCompleted ? "checked" : ""} />
+              <span class="text-[11px] font-medium hidden sm:inline">Done</span>
+            </label>
+            <button
+              class="launch-lesson-btn px-3.5 py-1.5 ${
+                isCurrent
+                  ? "bg-indigo-600 hover:bg-indigo-700 text-white font-bold"
+                  : "bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
+              } text-xs rounded-xl transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <i data-lucide="${isCurrent ? "play" : "book-open"}" class="w-3.5 h-3.5"></i>
+              <span>${isCurrent ? "Start Station" : "Review"}</span>
+            </button>
+          </div>
+        </div>
+
+        ${
+          item.adaptationReason
+            ? `<div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-600 shrink-0"></i>
+                <span>${item.adaptationReason}</span>
+              </div>`
+            : ""
+        }
+      </div>
+    `;
+
+    // Checkbox listener
+    const checkbox = cardEl.querySelector("input[type='checkbox']");
+    if (checkbox && onToggleCheck) {
+      checkbox.addEventListener("change", (e) => {
+        onToggleCheck(item, e.target.checked);
+      });
+    }
+
+    // Launch lesson listener
+    const launchBtn = cardEl.querySelector(".launch-lesson-btn");
+    if (launchBtn && onLaunchLesson) {
+      launchBtn.addEventListener("click", () => {
+        onLaunchLesson(item);
+      });
+    }
+
+    stepsContainer.appendChild(cardEl);
   });
 
   refreshLucide();
