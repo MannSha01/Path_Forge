@@ -47,7 +47,7 @@ export function renderRoadmap(role, categoryName) {
           ${isChecked ? "checked" : ""}
           class="step-checkbox sr-only"
         />
-        <div class="w-8 h-8 rounded-full bg-slate-950 border-2 ${isChecked ? 'border-emerald-400 bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]' : 'border-indigo-500/50 text-indigo-400 group-hover:border-indigo-400'} flex items-center justify-center transition-all duration-300">
+        <div class="w-8 h-8 rounded-full bg-white border-2 ${isChecked ? 'border-teal-500 bg-teal-50 text-teal-600 shadow-xs' : 'border-slate-300 text-slate-700 group-hover:border-teal-500'} flex items-center justify-center transition-all duration-300">
           ${isChecked 
             ? '<i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>' 
             : `<span class="text-xs font-bold">${index + 1}</span>`
@@ -56,26 +56,26 @@ export function renderRoadmap(role, categoryName) {
       </label>
 
       <!-- Glass Step Card -->
-      <div class="glass-card flex-1 p-5 sm:p-6 rounded-2xl transition-all duration-300 ${isChecked ? 'opacity-75 border-emerald-500/30' : ''}">
+      <div class="glass-card flex-1 p-5 sm:p-6 rounded-2xl transition-all duration-300 ${isChecked ? 'opacity-80 border-teal-300 bg-white' : 'border-slate-200 bg-white shadow-xs'}">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div class="flex items-center gap-2 flex-wrap mb-1.5">
-              <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${isChecked ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'} uppercase tracking-wider">
+              <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${isChecked ? 'bg-teal-100 text-teal-900 border border-teal-300' : 'bg-teal-50 text-teal-800 border border-teal-200'} uppercase tracking-wider">
                 Step ${index + 1}
               </span>
-              <h3 class="text-base sm:text-lg font-bold text-white ${isChecked ? 'line-through text-slate-400' : ''}">
+              <h3 class="text-base sm:text-lg font-black text-black ${isChecked ? 'line-through text-slate-400' : ''}">
                 ${step.title}
               </h3>
             </div>
 
-            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${step.summary}</p>
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">${step.summary}</p>
 
-            <div class="flex items-center gap-4 mt-3 text-xs text-slate-400 font-medium">
-              <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-indigo-400"></i> ${step.duration}
+            <div class="flex items-center gap-4 mt-3 text-xs text-slate-600 font-medium">
+              <span class="inline-flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-teal-600"></i> ${step.duration}
               </span>
-              <span class="inline-flex items-center gap-1.5 bg-slate-950/50 px-2.5 py-1 rounded-lg border border-slate-800">
-                <i data-lucide="book-open" class="w-3.5 h-3.5 text-cyan-400"></i> ${step.resources ? step.resources.length : 0} Courses/Docs
+              <span class="inline-flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 text-slate-700">
+                <i data-lucide="book-open" class="w-3.5 h-3.5 text-teal-600"></i> ${step.resources ? step.resources.length : 0} Courses/Docs
               </span>
             </div>
           </div>
@@ -83,26 +83,26 @@ export function renderRoadmap(role, categoryName) {
           <!-- Toggle Expand Button -->
           <button 
             data-target="expand-${step.id}" 
-            class="toggle-details-btn self-end sm:self-center px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-slate-300 hover:text-white text-xs font-semibold rounded-xl transition border border-slate-700/80 hover:border-indigo-500 flex items-center gap-2 whitespace-nowrap shadow-sm group/btn cursor-pointer"
+            class="toggle-details-btn self-end sm:self-center px-4 py-2 bg-white hover:bg-slate-50 text-slate-800 hover:text-black text-xs font-semibold rounded-xl transition border border-slate-200 hover:border-teal-500 flex items-center gap-2 whitespace-nowrap shadow-xs group/btn cursor-pointer"
           >
-            <i data-lucide="book-open-check" class="w-3.5 h-3.5"></i>
+            <i data-lucide="book-open-check" class="w-3.5 h-3.5 text-teal-600"></i>
             <span class="btn-label">View Course Syllabus</span>
             <i data-lucide="chevron-down" class="w-3.5 h-3.5 chevron-icon transition-transform duration-300"></i>
           </button>
         </div>
 
         <!-- COLLAPSIBLE EXPANDED DETAILS SECTION -->
-        <div id="expand-${step.id}" class="hidden mt-5 pt-5 border-t border-slate-800/80 space-y-4 transition-all">
+        <div id="expand-${step.id}" class="hidden mt-5 pt-5 border-t border-slate-200 space-y-4 transition-all">
           
           ${step.syllabus && step.syllabus.length ? `
             <div>
-              <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2 flex items-center gap-1.5">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-400"></i> Step-by-Step Curriculum
+              <h4 class="text-xs font-bold uppercase tracking-wider text-teal-800 mb-2 flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-teal-600"></i> Step-by-Step Curriculum
               </h4>
               <ul class="space-y-1.5 pl-1">
                 ${step.syllabus.map(item => `
-                  <li class="text-xs text-slate-300 flex items-start gap-2">
-                    <span class="text-indigo-400 font-bold">•</span>
+                  <li class="text-xs text-slate-700 flex items-start gap-2">
+                    <span class="text-teal-600 font-bold">•</span>
                     <span>${item}</span>
                   </li>
                 `).join('')}
@@ -112,23 +112,23 @@ export function renderRoadmap(role, categoryName) {
 
           ${step.concepts && step.concepts.length ? `
             <div>
-              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i> Core Competencies
+              <h4 class="text-xs font-bold uppercase tracking-wider text-teal-800 mb-2 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-teal-600"></i> Core Competencies
               </h4>
               <div class="flex flex-wrap gap-1.5">
-                ${step.concepts.map(c => `<span class="bg-slate-950 text-slate-300 text-[11px] px-2.5 py-1 rounded-lg border border-slate-800 font-medium">${c}</span>`).join('')}
+                ${step.concepts.map(c => `<span class="bg-teal-50 text-teal-900 text-[11px] px-2.5 py-1 rounded-lg border border-teal-200 font-medium">${c}</span>`).join('')}
               </div>
             </div>
           ` : ''}
 
           ${step.resources && step.resources.length ? `
             <div>
-              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2 flex items-center gap-1.5">
-                <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-cyan-400"></i> Direct Free Courses & Documentation
+              <h4 class="text-xs font-bold uppercase tracking-wider text-teal-800 mb-2 flex items-center gap-1.5">
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5 text-teal-600"></i> Direct Free Courses & Documentation
               </h4>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 ${step.resources.map(r => `
-                  <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="bg-slate-950/80 hover:bg-slate-900 p-2.5 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-indigo-400 hover:text-indigo-300 text-xs transition flex items-center justify-between font-medium group/link">
+                  <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="bg-white hover:bg-teal-50 p-2.5 rounded-xl border border-slate-200 hover:border-teal-400 text-teal-800 hover:text-teal-950 text-xs transition flex items-center justify-between font-medium group/link shadow-xs">
                     <span class="truncate">${r.name}</span>
                     <i data-lucide="external-link" class="w-3.5 h-3.5 shrink-0 group-hover/link:translate-x-0.5 transition"></i>
                   </a>
@@ -138,11 +138,11 @@ export function renderRoadmap(role, categoryName) {
           ` : ''}
 
           ${step.project ? `
-            <div class="p-3.5 bg-indigo-950/30 border border-indigo-500/30 rounded-xl">
-              <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5 mb-1">
-                <i data-lucide="code" class="w-3.5 h-3.5 text-indigo-400"></i> Milestone Project Challenge
+            <div class="p-3.5 bg-teal-50 border border-teal-200 rounded-xl">
+              <h4 class="text-xs font-bold text-teal-900 uppercase tracking-wider flex items-center gap-1.5 mb-1">
+                <i data-lucide="code" class="w-3.5 h-3.5 text-teal-600"></i> Milestone Project Challenge
               </h4>
-              <p class="text-xs text-slate-300 leading-relaxed">${step.project}</p>
+              <p class="text-xs text-slate-800 leading-relaxed">${step.project}</p>
             </div>
           ` : ''}
 
