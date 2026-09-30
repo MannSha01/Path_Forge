@@ -49,7 +49,7 @@ export function renderSkillGapsWidget(skillProfile = {}) {
                   </div>
                   <span class="font-mono text-slate-600 font-bold">${s.mastery}%</span>
                 </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border border-slate-200/80">
+                <div class="w-full bg-indigo-50/80 rounded-full h-2.5 overflow-hidden border border-indigo-100">
                   <div class="bg-gradient-to-r ${barColor} h-full rounded-full transition-all duration-500" style="width: ${s.mastery}%"></div>
                 </div>
               </div>

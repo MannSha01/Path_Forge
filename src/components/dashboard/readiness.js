@@ -35,27 +35,27 @@ export function renderReadinessWidget({
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 self-stretch lg:self-auto">
           <!-- Readiness Meter -->
-          <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-center">
-            <span class="text-2xl sm:text-3xl font-black text-emerald-600">
+          <div class="bg-emerald-50/80 border border-emerald-200/90 p-3.5 rounded-2xl text-center shadow-xs">
+            <span class="text-2xl sm:text-3xl font-black text-emerald-700">
               ${readinessPercent}%
             </span>
-            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-0.5">Job Readiness</p>
+            <p class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800/80 mt-0.5">Job Readiness</p>
           </div>
 
           <!-- Days Remaining -->
-          <div class="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-center">
-            <span class="text-2xl sm:text-3xl font-black text-slate-900">
+          <div class="bg-sky-50/80 border border-sky-200/90 p-3.5 rounded-2xl text-center shadow-xs">
+            <span class="text-2xl sm:text-3xl font-black text-sky-900">
               ${daysRemaining}
             </span>
-            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-0.5">Days Left</p>
+            <p class="text-[10px] font-extrabold uppercase tracking-wider text-sky-800/80 mt-0.5">Days Left</p>
           </div>
 
           <!-- Today Study Time -->
-          <div class="col-span-2 sm:col-span-1 bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl text-center">
-            <span class="text-xl sm:text-2xl font-black text-indigo-600">
+          <div class="col-span-2 sm:col-span-1 bg-indigo-50/80 border border-indigo-200/90 p-3.5 rounded-2xl text-center shadow-xs">
+            <span class="text-xl sm:text-2xl font-black text-indigo-700">
               ${todayMinutesSpent}m / ${targetDailyMinutes}m
             </span>
-            <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mt-0.5">Today's Study</p>
+            <p class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-800/80 mt-0.5">Today's Study</p>
           </div>
         </div>
       </div>

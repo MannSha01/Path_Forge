@@ -334,7 +334,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.selectCategory = (cat) => showCategoryRoles(cat);
 
   // Initialize visual systems
-  initConstellationCanvas("fx-canvas");
   initCustomCursor();
 
   // Initialize Progressive Web App & Offline capabilities
@@ -489,7 +488,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       sidebarNav.classList.toggle("inset-y-0");
       sidebarNav.classList.toggle("left-0");
       sidebarNav.classList.toggle("z-50");
-      sidebarNav.classList.toggle("bg-white");
       sidebarNav.classList.toggle("shadow-2xl");
     });
   }
