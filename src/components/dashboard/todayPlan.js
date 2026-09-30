@@ -70,18 +70,18 @@ export function renderTodayPlanWidget(
                   : task.status || "Scheduled";
 
               const cardBg = isCurrent
-                ? "bg-teal-50/90 border-teal-300 ring-2 ring-teal-500/20 shadow-xs"
-                : "bg-emerald-50/40 border-emerald-200/70 hover:border-emerald-300";
+                ? "bg-[#e2ddd4] border-[#b8b0a2] ring-2 ring-stone-400/20 shadow-xs"
+                : "bg-[#ebe7e0] border-[#d8d3c8] hover:border-[#b8b0a2]";
 
               return `
                 <div class="p-3.5 rounded-2xl border ${cardBg} flex items-center justify-between gap-3 transition">
                   <div class="flex items-center gap-3 min-w-0">
-                    <div class="w-8 h-8 rounded-xl ${isCurrent ? "bg-teal-600 text-white" : "bg-white border border-emerald-200 text-teal-700"} flex items-center justify-center shrink-0 shadow-2xs">
+                    <div class="w-8 h-8 rounded-xl ${isCurrent ? "bg-stone-900 text-white" : "bg-[#ded9cf] border border-[#cec7bc] text-stone-800"} flex items-center justify-center shrink-0 shadow-2xs">
                       <i data-lucide="${typeIcon}" class="w-4 h-4"></i>
                     </div>
                     <div class="truncate">
-                      <h4 class="text-xs font-bold text-slate-800 truncate">${idx + 1}. ${task.title}</h4>
-                      <p class="text-[11px] text-slate-500 capitalize">${task.type} • ${task.durationMinutes} min</p>
+                      <h4 class="text-xs font-black text-black truncate">${idx + 1}. ${task.title}</h4>
+                      <p class="text-[11px] text-slate-700 capitalize font-medium">${task.type} • ${task.durationMinutes} min</p>
                     </div>
                   </div>
                   <span class="text-[10px] px-2 py-0.5 rounded-full border uppercase tracking-wider font-bold shrink-0 ${badgeBg}">
@@ -93,18 +93,18 @@ export function renderTodayPlanWidget(
             .join("")}
         </div>
 
-        <!-- Spaced Repetition (SM-2) Flashcard Widget (Sea Green Emerald Accent) -->
-        <div class="p-3.5 rounded-2xl bg-gradient-to-r from-teal-50/90 via-emerald-50/70 to-teal-50/90 border border-teal-200/90 flex items-center justify-between gap-3 shadow-xs">
+        <!-- Spaced Repetition (SM-2) Flashcard Widget (Clay Grey Container) -->
+        <div class="p-3.5 rounded-2xl bg-[#ebe7e0] border border-[#d8d3c8] flex items-center justify-between gap-3 shadow-xs">
           <div class="flex items-center gap-2.5 min-w-0">
-            <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-700 border border-teal-200 flex items-center justify-center shrink-0">
+            <div class="w-8 h-8 rounded-xl bg-[#ded9cf] text-stone-800 border border-[#cec7bc] flex items-center justify-center shrink-0">
               <i data-lucide="layers" class="w-4 h-4"></i>
             </div>
             <div class="truncate">
               <div class="flex items-center gap-1.5">
-                <span class="text-xs font-extrabold text-teal-950">Daily Flashcard Sprint</span>
-                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-teal-100 text-teal-800 font-bold border border-teal-200">SM-2</span>
+                <span class="text-xs font-black text-black">Daily Flashcard Sprint</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[#ded9cf] text-stone-800 font-bold border border-[#cec7bc]">SM-2</span>
               </div>
-              <p class="text-[11px] text-teal-900/80 font-medium">
+              <p class="text-[11px] text-slate-700 font-medium">
                 ${dueCardsCount > 0 ? `${dueCardsCount} concepts due for recall today` : "All concepts retained for today"}
               </p>
             </div>

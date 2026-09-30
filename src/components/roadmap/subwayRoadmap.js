@@ -91,23 +91,23 @@ export function renderSubwayRoadmap({
             let stationRingColor = "border-teal-300 bg-teal-50 text-teal-700";
             let lineAccent = "border-l-4 border-l-teal-500";
             let statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-50 text-teal-800 border border-teal-200">Scheduled Ahead</span>`;
-            let cardTint = "bg-teal-50/20";
+            let cardTint = "bg-[#ebe7e0] border border-[#d8d3c8]";
 
             if (isCompleted) {
               stationRingColor = "border-emerald-500 bg-emerald-500 text-white shadow-md shadow-emerald-500/20";
               lineAccent = "border-l-4 border-l-emerald-500";
               statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"><i data-lucide="check" class="w-3 h-3"></i> Completed</span>`;
-              cardTint = "bg-emerald-50/30";
+              cardTint = "bg-[#edeae4] border border-[#dedad2]";
             } else if (isCurrent) {
               stationRingColor = "border-teal-600 bg-teal-600 text-white ring-4 ring-teal-100 shadow-md shadow-teal-600/30";
               lineAccent = "border-l-4 border-l-teal-600";
               statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-teal-100 text-teal-900 border border-teal-300 flex items-center gap-1 animate-pulse font-extrabold">You Are Here</span>`;
-              cardTint = "bg-teal-50/70 ring-1 ring-teal-500/20";
+              cardTint = "bg-[#e2ddd4] border border-[#b8b0a2] ring-1 ring-stone-400/20";
             } else if (isAdapted) {
               stationRingColor = "border-amber-500 bg-amber-500 text-white shadow-md shadow-amber-500/20";
               lineAccent = "border-l-4 border-l-amber-500";
               statusBadge = `<span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200">Reinforcement Loop ✨</span>`;
-              cardTint = "bg-amber-50/30";
+              cardTint = "bg-[#ede8df] border border-[#dad2c4]";
             }
 
             return `

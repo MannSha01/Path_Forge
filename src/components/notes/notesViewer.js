@@ -40,17 +40,17 @@ export async function renderNotesList(userId, containerSelector = "#notes-list-c
             (n) => `
           <div
             data-note-id="${n.noteId}"
-            class="note-card bg-emerald-50/70 border border-teal-200/90 shadow-xs hover:border-teal-400 p-5 rounded-2xl flex flex-col justify-between space-y-3 cursor-pointer group transition-all"
+            class="note-card bg-[#ebe7e0] border border-[#d8d3c8] shadow-xs hover:border-[#b8b0a2] hover:bg-[#e2ddd4] p-5 rounded-2xl flex flex-col justify-between space-y-3 cursor-pointer group transition-all"
           >
             <div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 border border-teal-200 uppercase">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#ded9cf] text-stone-800 border border-[#cec7bc] uppercase">
                 ${new Date(n.createdAt).toLocaleDateString()}
               </span>
-              <h4 class="text-base font-bold text-slate-900 group-hover:text-teal-700 transition mt-2 truncate">${n.title}</h4>
-              <p class="text-xs text-slate-600 line-clamp-2 mt-1">${n.summary}</p>
+              <h4 class="text-base font-black text-black group-hover:text-stone-950 transition mt-2 truncate">${n.title}</h4>
+              <p class="text-xs text-slate-800 line-clamp-2 mt-1 font-medium">${n.summary}</p>
             </div>
 
-            <div class="flex items-center justify-between text-xs text-teal-700 font-semibold pt-2 border-t border-teal-100">
+            <div class="flex items-center justify-between text-xs text-stone-800 font-bold pt-2 border-t border-[#d8d3c8]">
               <span>View Guide</span>
               <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
             </div>
