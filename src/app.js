@@ -30,6 +30,7 @@ import { initAiAdvisor, openAIAdvisor } from "./components/aiAdvisor.js";
 import { createPathwayCard } from "./components/pathwayCard.js";
 import { AdminPortal } from "./components/admin/adminPortal.js";
 import { AdminAuthModal } from "./components/admin/adminAuthModal.js";
+import { initPWA } from "./services/pwa/pwaService.js";
 
 // --- GLOBAL APPLICATION STATE ---
 let currentUser = null;
@@ -332,6 +333,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Initialize visual systems
   initConstellationCanvas("fx-canvas");
   initCustomCursor();
+
+  // Initialize Progressive Web App & Offline capabilities
+  initPWA();
 
   // Initialize Learning Session Controller
   learningSession = new LearningSessionController({

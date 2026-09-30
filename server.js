@@ -34,6 +34,7 @@ const MIME_TYPES = {
   ".mjs": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".webmanifest": "application/manifest+json",
   ".png": "image/png",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
@@ -136,7 +137,11 @@ const server = http.createServer(async (req, res) => {
   if (fs.existsSync(filePath)) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || "application/octet-stream";
-    res.writeHead(200, { "Content-Type": contentType });
+    const headers = { "Content-Type": contentType };
+    if (filePath.endsWith("sw.js")) {
+      headers["Service-Worker-Allowed"] = "/";
+    }
+    res.writeHead(200, headers);
     fs.createReadStream(filePath).pipe(res);
   } else {
     res.writeHead(404, { "Content-Type": "text/plain" });
