@@ -122,7 +122,7 @@ export class LivePreview {
                 </span>
               </div>
 
-              <h2 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                 ${escapeHTML(module.title)}
               </h2>
 

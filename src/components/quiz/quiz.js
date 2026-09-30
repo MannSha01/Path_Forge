@@ -72,13 +72,13 @@ function renderQuizStep() {
 
   modalContent.innerHTML = `
     <div class="flex items-center justify-between mb-2">
-      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase tracking-wider">
         Question ${currentQuizStep + 1} of ${QUIZ_QUESTIONS.length}
       </span>
       <span class="text-xs text-slate-500 font-semibold">1-Min Quiz</span>
     </div>
 
-    <h3 class="text-lg font-bold text-white mt-1 mb-4">${q.question}</h3>
+    <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">${q.question}</h3>
 
     <div class="space-y-2.5">
       ${q.options
@@ -86,10 +86,10 @@ function renderQuizStep() {
           (opt, i) => `
         <button 
           data-index="${i}"
-          class="quiz-opt-btn w-full text-left p-3.5 bg-slate-950/80 hover:bg-indigo-600/20 rounded-xl border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs font-medium transition flex items-center justify-between group cursor-pointer"
+          class="quiz-opt-btn w-full text-left p-3.5 bg-white hover:bg-teal-50 rounded-xl border border-slate-200 hover:border-teal-400 text-slate-800 text-xs font-medium transition flex items-center justify-between group cursor-pointer shadow-xs"
         >
           <span>${opt.text}</span>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-indigo-400"></i>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition text-teal-600"></i>
         </button>
       `
         )
@@ -117,9 +117,9 @@ function renderQuizResult() {
 
   if (!matchedRole) {
     modalContent.innerHTML = `
-      <div class="text-center py-4 text-slate-300">
+      <div class="text-center py-4 text-slate-700">
         <p>No matching role found. Please try again.</p>
-        <button id="retry-quiz-btn" class="mt-4 px-4 py-2 bg-indigo-600 rounded-xl text-white text-xs font-bold">Retry Quiz</button>
+        <button id="retry-quiz-btn" class="mt-4 px-4 py-2 bg-teal-600 hover:bg-teal-700 rounded-xl text-white text-xs font-bold">Retry Quiz</button>
       </div>
     `;
     $("#retry-quiz-btn")?.addEventListener("click", openQuizModal);
@@ -128,19 +128,19 @@ function renderQuizResult() {
 
   modalContent.innerHTML = `
     <div class="text-center py-2">
-      <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-3">
+      <div class="w-12 h-12 rounded-2xl bg-teal-50 border border-teal-200 text-teal-600 flex items-center justify-center mx-auto mb-3">
         <i data-lucide="sparkles" class="w-6 h-6"></i>
       </div>
-      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider">
+      <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase tracking-wider">
         Your Match Found!
       </span>
-      <h3 class="text-2xl font-black text-white mt-2">${matchedRole.title}</h3>
-      <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto leading-relaxed">${matchedRole.tagline}</p>
+      <h3 class="text-2xl font-black text-slate-900 mt-2">${matchedRole.title}</h3>
+      <p class="text-xs text-slate-600 mt-1 max-w-sm mx-auto leading-relaxed">${matchedRole.tagline}</p>
 
       <div class="mt-6">
         <button 
           id="launch-matched-roadmap"
-          class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+          class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-teal-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
         >
           <span>Set As Target Role & Continue</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>

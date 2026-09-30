@@ -55,9 +55,9 @@ export class LearningSessionController {
     // Show initial loading state
     this.container.innerHTML = `
       <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-        <i data-lucide="sparkles" class="w-10 h-10 text-indigo-400 animate-spin mx-auto"></i>
-        <h3 class="text-lg font-bold text-white">AI Teacher is Preparing Your Topic Lesson...</h3>
-        <p class="text-xs text-slate-400">Synthesizing topic content, architectural examples, and interview points tailored to your current mastery.</p>
+        <i data-lucide="sparkles" class="w-10 h-10 text-teal-600 animate-spin mx-auto"></i>
+        <h3 class="text-lg font-bold text-slate-900">AI Teacher is Preparing Your Topic Lesson...</h3>
+        <p class="text-xs text-slate-500">Synthesizing topic content, architectural examples, and interview points tailored to your current mastery.</p>
       </div>
     `;
     refreshLucide();
@@ -366,9 +366,9 @@ export class LearningSessionController {
     // If still generating in background, display graceful non-blocking state
     this.container.innerHTML = `
       <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-        <i data-lucide="brain-circuit" class="w-10 h-10 text-cyan-400 animate-spin mx-auto"></i>
-        <h3 class="text-lg font-bold text-white">Synthesizing 3 Adaptive Practice MCQs...</h3>
-        <p class="text-xs text-slate-400">Crafting conceptually unique questions for "${this.currentLesson?.title || "this topic"}" with anti-repeat protection.</p>
+        <i data-lucide="brain-circuit" class="w-10 h-10 text-teal-600 animate-spin mx-auto"></i>
+        <h3 class="text-lg font-bold text-slate-900">Synthesizing 3 Adaptive Practice MCQs...</h3>
+        <p class="text-xs text-slate-500">Crafting conceptually unique questions for "${this.currentLesson?.title || "this topic"}" with anti-repeat protection.</p>
       </div>
     `;
     refreshLucide();
@@ -482,9 +482,9 @@ export class LearningSessionController {
   async handleAssessmentSubmission() {
     this.container.innerHTML = `
       <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-        <i data-lucide="cpu" class="w-10 h-10 text-emerald-400 animate-spin mx-auto"></i>
-        <h3 class="text-lg font-bold text-white">Analyzing Assessment Performance...</h3>
-        <p class="text-xs text-slate-400">Evaluating conceptual understanding, updating skill profiles & adapting upcoming pathway lessons.</p>
+        <i data-lucide="cpu" class="w-10 h-10 text-teal-600 animate-spin mx-auto"></i>
+        <h3 class="text-lg font-bold text-slate-900">Analyzing Assessment Performance...</h3>
+        <p class="text-xs text-slate-500">Evaluating conceptual understanding, updating skill profiles & adapting upcoming pathway lessons.</p>
       </div>
     `;
     refreshLucide();
@@ -710,9 +710,9 @@ export class LearningSessionController {
 
     this.container.innerHTML = `
       <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-        <i data-lucide="sparkles" class="w-10 h-10 text-amber-400 animate-spin mx-auto"></i>
-        <h3 class="text-lg font-bold text-white">Synthesizing 4-Topic Cumulative Milestone Assessment...</h3>
-        <p class="text-xs text-slate-400">Crafting cross-topic synthesis questions evaluating long-term retention across your last 4 completed topics.</p>
+        <i data-lucide="sparkles" class="w-10 h-10 text-teal-600 animate-spin mx-auto"></i>
+        <h3 class="text-lg font-bold text-slate-900">Synthesizing 4-Topic Cumulative Milestone Assessment...</h3>
+        <p class="text-xs text-slate-500">Crafting cross-topic synthesis questions evaluating long-term retention across your last 4 completed topics.</p>
       </div>
     `;
     refreshLucide();
@@ -772,9 +772,9 @@ export class LearningSessionController {
   async handleCumulativeSubmission() {
     this.container.innerHTML = `
       <div class="glass-card rounded-3xl p-12 text-center max-w-xl mx-auto space-y-4">
-        <i data-lucide="cpu" class="w-10 h-10 text-amber-400 animate-spin mx-auto"></i>
-        <h3 class="text-lg font-bold text-white">Evaluating Retention Across 4 Topics...</h3>
-        <p class="text-xs text-slate-400">Updating cross-topic competency and calibrating future pathway milestones.</p>
+        <i data-lucide="cpu" class="w-10 h-10 text-teal-600 animate-spin mx-auto"></i>
+        <h3 class="text-lg font-bold text-slate-900">Evaluating Retention Across 4 Topics...</h3>
+        <p class="text-xs text-slate-500">Updating cross-topic competency and calibrating future pathway milestones.</p>
       </div>
     `;
     refreshLucide();

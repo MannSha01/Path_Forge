@@ -24,6 +24,13 @@ try {
   else if (fs.existsSync(defaultEnv)) process.loadEnvFile(defaultEnv);
 } catch {}
 
+if (!process.env.FIREBASE_API_KEY) {
+  process.env.FIREBASE_API_KEY = "test_api_key";
+  process.env.FIREBASE_AUTH_DOMAIN = "test.firebaseapp.com";
+  process.env.FIREBASE_PROJECT_ID = "test-project";
+  process.env.FIREBASE_APP_ID = "1:12345:web:abcdef";
+}
+
 describe("Authentication, Multi-User Isolation & Security", () => {
   beforeEach(() => {
     LocalStorageService.clear();

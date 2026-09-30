@@ -62,48 +62,48 @@ export function renderNoteDetail(note, onBackToList) {
   if (!container) return;
 
   container.innerHTML = `
-    <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 max-w-3xl mx-auto border border-slate-800 text-left">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-        <button id="back-to-notes-list-btn" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 hover:border-indigo-500 text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+    <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6 max-w-3xl mx-auto border border-slate-200 bg-white shadow-xs text-left">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+        <button id="back-to-notes-list-btn" class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-teal-500 text-slate-700 hover:text-slate-900 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs">
           <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> All Notes
         </button>
 
         <div class="flex items-center gap-2">
-          <button id="download-txt-btn" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-cyan-400 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="download-txt-btn" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-teal-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs">
             <i data-lucide="file-text" class="w-3.5 h-3.5"></i> Download TXT
           </button>
-          <button id="download-pdf-btn" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer">
+          <button id="download-pdf-btn" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer shadow-xs">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print / PDF
           </button>
         </div>
       </div>
 
       <div class="space-y-2">
-        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+        <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase tracking-wider">
           Study Guide
         </span>
-        <h2 class="text-2xl sm:text-3xl font-black text-white">${note.title}</h2>
-        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">${note.summary}</p>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">${note.title}</h2>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">${note.summary}</p>
       </div>
 
       <!-- Key Concepts -->
       ${note.keyConcepts && note.keyConcepts.length ? `
         <div class="space-y-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-300">Core Concepts</h4>
-          <ul class="space-y-1.5 pl-1 text-xs text-slate-300">
-            ${note.keyConcepts.map((c) => `<li class="flex items-start gap-2"><span class="text-indigo-400 font-bold">•</span><span>${c}</span></li>`).join("")}
+          <h4 class="text-xs font-bold uppercase tracking-wider text-teal-800">Core Concepts</h4>
+          <ul class="space-y-1.5 pl-1 text-xs text-slate-700">
+            ${note.keyConcepts.map((c) => `<li class="flex items-start gap-2"><span class="text-teal-600 font-bold">•</span><span>${c}</span></li>`).join("")}
           </ul>
         </div>
       ` : ""}
 
       <!-- Technical Interview Takeaways -->
       ${note.interviewPoints && note.interviewPoints.length ? `
-        <div class="p-4 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 space-y-2">
-          <h4 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-1.5">
-            <i data-lucide="award" class="w-4 h-4 text-cyan-400"></i> Technical Interview Prep Points
+        <div class="p-4 rounded-2xl bg-teal-50/60 border border-teal-200/80 space-y-2">
+          <h4 class="text-xs font-bold text-teal-900 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="award" class="w-4 h-4 text-teal-600"></i> Technical Interview Prep Points
           </h4>
-          <ul class="space-y-2 text-xs text-slate-200">
-            ${note.interviewPoints.map((p) => `<li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5"></i><span>${p}</span></li>`).join("")}
+          <ul class="space-y-2 text-xs text-slate-800">
+            ${note.interviewPoints.map((p) => `<li class="flex items-start gap-2"><i data-lucide="chevron-right" class="w-3.5 h-3.5 text-teal-600 shrink-0 mt-0.5"></i><span>${p}</span></li>`).join("")}
           </ul>
         </div>
       ` : ""}

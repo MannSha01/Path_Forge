@@ -239,8 +239,8 @@ describe("Admin CMS: Universal Shared Content Renderer & Block System", () => {
 
     const html = ContentRenderer.render([textBlock]);
     assert.ok(html.includes("Core Axioms"));
-    assert.ok(html.includes("<strong class=\"font-bold text-white\">bold text</strong>"));
-    assert.ok(html.includes("<em class=\"italic text-slate-200\">italic text</em>"));
+    assert.ok(html.includes("<strong class=\"font-bold text-slate-900\">bold text</strong>"));
+    assert.ok(html.includes("<em class=\"italic text-slate-700\">italic text</em>"));
     assert.ok(html.includes("First point"));
     assert.ok(html.includes("Second point"));
   });

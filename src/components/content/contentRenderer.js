@@ -29,12 +29,12 @@ export function formatInlineText(text) {
   let html = escapeHTML(text);
 
   // Bold: **text** or __text__
-  html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold text-white">$1</strong>');
-  html = html.replace(/__(.+?)__/g, '<strong class="font-bold text-white">$1</strong>');
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="font-bold text-slate-900">$1</strong>');
+  html = html.replace(/__(.+?)__/g, '<strong class="font-bold text-slate-900">$1</strong>');
 
   // Italic: *text* or _text_
-  html = html.replace(/\*([^*]+?)\*/g, '<em class="italic text-slate-200">$1</em>');
-  html = html.replace(/_([^_]+?)_/g, '<em class="italic text-slate-200">$1</em>');
+  html = html.replace(/\*([^*]+?)\*/g, '<em class="italic text-slate-700">$1</em>');
+  html = html.replace(/_([^_]+?)_/g, '<em class="italic text-slate-700">$1</em>');
 
   // Inline Code: `code`
   html = html.replace(/`([^`]+?)`/g, '<code class="px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300 font-mono text-xs">$1</code>');
@@ -187,13 +187,13 @@ export class ContentRenderer {
     let headingHtml = "";
     if (heading) {
       if (level === "h1") {
-        headingHtml = `<h2 class="text-xl sm:text-2xl font-black text-white tracking-tight border-b border-slate-800 pb-2">${escapeHTML(heading)}</h2>`;
+        headingHtml = `<h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight border-b border-slate-200 pb-2">${escapeHTML(heading)}</h2>`;
       } else if (level === "h2") {
-        headingHtml = `<h3 class="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">${escapeHTML(heading)}</h3>`;
+        headingHtml = `<h3 class="text-lg sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">${escapeHTML(heading)}</h3>`;
       } else {
         headingHtml = `
-          <h4 class="text-base font-bold text-white flex items-center gap-2">
-            <span class="w-6 h-6 rounded-lg bg-indigo-600/20 text-indigo-400 text-xs font-mono font-bold flex items-center justify-center border border-indigo-500/30">${index + 1}</span>
+          <h4 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-lg bg-teal-50 text-teal-800 text-xs font-mono font-bold flex items-center justify-center border border-teal-200">${index + 1}</span>
             <span>${escapeHTML(heading)}</span>
           </h4>
         `;
@@ -201,7 +201,7 @@ export class ContentRenderer {
     }
 
     return `
-      <div class="pf-block pf-block-text p-5 sm:p-6 rounded-2xl bg-slate-950/70 border border-slate-800/80 space-y-3.5 transition">
+      <div class="pf-block pf-block-text p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3.5 transition">
         ${headingHtml}
         <div class="space-y-2.5">
           ${formattedBlocks.join("\n")}
@@ -298,11 +298,11 @@ export class ContentRenderer {
             <div class="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
               <i data-lucide="git-merge" class="w-4 h-4"></i>
             </div>
-            <h4 class="text-xs sm:text-sm font-bold text-white tracking-wide">
+            <h4 class="text-xs sm:text-sm font-bold text-slate-900 tracking-wide">
               ${escapeHTML(title)}
             </h4>
           </div>
-          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-950/60 text-indigo-300 border border-indigo-500/30">
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200">
             Interactive Diagram
           </span>
         </div>

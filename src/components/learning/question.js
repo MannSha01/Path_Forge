@@ -20,9 +20,9 @@ export function renderQuestionContent(question, questionIndex = 1, totalQuestion
 
   return `
     <div class="space-y-5 text-left">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
         <div class="flex items-center gap-2">
-          <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 uppercase tracking-wider">
+          <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200 uppercase tracking-wider">
             Evaluation ${questionIndex} of ${totalQuestions}
           </span>
           <span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border ${diffBadgeColor}">
@@ -32,7 +32,7 @@ export function renderQuestionContent(question, questionIndex = 1, totalQuestion
         <span class="text-xs text-slate-500 font-medium">Concept: ${question.conceptTested || question.skill}</span>
       </div>
 
-      <h3 class="text-base sm:text-lg font-bold text-white leading-snug">
+      <h3 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
         ${question.question}
       </h3>
 
@@ -42,10 +42,10 @@ export function renderQuestionContent(question, questionIndex = 1, totalQuestion
             (opt, i) => `
           <button
             data-option-index="${i}"
-            class="practice-option-btn w-full text-left p-4 rounded-xl bg-slate-950/80 hover:bg-indigo-600/20 border border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white text-xs sm:text-sm font-medium transition flex items-center justify-between group cursor-pointer"
+            class="practice-option-btn w-full text-left p-4 rounded-xl bg-white hover:bg-teal-50 border border-slate-200 hover:border-teal-400 text-slate-900 text-xs sm:text-sm font-medium shadow-xs transition flex items-center justify-between group cursor-pointer"
           >
             <span>${opt}</span>
-            <span class="w-5 h-5 rounded-full border border-slate-700 flex items-center justify-center text-xs text-slate-500 group-hover:border-indigo-400 group-hover:text-indigo-400">
+            <span class="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-600 group-hover:border-teal-500 group-hover:text-teal-700">
               ${String.fromCharCode(65 + i)}
             </span>
           </button>

@@ -64,7 +64,7 @@ export function renderAssessmentQuestion({
 
       <!-- Question Statement -->
       <div class="space-y-2">
-        <h3 class="text-base sm:text-lg font-bold text-white leading-relaxed">
+        <h3 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
           ${question.question}
         </h3>
       </div>
@@ -74,32 +74,32 @@ export function renderAssessmentQuestion({
         ${(question.options || []).map((opt, optIdx) => {
           const isSelected = selectedOptionIndex === optIdx;
           const selectedClasses = isSelected
-            ? "border-indigo-500 bg-indigo-600/20 text-white ring-1 ring-indigo-500/50"
-            : "border-slate-800 bg-slate-950/70 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60";
+            ? "border-teal-500 bg-teal-50 text-slate-900 ring-2 ring-teal-500/30"
+            : "border-slate-200 bg-white text-slate-800 hover:border-teal-300 hover:bg-slate-50";
 
           return `
             <button
               data-option-index="${optIdx}"
-              class="mcq-option-btn w-full text-left p-4 rounded-xl border ${selectedClasses} text-xs sm:text-sm font-medium transition-all flex items-center justify-between group cursor-pointer"
+              class="mcq-option-btn w-full text-left p-4 rounded-xl border ${selectedClasses} text-xs sm:text-sm font-medium transition-all flex items-center justify-between group cursor-pointer shadow-xs"
             >
               <div class="flex items-center gap-3">
-                <span class="w-6 h-6 rounded-lg ${isSelected ? "bg-indigo-600 text-white border-indigo-400" : "bg-slate-900 text-slate-400 border-slate-700"} border flex items-center justify-center text-xs font-mono font-bold shrink-0">
+                <span class="w-6 h-6 rounded-lg ${isSelected ? "bg-teal-600 text-white border-teal-500" : "bg-slate-100 text-slate-700 border-slate-200"} border flex items-center justify-center text-xs font-mono font-bold shrink-0">
                   ${String.fromCharCode(65 + optIdx)}
                 </span>
                 <span class="leading-snug">${opt}</span>
               </div>
-              <i data-lucide="${isSelected ? "check-circle-2" : "circle"}" class="w-4 h-4 ${isSelected ? "text-indigo-400" : "text-slate-600"} shrink-0 ml-2"></i>
+              <i data-lucide="${isSelected ? "check-circle-2" : "circle"}" class="w-4 h-4 ${isSelected ? "text-teal-600" : "text-slate-400"} shrink-0 ml-2"></i>
             </button>
           `;
         }).join("")}
       </div>
 
       <!-- Navigation & Action Buttons -->
-      <div class="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
+      <div class="pt-4 border-t border-slate-200 flex items-center justify-between gap-3">
         <button
           id="prev-mcq-btn"
           ${currentIndex === 0 ? "disabled" : ""}
-          class="px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-900/70 hover:bg-slate-800 text-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-30 disabled:pointer-events-none"
+          class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer disabled:opacity-30 disabled:pointer-events-none shadow-xs"
         >
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span>Previous</span>
@@ -116,7 +116,7 @@ export function renderAssessmentQuestion({
         ` : `
           <button
             id="next-mcq-btn"
-            class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition shadow-md shadow-indigo-600/30 flex items-center gap-1.5 cursor-pointer active:scale-95"
+            class="px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold transition shadow-md shadow-teal-600/20 flex items-center gap-1.5 cursor-pointer active:scale-95"
           >
             <span>Next Question</span>
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -164,74 +164,74 @@ export function renderAssessmentResults({
   return `
     <div class="space-y-6 text-left max-w-2xl mx-auto">
       <!-- Score & Performance Header -->
-      <div class="p-6 rounded-3xl bg-gradient-to-br ${scoreBadgeColor} border space-y-3 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="p-6 rounded-3xl bg-gradient-to-br ${scoreBadgeColor} border border-teal-200/80 shadow-xs space-y-3 text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-slate-950/60 border border-current">
+          <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-white/80 text-slate-800 border border-current">
             ${isCumulative ? "Cumulative Retention Milestone Completed" : "Topic Assessment Completed"}
           </span>
-          <h2 class="text-2xl sm:text-3xl font-black text-white mt-2">
+          <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mt-2">
             ${score} / ${total} Correct (${percentage}%)
           </h2>
-          <p class="text-xs sm:text-sm text-slate-300 mt-1 font-medium">
+          <p class="text-xs sm:text-sm text-slate-700 mt-1 font-medium">
             ${analysis.summary || (isMastered ? "Strong understanding" : isPass ? "Partial understanding" : "Weak understanding — reinforcement required")}
           </p>
         </div>
 
-        <div class="w-16 h-16 rounded-2xl bg-slate-950/70 border border-slate-800 flex items-center justify-center shrink-0">
-          <i data-lucide="${isMastered ? "award" : isPass ? "check-circle" : "alert-circle"}" class="w-8 h-8 ${isMastered ? "text-emerald-400" : isPass ? "text-amber-400" : "text-rose-400"}"></i>
+        <div class="w-16 h-16 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-xs">
+          <i data-lucide="${isMastered ? "award" : isPass ? "check-circle" : "alert-circle"}" class="w-8 h-8 ${isMastered ? "text-emerald-600" : isPass ? "text-teal-600" : "text-rose-600"}"></i>
         </div>
       </div>
 
       <!-- Concept Breakdown (Mastered vs Weak) -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <!-- Mastered Concepts -->
-        <div class="p-4 rounded-2xl bg-slate-950/60 border border-emerald-500/20 space-y-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+        <div class="p-4 rounded-2xl bg-teal-50/60 border border-teal-200/80 space-y-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-teal-800 flex items-center gap-1.5">
             <i data-lucide="check" class="w-3.5 h-3.5"></i> Mastered Principles
           </h4>
           <div class="flex flex-wrap gap-1.5">
             ${(analysis.masteredConcepts?.length ? analysis.masteredConcepts : ["Core Mechanics"])
-              .map((c) => `<span class="text-[11px] px-2.5 py-0.5 rounded-lg bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">${c}</span>`)
+              .map((c) => `<span class="text-[11px] px-2.5 py-0.5 rounded-lg bg-teal-100/70 text-teal-900 border border-teal-200">${c}</span>`)
               .join("")}
           </div>
         </div>
 
         <!-- Weak Concepts -->
-        <div class="p-4 rounded-2xl bg-slate-950/60 border border-rose-500/20 space-y-2">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-rose-400 flex items-center gap-1.5">
+        <div class="p-4 rounded-2xl bg-rose-50/60 border border-rose-200/80 space-y-2">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-rose-800 flex items-center gap-1.5">
             <i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Identified Weaknesses
           </h4>
           <div class="flex flex-wrap gap-1.5">
             ${(analysis.weakConcepts?.length
               ? analysis.weakConcepts
               : ["None — All tested principles answered correctly!"]
-            ).map((c) => `<span class="text-[11px] px-2.5 py-0.5 rounded-lg bg-rose-500/10 text-rose-300 border border-rose-500/30">${c}</span>`).join("")}
+            ).map((c) => `<span class="text-[11px] px-2.5 py-0.5 rounded-lg bg-rose-100/70 text-rose-900 border border-rose-200">${c}</span>`).join("")}
           </div>
         </div>
       </div>
 
       <!-- Misconception Diagnostic -->
       ${analysis.misconceptionAnalysis ? `
-        <div class="p-4 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-1.5">
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-            <i data-lucide="brain" class="w-4 h-4 text-indigo-400"></i> AI Misconception Diagnosis
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1.5">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-1.5">
+            <i data-lucide="brain" class="w-4 h-4 text-teal-600"></i> AI Misconception Diagnosis
           </h4>
-          <p class="text-xs text-slate-400 leading-relaxed font-normal">
+          <p class="text-xs text-slate-600 leading-relaxed font-normal">
             ${analysis.misconceptionAnalysis}
           </p>
         </div>
       ` : ""}
 
       <!-- Future Topic Adaptation Notice -->
-      <div class="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-start gap-3">
-        <div class="w-8 h-8 rounded-xl bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-500/30 mt-0.5">
+      <div class="p-4 rounded-2xl bg-teal-50 border border-teal-200 shadow-xs flex items-start gap-3">
+        <div class="w-8 h-8 rounded-xl bg-teal-600/10 text-teal-700 flex items-center justify-center shrink-0 border border-teal-200 mt-0.5">
           <i data-lucide="git-merge" class="w-4 h-4"></i>
         </div>
         <div class="space-y-1">
-          <h4 class="text-xs font-bold text-indigo-200 uppercase tracking-wider">
+          <h4 class="text-xs font-bold text-teal-900 uppercase tracking-wider">
             Future Learning Adapted (Odd/Even Lanes & Prerequisites)
           </h4>
-          <p class="text-xs text-indigo-300 leading-relaxed">
+          <p class="text-xs text-teal-800 leading-relaxed">
             ${analysis.adaptationAdvice || `Your performance has been incorporated into the adaptive scheduler. Future lane topics and prerequisite chains have been calibrated with distance decay.`}
           </p>
         </div>
