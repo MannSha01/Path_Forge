@@ -1,6 +1,6 @@
 // ===================================================
 // PATH FORGE - DASHBOARD COMPONENT
-// Master dashboard controller assembling readiness, skills & today plan
+// Master dashboard controller assembling readiness, skills, calendar & SRS
 // ===================================================
 
 import { $, refreshLucide, on } from "../../utils/dom.js";
@@ -9,6 +9,9 @@ import { renderSkillGapsWidget } from "./skillGaps.js";
 import { renderTodayPlanWidget } from "./todayPlan.js";
 import { calculateOverallReadiness } from "../../services/learning/skillEngine.js";
 import { calculateDaysRemaining } from "../../utils/validation.js";
+import { calendarService } from "../../services/calendar/calendarService.js";
+import { srsEngine } from "../../services/learning/srsEngine.js";
+import { FlashcardModal } from "../flashcards/flashcardModal.js";
 
 /**
  * Renders the full personalized dashboard.
@@ -37,10 +40,16 @@ export function renderDashboard({
   const daysRemaining = calculateDaysRemaining(goal?.deadline);
   const readinessPercent = calculateOverallReadiness(skillProfile, Object.keys(skillProfile));
   const targetDailyMinutes = goal?.dailyMinutes || 60;
+  const userId = user?.userId || user?.uid || "default";
 
   // Filter today's tasks from the live schedule
   const todayDate = new Date().toISOString().split("T")[0];
   const todayTasks = (schedule?.items || []).filter((i) => i.date === todayDate || i.dayIndex === 1);
+
+  // Calendar and SRS metrics
+  const googleCalUrl = calendarService.getGoogleCalendarUrl(todayTasks[0], goal);
+  const dueCards = srsEngine.getDueCards(userId);
+  const dueCardsCount = dueCards.length;
 
   container.innerHTML = `
     <div class="space-y-6 max-w-6xl mx-auto">
@@ -75,7 +84,7 @@ export function renderDashboard({
 
       <!-- Two-Column Widgets Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        ${renderTodayPlanWidget(todayTasks)}
+        ${renderTodayPlanWidget(todayTasks, { goal, dueCardsCount, googleCalUrl })}
         ${renderSkillGapsWidget(skillProfile)}
       </div>
     </div>
@@ -83,8 +92,39 @@ export function renderDashboard({
 
   refreshLucide();
 
+  // 1. Continue Learning Session Button
   const continueBtn = $("#dashboard-continue-learning-btn");
   if (continueBtn && onContinueLearning) {
     on(continueBtn, "click", onContinueLearning);
+  }
+
+  // 2. Export .ics Calendar
+  const exportIcsBtn = $("#btn-export-ics");
+  if (exportIcsBtn) {
+    on(exportIcsBtn, "click", () => {
+      calendarService.downloadICSFile(schedule?.items || todayTasks, goal);
+    });
+  }
+
+  // 3. Spaced Repetition (SM-2) Review Modal Trigger
+  const srsReviewBtn = $("#btn-start-srs-review");
+  if (srsReviewBtn) {
+    on(srsReviewBtn, "click", () => {
+      const modal = new FlashcardModal({
+        userId,
+        onComplete: () => {
+          // Re-render dashboard to refresh due count
+          renderDashboard({
+            user,
+            goal,
+            skillProfile,
+            schedule,
+            todayMinutesSpent,
+            onContinueLearning
+          });
+        }
+      });
+      modal.open();
+    });
   }
 }
